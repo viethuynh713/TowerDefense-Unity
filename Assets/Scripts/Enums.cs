@@ -3,6 +3,11 @@ namespace MythicEmpire.Enums
     public enum EventID
     {
         None,
+        OnLoginSuccess,
+        OnLoginFail,
+        OnRegisterSuccess,
+        OnRegisterFail,
+        
     }
     public enum GachaType
     {

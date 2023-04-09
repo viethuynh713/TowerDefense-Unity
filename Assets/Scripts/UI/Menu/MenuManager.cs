@@ -37,7 +37,7 @@ namespace MythicEmpire.UI.Menu
 
         private void OnEnable()
         {
-            DOTween.KillAll(true);
+            // DOTween.KillAll(true);
 
             _loginCanvasGrp.alpha = 0;
             _loginButton.anchoredPosition = new Vector2(_loginPos.x - 100, _loginPos.y);

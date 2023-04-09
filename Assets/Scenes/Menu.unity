@@ -2831,7 +2831,7 @@ GameObject:
   - component: {fileID: 602415350}
   - component: {fileID: 602415349}
   m_Layer: 5
-  m_Name: 'PasswordInputField '
+  m_Name: 'ConfirmPasswordInputField '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3398,6 +3398,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 658138875}
+  - component: {fileID: 658138876}
   m_Layer: 0
   m_Name: LifetimeMenuScope
   m_TagString: Untagged
@@ -3413,13 +3414,32 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 658138874}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 903.80505, y: 516.5001, z: -2.8998225}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &658138876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658138874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dcf2ee97ddf3b6459c78b7f95c622c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects:
+  - {fileID: 1384128454}
+  - {fileID: 1295207799}
+  - {fileID: 1155720250}
 --- !u!1 &669444115
 GameObject:
   m_ObjectHideFlags: 0
@@ -4536,7 +4556,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 845710996}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1384128459}
+        m_TargetAssemblyTypeName: MythicEmpire.UI.Menu.LoginUI, Assembly-CSharp
+        m_MethodName: OnDisappear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1295207799}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &845710996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6418,6 +6462,7 @@ GameObject:
   - component: {fileID: 1155720251}
   - component: {fileID: 1155720253}
   - component: {fileID: 1155720252}
+  - component: {fileID: 1155720254}
   m_Layer: 5
   m_Name: RegisterPanel
   m_TagString: Untagged
@@ -6490,6 +6535,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155720250}
   m_CullTransparentMesh: 1
+--- !u!114 &1155720254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155720250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e07f82257a0646a1bf51c62c72c5492b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nicknameInputField: {fileID: 2111681041}
+  _emailInputField: {fileID: 1939248510}
+  _passwordInputField: {fileID: 2020233238}
+  _confirmPwInputField: {fileID: 1033584831}
 --- !u!1 &1169871546
 GameObject:
   m_ObjectHideFlags: 0
@@ -6796,7 +6857,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1181786043}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1384128459}
+        m_TargetAssemblyTypeName: MythicEmpire.UI.Menu.LoginUI, Assembly-CSharp
+        m_MethodName: OnDisappear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1471482546}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1181786043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6848,7 +6933,7 @@ GameObject:
   - component: {fileID: 1210059640}
   - component: {fileID: 1210059639}
   m_Layer: 5
-  m_Name: EmailInputField
+  m_Name: OTPInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7720,6 +7805,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1295207800}
   - component: {fileID: 1295207801}
+  - component: {fileID: 1295207802}
   m_Layer: 5
   m_Name: ForgotPasswordPanel
   m_TagString: Untagged
@@ -7758,6 +7844,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1295207799}
   m_CullTransparentMesh: 1
+--- !u!114 &1295207802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295207799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 580696387ab345ed9244c83607898686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _emailInputField: {fileID: 864459665}
+  _optInputField: {fileID: 1210059639}
+  _newPasswordInputField: {fileID: 1127729584}
+  _confirmPasswordInputField: {fileID: 602415349}
 --- !u!1 &1297994248
 GameObject:
   m_ObjectHideFlags: 0

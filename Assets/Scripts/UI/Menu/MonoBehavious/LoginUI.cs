@@ -31,13 +31,6 @@ namespace MythicEmpire.UI.Menu
             OnAppear();
         }
 
-        // public void Update()
-        // {
-        //     if (Input.GetMouseButtonDown(0))
-        //     {
-        //         OnDisappear();
-        //     }
-        // }
         
         public void OnAppear()
         {
@@ -45,22 +38,24 @@ namespace MythicEmpire.UI.Menu
             _rectTransform.anchoredPosition = new Vector2(_anchorPos.x + 100, _anchorPos.y);
             _canvasGroup.alpha = 0;
 
-            _rectTransform.DOLocalMoveX(_anchorPos.x, 0.5f).SetEase(Ease.InQuart);
-            _canvasGroup.DOFade(1,0.5f).SetEase(Ease.InQuart);
+            _rectTransform.DOLocalMoveX(_anchorPos.x, 0.4f).SetEase(Ease.InQuart);
+            _canvasGroup.DOFade(1,0.3f).SetEase(Ease.InQuart);
         }
 
         public void OnDisappear()
         {
-            DOTween.KillAll(true);
+            // DOTween.KillAll(true);
+            _canvasGroup.alpha = 1;
 
             _rectTransform.DOLocalMoveX(_anchorPos.x -100, 0.5f).SetEase(Ease.OutQuart);
-            _canvasGroup.DOFade(0,0.5f).SetEase(Ease.OutQuart).OnComplete(
-                ()=>this.gameObject.SetActive(false));
-            // this.gameObject.SetActive(false);
+            _canvasGroup.DOFade(0, 0.7f).SetEase(Ease.OutQuart).OnComplete(
+                () => gameObject.SetActive(false));
+
         }
         public void  LoginButtonClick()
         {
             
         }
+        
     }
 }
