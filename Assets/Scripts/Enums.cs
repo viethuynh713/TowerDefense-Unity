@@ -11,31 +11,36 @@ namespace MythicEmpire.Enums
     }
     public enum GachaType
     {
+        None,
         Common,
         Rare,
         Legend
     }
     public enum ModeGame
     {
+        None,
         Adventure,
         Arena
 
     }
     public enum GameState
     {
+        None,
         Init,
         Start,
         Playing,
         EndGame
     }
-    public enum TypeCard
+    public enum CardType
     {
+        None,
         TowerCard,
         MonsterCard,
         SpellCard
     }
     public enum RarityCard
     {
+        None,
         Common,
         Rare,
         Mythic,
