@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DG.Tweening;
+using MythicEmpire.Manager;
+using MythicEmpire.Networking;
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using VContainer;
 
 namespace MythicEmpire.UI.Menu
 {
     public class LoginUI : MonoBehaviour
     {
-        private ILoginService _loginService;
+        #region SerializeField
         [SerializeField] private TMP_InputField _emailInputField;
         [SerializeField] private TMP_InputField _passwordInputField;
+        #endregion
 
         #region Amination Field
 
@@ -19,6 +24,8 @@ namespace MythicEmpire.UI.Menu
         private Vector2 _anchorPos;
 
         #endregion
+
+        [Inject] private ILoginService _userLoginService;
         public void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
@@ -29,22 +36,23 @@ namespace MythicEmpire.UI.Menu
         private void OnEnable()
         {
             OnAppear();
+            _emailInputField.text = "";
+            _passwordInputField.text = "";
         }
-
         
         public void OnAppear()
         {
             DOTween.KillAll(true);
-            _rectTransform.anchoredPosition = new Vector2(_anchorPos.x + 100, _anchorPos.y);
+            _rectTransform.anchoredPosition = _anchorPos;
             _canvasGroup.alpha = 0;
+            transform.localScale = Vector3.one * 0.7f;
+            transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InQuart);
 
-            _rectTransform.DOLocalMoveX(_anchorPos.x, 0.4f).SetEase(Ease.InQuart);
             _canvasGroup.DOFade(1,0.3f).SetEase(Ease.InQuart);
         }
 
         public void OnDisappear()
         {
-            // DOTween.KillAll(true);
             _canvasGroup.alpha = 1;
 
             _rectTransform.DOLocalMoveX(_anchorPos.x -100, 0.5f).SetEase(Ease.OutQuart);
@@ -54,8 +62,22 @@ namespace MythicEmpire.UI.Menu
         }
         public void  LoginButtonClick()
         {
-            
+            if (string.IsNullOrEmpty(_emailInputField.text) || string.IsNullOrEmpty(_passwordInputField.text))
+            {
+                Notification.Instance.PopupNotifyWaring("Please fill in your email or password");
+                return;
+            }
+            else if (_passwordInputField.text.Length < 6)
+            {
+                Notification.Instance.PopupNotifyWaring("Passwords must be at least 6 characters");
+                return;
+            }
+            else
+            {
+                _userLoginService.Login(_emailInputField.text,_passwordInputField.text);
+            }
         }
         
+
     }
 }

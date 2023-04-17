@@ -1,5 +1,9 @@
 using MythicEmpire;
+using MythicEmpire.Networking;
 using MythicEmpire.PlayerInfos;
+using UnityEngine.Playables;
+using VContainer;
+using Notification = MythicEmpire.Manager.Notification;
 
 namespace MythicEmpire.UI.Menu
 {
@@ -7,9 +11,11 @@ namespace MythicEmpire.UI.Menu
     public class UserRegister : IRegisterService
     {
 
-        public void Register(UserInfos infos)
+        [Inject]private IVerifyUserNetwork _verifyUserNetwork;
+        public void Register(UserModel infos)
         {
-
+            _verifyUserNetwork.RegisterRequest("", "", "");
+            Notification.Instance.NotifyStatus("Register successfully");
         }
     }
 }

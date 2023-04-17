@@ -3,6 +3,6 @@ namespace MythicEmpire
 {
     public interface IRegisterService
     {
-        void Register(UserInfos infos);
+        void Register(UserModel infos);
     }
 }

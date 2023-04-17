@@ -1,6 +1,6 @@
 ﻿namespace MythicEmpire.PlayerInfos
 {
-    public class UserInfos
+    public class UserModel
     {
         
     }
