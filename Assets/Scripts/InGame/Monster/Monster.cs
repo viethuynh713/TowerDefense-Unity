@@ -2,64 +2,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+namespace MythicEmpire
 {
-    private int id;
-    private int ownerId;
-    private bool canAction;
-    //private MonsterStat stats
-    //private List<Effect> state;
-    private List<Vector2Int> path;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Monster : MonoBehaviour
     {
-        path = new List<Vector2Int> { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0) };
-    }
+        private int id;
+        private int ownerId;
+        private bool canAction;
+        private MonsterStats stats;
+        //private List<Effect> state;
+        private List<Vector2Int> path;
 
-    // Update is called once per frame
-    void Update()
-    {
-        Move();
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            path = new List<Vector2Int> { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0) };
+        }
 
-    public void Move()
-    {
-        
-    }
+        // Update is called once per frame
+        void Update()
+        {
+            Move();
+        }
 
-    public void AttackMonster()
-    {
+        public void Move()
+        {
 
-    }
+        }
 
-    public void AttackHouse()
-    {
+        public void AttackMonster()
+        {
 
-    }
+        }
 
-    public void TakeDmg(int dmg)
-    {
+        public void AttackHouse()
+        {
 
-    }
+        }
 
-    public void AddEffect(Effect effect)
-    {
+        public void TakeDmg(int dmg)
+        {
 
-    }
+        }
 
-    public void ExecuteEffect()
-    {
+        public void AddEffect(Effect effect)
+        {
 
-    }
+        }
 
-    public void Die()
-    {
+        public void ExecuteEffect()
+        {
 
-    }
+        }
 
-    public void FindPath()
-    {
+        public void Die()
+        {
 
+        }
+
+        public void FindPath()
+        {
+
+        }
     }
 }
