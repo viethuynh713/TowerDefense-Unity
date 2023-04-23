@@ -7,15 +7,18 @@ namespace MythicEmpire.Card
 {
 
 
-    [Serializable]
-    public class CardInfo
+    [CreateAssetMenu(fileName = "Card Data", menuName = "MythicEmpire Data/Data/Card")]
+
+    public class CardInfo : ScriptableObject
     {
-        public string CardId;
+        public string CardId = Guid.NewGuid().ToString();
         public string CardName;
+        [Range(0,5)]
         public int CardStart;
         public Sprite CardImage;
         public CardType TypeOfCard;
         public RarityCard CardRarity;
         public StatsCard CardStats;
+        
     }
 }

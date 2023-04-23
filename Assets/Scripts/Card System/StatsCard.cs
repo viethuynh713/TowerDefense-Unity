@@ -1,31 +1,15 @@
-﻿namespace MythicEmpire.Card
+﻿using UnityEngine;
+
+namespace MythicEmpire.Card
 {
 
+    [CreateAssetMenu(fileName = "New Data Manager", menuName = "MythicEmpire Data/Original Stat")]
 
-    public abstract class StatsCard
+    public class StatsCard: ScriptableObject
     {
         public int Energy;
+        
     }
-
-    public class TowerStats : StatsCard
-    {
-        public int Damage;
-        public int Range;
-        public float AttackSpeed;
-    }
-
-    public class MonsterStats : StatsCard
-    {
-        public int Hp;
-        public float AttackSpeed;
-        public float MoveSpeed;
-        public int Damage;
-
-
-    }
-
-    public class SpellStats : StatsCard
-    {
-        public float Duration;
-    }
+   
+    
 }

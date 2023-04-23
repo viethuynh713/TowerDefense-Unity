@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using MythicEmpire.Enums;
 using UnityEngine;
@@ -6,11 +7,13 @@ using UnityEngine;
 namespace MythicEmpire.Card
 {
 
-    [CreateAssetMenu(fileName = "New LevelConfig", menuName = "RunnerCraft Data/Level Config")]
+    [CreateAssetMenu(fileName = "New Data Manager", menuName = "MythicEmpire Data/Data Manager")]
 
     public class CardManager : ScriptableObject, IGetCardInfos
     {
         [SerializeField] public List<CardInfo> ListCards;
+
+
 
         public CardInfo GetCardById(string id)
         {
