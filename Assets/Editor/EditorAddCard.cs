@@ -21,7 +21,7 @@ public class EditorAddCard : EditorWindow
     private VisualElement _spellStats;
     private Sprite _defaultItemIcon;
 
-    [MenuItem("MythicEmpire/Add Card")]
+    // [MenuItem("MythicEmpire/Add Card")]
     public static void AddCard()
     {
         EditorAddCard wnd = GetWindow<EditorAddCard>();
@@ -108,6 +108,7 @@ public class EditorAddCard : EditorWindow
 
     private void AddNewCard()
     {
+        if(_newCard.TypeOfCard== CardType.None)return;
         _newCard.CardStats = _statsCard;
          if (!Directory.Exists($"Assets/Data/{_newCard.TypeOfCard}/{_newCard.CardName}"))
          {
@@ -120,8 +121,9 @@ public class EditorAddCard : EditorWindow
          AssetDatabase.CreateAsset(_newCard, $"Assets/Data/{_newCard.TypeOfCard}/{_newCard.CardName}/{_newCard.CardId}.asset");
          AssetDatabase.CreateAsset(_statsCard, $"Assets/Data/{_newCard.TypeOfCard}/{_newCard.CardName}/Stats/{_newCard.CardId}.asset");
          _cardManager.ListCards.Add(_newCard);
-         // Debug.Log(_statsCard.Energy);
+         
          Close();
+         EditorCardManager.ShowListCard();
          
          
     }

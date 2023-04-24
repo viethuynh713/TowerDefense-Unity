@@ -24,6 +24,7 @@ public class EditorCardManager : EditorWindow
     private VisualElement _spellStats;
     private VisualElement _monsterStats;
     private StatsCard _statsCard;
+    private List<CardInfo> _listCardRender;
 
     [MenuItem("MythicEmpire/Card Manager")]
     public static void ShowListCard()
@@ -74,11 +75,20 @@ public class EditorCardManager : EditorWindow
          {
              _itemListView.Rebuild();
          });
-         _containerDetail.Q<DropdownField>("CardType").RegisterValueChangedCallback(evt => 
-         {        
-             ChangeStats(_activeCard.TypeOfCard.ToString(), true);
 
-             _itemListView.Rebuild();
+         rootVisualElement.Q<DropdownField>("FilterByType").RegisterValueChangedCallback(evt =>
+         {
+             // GetCardRender(evt.newValue);
+         });
+         rootVisualElement.Q<DropdownField>("FilterByRarity").RegisterValueChangedCallback(evt =>
+         {
+             // GetCardRender(evt.newValue);
+
+         });
+         rootVisualElement.Q<SliderInt>("FilterByStar").RegisterValueChangedCallback(evt =>
+         {
+             // GetCardRender(evt.newValue);
+
          });
          _containerDetail.Q<DropdownField>("RarityCard").RegisterValueChangedCallback(evt => 
          {
@@ -95,77 +105,48 @@ public class EditorCardManager : EditorWindow
         });
 
     }
-    private void ChangeStats(string value, bool isGet)
+
+    private void GetCardRenderByRarity(int evtNewValue)
+    {
+        
+    }
+    private void GetCardRenderByType(string evtNewValue)
+    {
+        ;
+    }
+
+    private void ChangeStats(string value)
     {
         _monsterStats.style.display =  DisplayStyle.None;
         _spellStats.style.display =   DisplayStyle.None;
         _towerStats.style.display =   DisplayStyle.None;
-        Debug.Log(value);
+       
         if (value.Equals("MonsterCard"))
         {
             _monsterStats.style.display = DisplayStyle.Flex;
-            if (isGet)
-            {
-                _statsCard = _activeCard.CardStats;
-            }
-            else
-            {
-                var path = AssetDatabase.GetAssetPath(_statsCard);
-                AssetDatabase.DeleteAsset(path);
-                _statsCard = CreateInstance<MonsterStats>();
-                AssetDatabase.CreateAsset(_statsCard,path);
-                _activeCard.CardStats = _statsCard;
-
-            }
+            _statsCard = _activeCard.CardStats;
             SerializedObject so = new SerializedObject(_statsCard);
             _monsterStats.Bind(so);
         }
         else if (value.Equals("SpellCard"))
         {
             _spellStats.style.display = DisplayStyle.Flex;
-            if (isGet)
-            {
-                _statsCard = _activeCard.CardStats;
-            }
-            else
-            {
-                var path = AssetDatabase.GetAssetPath(_statsCard);
-                AssetDatabase.DeleteAsset(path);
-                _statsCard = CreateInstance<SpellStats>();
-                AssetDatabase.CreateAsset(_statsCard,path);
-                _activeCard.CardStats = _statsCard;
-
-            }
+            _statsCard = _activeCard.CardStats;
             SerializedObject so = new SerializedObject(_statsCard);
             _spellStats.Bind(so);
         }
         else if (value.Equals("TowerCard"))
         {
             _towerStats.style.display = DisplayStyle.Flex;
-            if (isGet)
-            {
-                _statsCard = _activeCard.CardStats;
-            }
-            else
-            {
-                var path = AssetDatabase.GetAssetPath(_statsCard);
-                AssetDatabase.DeleteAsset(path);
-                _statsCard = CreateInstance<TowerStats>();
-                AssetDatabase.CreateAsset(_statsCard,path);
-                _activeCard.CardStats = _statsCard;
-
-            }
+            _statsCard = _activeCard.CardStats;
             SerializedObject so = new SerializedObject(_statsCard);
             _towerStats.Bind(so);
         }
-
+        
 
         
     }
 
-    /// <summary>
-    /// Delete the active Item asset from the Asset/Data folder
-    /// </summary>
 private void DeleteItem_OnClick()
 {
 
@@ -177,10 +158,14 @@ private void DeleteItem_OnClick()
     
     //Purge the reference from the list and refresh the ListView
     _cardManager.ListCards.Remove(_activeCard);
+    
     _itemListView.Rebuild();
     
     //Nothing is selected, so hide the details section
     _containerDetail.style.visibility = Visibility.Hidden;
+    _monsterStats.style.display =  DisplayStyle.None;
+    _spellStats.style.display =   DisplayStyle.None;
+    _towerStats.style.display =   DisplayStyle.None;
 
 }
 
@@ -220,17 +205,18 @@ private void DeleteItem_OnClick()
             e.Q<Label>("Name").text = _cardManager.ListCards[i].CardName;
             e.Q<Label>("Type").text = _cardManager.ListCards[i].TypeOfCard.ToString();
             e.Q<Label>("Rarity").text = _cardManager.ListCards[i].CardRarity.ToString();
+            e.Q<Label>("Star").text = _cardManager.ListCards[i].CardStar.ToString();
         };
 
         //Create the listview and set various properties
         _itemListView = new ListView(_cardManager.ListCards, _itemHeight, makeItem, bindItem);
         _itemListView.selectionType = SelectionType.Single;
-        _itemListView.style.height = _cardManager.ListCards.Count * _itemHeight + 5;
+        _itemListView.style.height = 450;
         _itemsTab.Add(_itemListView);
 
         _itemListView.onSelectionChange += ListView_onSelectionChange;
         _itemListView.SetSelection(0);
-        ChangeStats(_activeCard.TypeOfCard.ToString(), false);
+        ChangeStats(_activeCard.TypeOfCard.ToString());
     }
 
     /// <summary>
@@ -242,6 +228,7 @@ private void DeleteItem_OnClick()
         //Get the first item in the selectedItems list. 
         //There will only ever be one because SelectionType is set to Single
         _activeCard = (CardInfo)selectedItems.First();
+        ChangeStats(_activeCard.TypeOfCard.ToString());
 
         //Create a new SerializedObject and bind the Details VE to it. 
         //This cascades the binding to the children

@@ -1,12 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="ItemRow">
-        <ui:VisualElement name="Row" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; flex-direction: row; align-items: center;">
+        <ui:VisualElement name="Row" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; flex-direction: row; align-items: center; justify-content: space-between;">
             <ui:VisualElement name="CardImage" style="background-image: url(&apos;project://database/Assets/UI/MenuUI/Register/UserIcon.png?fileID=2800000&amp;guid=50254cb290d2c9140a2b80c8cef18d6c&amp;type=3#UserIcon&apos;); width: 45px; height: 45px; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;" />
-            <ui:Label text="Label" display-tooltip-when-elided="true" name="Name" style="width: 85px; justify-content: flex-start; font-size: 13px; white-space: normal; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-text-align: upper-center;" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="Name" style="width: 79px; justify-content: flex-start; font-size: 13px; white-space: normal; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-text-align: upper-center;" />
             <ui:VisualElement style="width: 1px; height: 100%; background-color: rgb(255, 255, 255);" />
-            <ui:Label text="Label" display-tooltip-when-elided="true" name="Type" style="font-size: 13px; width: 107px; white-space: normal; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-text-align: upper-center;" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="Type" style="font-size: 13px; width: 93px; white-space: normal; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-text-align: upper-center;" />
             <ui:VisualElement style="width: 1px; height: 100%; background-color: rgb(255, 255, 255);" />
-            <ui:Label text="Lable" display-tooltip-when-elided="true" name="Rarity" style="font-size: 13px; width: 98px; white-space: normal; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-text-align: upper-center;" />
+            <ui:Label text="Lable" display-tooltip-when-elided="true" name="Rarity" style="font-size: 13px; width: 65px; white-space: normal; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-text-align: upper-center;" />
+            <ui:VisualElement style="width: 1px; height: 100%; background-color: rgb(255, 255, 255);" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="Star" style="-unity-text-align: middle-center; width: 54px; height: 23px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

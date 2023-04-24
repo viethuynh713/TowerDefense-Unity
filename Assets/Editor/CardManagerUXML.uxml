@@ -1,24 +1,30 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/Editor/CardManagerUSS.uss?fileID=7433441132597879392&amp;guid=5fbf975598829284ab6c417abd8cdc25&amp;type=3#CardManagerUSS" />
     <ui:VisualElement style="flex-direction: row; justify-content: space-around; display: flex;">
-        <ui:VisualElement name="ItemTab" style="height: 498px; width: 560px; display: flex; opacity: 1; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 0; -unity-background-image-tint-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
-            <ui:VisualElement name="Header" style="height: 40px; overflow: visible; flex-basis: auto; flex-direction: row; align-items: center; justify-content: space-around; border-bottom-width: 1px; border-bottom-color: rgb(255, 255, 255);">
-                <ui:Label text="List Card" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-center; width: 291px; font-size: 14px; white-space: nowrap;" />
-                <ui:Button text="Add" display-tooltip-when-elided="true" name="AddButton" style="display: flex; white-space: nowrap; width: 35px; height: 35px; font-size: 12px; flex-direction: row; overflow: visible; left: auto; right: auto; position: relative; top: auto; transform-origin: center; -unity-text-align: middle-center; opacity: 1; visibility: visible; flex-basis: auto;" />
+        <ui:VisualElement style="width: 500px; height: 504px;">
+            <ui:VisualElement name="Header" style="height: 40px; overflow: visible; flex-basis: auto; flex-direction: row; align-items: center; justify-content: center; border-bottom-width: 1px; border-bottom-color: rgb(255, 255, 255); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                <ui:Label text="List Card" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-center; width: 267px; font-size: 14px; white-space: nowrap; height: 23px;" />
+                <ui:Button text="Add" display-tooltip-when-elided="true" name="AddButton" style="display: flex; white-space: normal; width: 46px; height: 27px; font-size: 12px; flex-direction: row; overflow: visible; left: auto; right: auto; position: relative; top: auto; transform-origin: center; -unity-text-align: middle-center; opacity: 1; visibility: visible; flex-basis: auto;" />
             </ui:VisualElement>
+            <ui:VisualElement style="height: 100px; justify-content: space-between; display: none; margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px;">
+                <ui:DropdownField label="Card Type" index="-1" choices="None,TowerCard,MonsterCard,SpellCard" name="FilterByType" />
+                <ui:DropdownField label="Rarity" index="-1" choices="None,Common,Rare,Mythic,Legend" name="FilterByRarity" />
+                <ui:SliderInt picking-mode="Ignore" label="Star" value="42" high-value="5" show-input-field="true" name="FilterByStar" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ItemTab" style="height: 456px; width: 100%; display: flex; opacity: 1; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 0; -unity-background-image-tint-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; align-items: stretch; justify-content: space-between; flex-direction: column; border-top-color: rgb(255, 255, 255);" />
         </ui:VisualElement>
-        <ui:VisualElement style="width: 1px; background-color: rgb(255, 255, 255);" />
+        <ui:VisualElement style="width: 1px; background-color: rgb(255, 255, 255); height: 100%;" />
         <ui:VisualElement name="ContainerDetail" picking-mode="Ignore" style="width: 799px; align-items: center; display: flex; visibility: visible;">
             <ui:VisualElement name="Header" style="flex-direction: row; align-items: center;">
-                <ui:Label text="New Card" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; width: 522px; font-size: 40px;" />
+                <ui:Label text="Detail" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; width: 522px; font-size: 40px;" />
                 <ui:Button text="Delete" display-tooltip-when-elided="true" name="DeleteButton" style="width: 50px; height: 30px; opacity: 1; left: auto; right: auto; top: auto; bottom: auto; white-space: nowrap; -unity-text-align: middle-center; transform-origin: center;" />
             </ui:VisualElement>
-            <ui:VisualElement name="CardInfor" style="height: 221px; align-items: center; flex-direction: row; justify-content: center;">
+            <ui:VisualElement name="CardInfor" style="height: 221px; align-items: center; flex-direction: row; justify-content: center; visibility: visible;">
                 <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/PlasticSCM/Assets/Images/d_genericbuho2.png?fileID=2800000&amp;guid=0f061b4bd0275bc4eb60f2af31e7375a&amp;type=3#d_genericbuho2&apos;); width: 200px; height: 172px; justify-content: flex-end; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;" />
-                <ui:VisualElement name="Container" style="width: 306px; height: 148px; align-items: stretch; justify-content: space-between; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;">
+                <ui:VisualElement name="Container" style="width: 306px; height: 148px; align-items: stretch; justify-content: space-between; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; visibility: visible;">
                     <ui:TextField picking-mode="Ignore" label="Name" value="filler text" text="New Card" name="CardName" password="false" readonly="false" binding-path="CardName" />
                     <ui:SliderInt picking-mode="Ignore" label="Star" value="42" high-value="5" name="CardStart" show-input-field="true" inverted="false" binding-path="CardStart" style="opacity: 1;" />
-                    <ui:DropdownField label="Card Type" index="-1" name="CardType" focusable="true" binding-path="TypeOfCard" choices="None,Tower Card,Monster Card,Spell Card" style="visibility: visible; overflow: visible; display: flex;" />
+                    <ui:DropdownField label="Card Type" index="0" name="CardType" focusable="true" binding-path="TypeOfCard" style="visibility: visible; overflow: visible; display: flex; opacity: 1;" />
                     <ui:DropdownField label="Rarity" index="0" name="RarityCard" focusable="true" binding-path="CardRarity" choices="None,Common,Rare,Mythic,Legend" />
                     <uie:ObjectField label="Object Field" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="CardImage" binding-path="CardImage" />
                 </ui:VisualElement>
@@ -38,7 +44,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="TowerStats" style="height: 139px; width: 342px; flex-direction: column; align-items: stretch; justify-content: space-between; display: none; visibility: visible;">
                 <ui:Label text="Tower Stats" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; height: 22px; font-size: 15px;" />
-                <uie:IntegerField label="Energy" value="0" name="Energy" binding-path="CardStats.Energy" />
+                <uie:IntegerField label="Energy" value="0" name="Energy" binding-path="Energy" />
                 <uie:IntegerField label="Damage" value="0" name="Damage" binding-path="Damage" />
                 <uie:FloatField label="Range" value="0" name="Range" binding-path="Range" />
                 <uie:FloatField label="Attack Speed" value="0" name="AttackSpeed" readonly="false" binding-path="AttackSpeed" />

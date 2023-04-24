@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f790e0bc5280ee4fa534432e44c4f98, type: 3}
   m_Name: CardManager
   m_EditorClassIdentifier: 
-  ListCards:
-  - {fileID: 11400000, guid: 67626ace66bd5894ca8ac14daf6eaf20, type: 2}
+  ListCards: []
