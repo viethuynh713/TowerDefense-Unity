@@ -1,34 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace MythicEmpire
+namespace MythicEmpire.InGame
 {
     public class PlayerController : MonoBehaviour
     {
         private string playerID;
         private List<GameObject> cardList;
-        private GameObject map;
-        private bool isMine;
-        private GameObject monsterGate;
+        private bool isMyPlayer;
+        private Vector2Int monsterGatePos;
 
         [SerializeField] private GameObject monster;
         // Start is called before the first frame update
         void Start()
         {
-            // check this 'player' is 'me' or 'opponent'
-            if (transform.position.x > 11)
-            {
-                isMine = true;
-            }
-            else
-            {
-                isMine = false;
-            }
-            // get monster gate
-            monsterGate = GameObject.Find("MonsterGate");
+            playerID = Random.Range(10000000, 99999999).ToString();
             // generate monster (test)
             GenerateMonster();
+        }
+
+        public void Init(bool isMyPlayer)
+        {
+            this.isMyPlayer = isMyPlayer;
+            monsterGatePos = InGameService.monsterGateLogicPos;
         }
 
         // Update is called once per frame
@@ -39,9 +35,11 @@ namespace MythicEmpire
 
         public void GenerateMonster()
         {
-            Instantiate(monster, monsterGate.transform.position, Quaternion.identity);
+            GameObject monsterObj = Instantiate(monster, InGameService.Logic2DisplayPos(monsterGatePos), Quaternion.identity);
+            monsterObj.GetComponent<Monster>().Init(playerID, !isMyPlayer);
         }
 
-        public bool IsMine { get { return isMine; } }
+        public string PlayerId { get { return playerID; } }
+        public bool IsMyPlayer { get { return isMyPlayer; } }
     }
 }

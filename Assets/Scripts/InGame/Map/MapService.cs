@@ -1,45 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace MythicEmpire
+namespace MythicEmpire.InGame
 {
     public class MapService : MonoBehaviour
     {
-        private const int width = 10;
-        private const int height = 10;
-        [SerializeField] private GameObject sampleTile;
-        [SerializeField] private GameObject house;
         private GameObject[][] currentMap;
+
+        [SerializeField] private GameObject emptyTile;
+        [SerializeField] private GameObject barrierTile;
+        [SerializeField] private GameObject monsterGateTile;
+        [SerializeField] private GameObject bridgeTile;
+        [SerializeField] private GameObject houseTile;
+        [SerializeField] private GameObject coverTile;
 
         // Start is called before the first frame update
         void Start()
         {
             // initial map
-            currentMap = new GameObject[height][];
-            for (int i = 0; i < height; i++)
+            currentMap = new GameObject[InGameService.mapHeight][];
+            for (int i = 0; i < InGameService.mapHeight; i++)
             {
-                currentMap[i] = new GameObject[width];
+                currentMap[i] = new GameObject[InGameService.mapWidth];
             }
-            for (int i = 0; i < height; i++)
+            for (int i = 0; i < InGameService.mapHeight; i++)
             {
-                for (int j = 0; j < width; j++)
+                for (int j = 0; j < InGameService.mapWidth; j++)
                 {
-                    currentMap[i][j] = Instantiate(sampleTile, transform.position + new Vector3(j, 0, i), Quaternion.identity);
+                    if (j == 0 || j == InGameService.mapWidth - 1)
+                    {
+                        bool isHouseTile = false;
+                        foreach (var pos in InGameService.houseLogicPos)
+                        {
+                            if (pos.Value == new Vector2Int(j, i))
+                            {
+                                isHouseTile = true;
+                                break;
+                            }
+                        }
+                        currentMap[i][j] = isHouseTile
+                            ? Instantiate(houseTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, j == 0 ? 90 : -90, 0))
+                            : Instantiate(barrierTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
+                    }
+                    else if (j == InGameService.columnIndexSplit)
+                    {
+                        currentMap[i][j] = InGameService.monsterGateLogicPos == new Vector2Int(j, i)
+                            ? Instantiate(monsterGateTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, 90, 0))
+                            : Instantiate(bridgeTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, 90, 0));
+                    }
+                    else
+                    {
+                        currentMap[i][j] = Instantiate(emptyTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
+                        currentMap[i][j].GetComponent<Tile>().Type = j < InGameService.columnIndexSplit
+                            ? Enums.TypeTile.Opponent : Enums.TypeTile.Player;
+                    }
                     currentMap[i][j].transform.parent = transform;
                 }
             }
-            // initial house
-            GameObject houseObj;
-            if (transform.parent.gameObject.GetComponent<PlayerController>().IsMine)
+            for (int j = 0; j < InGameService.mapWidth; j++)
             {
-                houseObj = Instantiate(house, transform.position + new Vector3(10, 0, 5), Quaternion.Euler(new Vector3(0, -90, 0)));
+                Instantiate(coverTile, new Vector3(j, 0, -1), Quaternion.identity);
+                Instantiate(coverTile, new Vector3(j, 0, InGameService.mapHeight), Quaternion.identity);
             }
-            else
-            {
-                houseObj = Instantiate(house, transform.position + new Vector3(-1, 0, 5), Quaternion.Euler(new Vector3(0, 90, 0)));
-            }
-            houseObj.transform.parent = transform;
         }
 
         // Update is called once per frame
@@ -53,6 +77,17 @@ namespace MythicEmpire
 
         }
 
+        public void UpdateMap()
+        {
+
+        }
+
+        public void IsValidPosition()
+        {
+
+        }
+
+        public GameObject[][] CurrentMap { get { return currentMap; } }
         class TreeTileLinkedList
         {
             public LinkedList<InitTree1Node> treeTileLinkedList;
@@ -130,25 +165,15 @@ namespace MythicEmpire
         private void InitTree1()
         {
             List<Vector2Int> tileList = new List<Vector2Int>();
-            for (int i = 1; i < height - 1; i++)
+            for (int i = 1; i < InGameService.mapHeight - 1; i++)
             {
-                for (int j = 1; j < width - 1; j++)
+                for (int j = 1; j < InGameService.mapWidth - 1; j++)
                 {
                     tileList.Add(new Vector2Int(i, j));
                 }
             }
             TreeTileLinkedList treeTileLinkedList = new TreeTileLinkedList(tileList, 9);
             List<Vector2Int> treePosList = treeTileLinkedList.createAllTree();
-        }
-
-        public void UpdateMap()
-        {
-
-        }
-
-        public void IsValidPosition()
-        {
-
         }
     }
 }

@@ -37,5 +37,15 @@ namespace MythicEmpire.Enums
         Legend
 
     }
-
+    public enum TypeTile
+    {
+        None,
+        Player,
+        Opponent
+    }
+    public enum TypePlayer
+    {
+        Player,
+        Opponent
+    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MythicEmpire
 {
-    public class StatsCard : MonoBehaviour
+    public class StatsCard
     {
         public int energy;
     }

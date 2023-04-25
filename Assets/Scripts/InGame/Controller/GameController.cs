@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MythicEmpire
+namespace MythicEmpire.InGame
 {
     public class GameController : MonoBehaviour
     {
-        private const int nPlayer = 2;
-        private readonly List<Vector3> mapPosList = new List<Vector3>() { new Vector3(1, 0, 0), new Vector3(12, 0, 0) };
-
         private string gameID;
         private List<GameObject> playerList;
+        [SerializeField] private GameObject map;
         private GameState state;
 
         [SerializeField] private GameObject playerController;
@@ -19,9 +17,12 @@ namespace MythicEmpire
         void Start()
         {
             playerList = new List<GameObject>();
-            for (int i = 0; i < nPlayer; i++)
+            for (int i = 0; i < InGameService.nPlayer; i++)
             {
-                GameObject player = Instantiate(playerController, mapPosList[i], Quaternion.identity);
+                GameObject player = Instantiate(
+                    playerController, InGameService.Logic2DisplayPos(InGameService.mapLogicPos), Quaternion.identity
+                );
+                player.GetComponent<PlayerController>().Init(i == 0 ? true : false);
                 playerList.Add(player);
             }
         }
@@ -31,5 +32,18 @@ namespace MythicEmpire
         {
 
         }
+
+        public GameObject GetPlayer(string id)
+        {
+            foreach (GameObject player in playerList)
+            {
+                if (player.GetComponent<PlayerController>().PlayerId == id)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
+        public GameObject Map { get { return map; } }
     }
 }

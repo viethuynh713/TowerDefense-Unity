@@ -1,19 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MythicEmpire.Enums;
 
-namespace MythicEmpire
+namespace MythicEmpire.InGame
 {
     public class Tile : MonoBehaviour
     {
         private Vector2Int pos;
-        private bool isBarrier;
-        [SerializeField] private Transform tile;
+        [SerializeField] private bool isBarrier;
+        private TypeTile type;
         // private Tower tower;
         // Start is called before the first frame update
         void Start()
         {
-            isBarrier = false;
+            type = TypeTile.None;
         }
 
         // Update is called once per frame
@@ -22,14 +23,7 @@ namespace MythicEmpire
 
         }
 
-        public void ChangeToEmptyTile()
-        {
-            isBarrier = false;
-        }
-
-        public void ChangeToBarrier()
-        {
-            isBarrier = true;
-        }
+        public bool IsBarrier { get { return isBarrier; } set { isBarrier = value; } }
+        public TypeTile Type { get { return type; } set { type = value; } }
     }
 }

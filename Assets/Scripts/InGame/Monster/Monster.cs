@@ -1,14 +1,20 @@
+using MythicEmpire.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
-namespace MythicEmpire
+namespace MythicEmpire.InGame
 {
     public class Monster : MonoBehaviour
     {
-        private int id;
-        private int ownerId;
+        private string id;
+        private string ownerId;
+        private bool isMyPlayer;
         private bool canAction;
+        private bool isSummonedByPlayer;
         private MonsterStats stats;
         //private List<Effect> state;
         private List<Vector2Int> path;
@@ -16,7 +22,20 @@ namespace MythicEmpire
         // Start is called before the first frame update
         void Start()
         {
-            path = new List<Vector2Int> { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0) };
+            path = new List<Vector2Int>();
+            stats = new MonsterStats();
+
+            stats.MoveSpeed = 1;
+            stats.AttackRange = 3;
+
+            isSummonedByPlayer = false;
+            FindPath();
+        }
+
+        public void Init(string ownerId, bool isMyPlayer)
+        {
+            this.ownerId = ownerId;
+            this.isMyPlayer = isMyPlayer;
         }
 
         // Update is called once per frame
@@ -27,12 +46,21 @@ namespace MythicEmpire
 
         public void Move()
         {
-
+            if (path.Count > 0)
+            {
+                transform.Translate((InGameService.Logic2DisplayPos(path[0]) - transform.position).normalized
+                    * stats.MoveSpeed * Time.deltaTime
+                );
+                if (Mathf.Abs((InGameService.Logic2DisplayPos(path[0]) - transform.position).magnitude) < 0.01f)
+                {
+                    path.RemoveAt(0);
+                }
+            }
         }
 
-        public void AttackMonster()
+        public void AttackMonster(GameObject target)
         {
-
+            Debug.Log("Attack Monster");
         }
 
         public void AttackHouse()
@@ -62,7 +90,13 @@ namespace MythicEmpire
 
         public void FindPath()
         {
-
+            path = InGameService.FindPath(
+                FindObjectOfType<GameController>().Map.GetComponent<MapService>().CurrentMap,
+                InGameService.Display2LogicPos(transform.position),
+                InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Player : TypePlayer.Opponent]
+            );
         }
+
+        public MonsterStats Stats { get { return stats; } }
     }
 }
