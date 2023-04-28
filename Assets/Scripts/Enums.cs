@@ -7,7 +7,8 @@ namespace MythicEmpire.Enums
         OnLoginFail,
         OnRegisterSuccess,
         OnRegisterFail,
-        
+
+        SelectedCard
     }
     public enum GachaType
     {

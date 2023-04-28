@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MythicEmpire.Card;
+using MythicEmpire.Enums;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -25,6 +26,8 @@ public class EditorCardManager : EditorWindow
     private VisualElement _monsterStats;
     private StatsCard _statsCard;
     private List<CardInfo> _listCardRender;
+    private RarityCard _filterRarity;
+    private string _filterCardName = "";
 
     [MenuItem("MythicEmpire/Card Manager")]
     public static void ShowListCard()
@@ -62,7 +65,7 @@ public class EditorCardManager : EditorWindow
 
         //Load all existing item assets 
         LoadAllItems();
-
+        _listCardRender = _cardManager.ListCards;
         //Populate the listview
         _itemsTab = rootVisualElement.Q<VisualElement>("ItemTab");
         GenerateListView();
@@ -76,22 +79,26 @@ public class EditorCardManager : EditorWindow
              _itemListView.Rebuild();
          });
 
-         rootVisualElement.Q<DropdownField>("FilterByType").RegisterValueChangedCallback(evt =>
-         {
-             // GetCardRender(evt.newValue);
-         });
          rootVisualElement.Q<DropdownField>("FilterByRarity").RegisterValueChangedCallback(evt =>
          {
-             // GetCardRender(evt.newValue);
-
+             _filterRarity = Enum.Parse<RarityCard>(evt.newValue);
+             GetCardRender();
+             _itemListView.Rebuild();
          });
-         rootVisualElement.Q<SliderInt>("FilterByStar").RegisterValueChangedCallback(evt =>
+         rootVisualElement.Q<TextField>("FilterByName").RegisterValueChangedCallback(evt =>
          {
-             // GetCardRender(evt.newValue);
+             _filterCardName = evt.newValue;
+             GetCardRender();
+             _itemListView.Rebuild();
 
          });
          _containerDetail.Q<DropdownField>("RarityCard").RegisterValueChangedCallback(evt => 
          {
+             _itemListView.Rebuild();
+         });         
+         _containerDetail.Q<SliderInt>("CardStar").RegisterValueChangedCallback(evt => 
+         {
+             // Debug.Log("1");
              _itemListView.Rebuild();
          });
         _containerDetail.Q<ObjectField>("CardImage").RegisterValueChangedCallback(evt =>
@@ -106,14 +113,23 @@ public class EditorCardManager : EditorWindow
 
     }
 
-    private void GetCardRenderByRarity(int evtNewValue)
+    private void GetCardRender()
     {
         
+
+        if (_filterRarity != RarityCard.None)
+        {
+            _listCardRender = _cardManager.ListCards.FindAll(card =>
+                card.CardRarity == _filterRarity && card.CardName.Contains(_filterCardName));
+        }
+        else
+        {
+            _listCardRender = _cardManager.ListCards.FindAll(card =>
+                 card.CardName.Contains(_filterCardName));
+        }
+        _itemListView.Rebuild();
     }
-    private void GetCardRenderByType(string evtNewValue)
-    {
-        ;
-    }
+
 
     private void ChangeStats(string value)
     {
@@ -158,7 +174,7 @@ private void DeleteItem_OnClick()
     
     //Purge the reference from the list and refresh the ListView
     _cardManager.ListCards.Remove(_activeCard);
-    
+    _listCardRender.Remove(_activeCard);
     _itemListView.Rebuild();
     
     //Nothing is selected, so hide the details section
@@ -192,7 +208,7 @@ private void DeleteItem_OnClick()
     /// </summary>
     private void GenerateListView()
     {
-        if (_cardManager.ListCards.Count == 0) return;
+        if (_listCardRender.Count == 0) return;
         //Defining what each item will visually look like. In this case, the makeItem function is creating a clone of the ItemRowTemplate.
         Func<VisualElement> makeItem = () => _itemRowTemplate.CloneTree();
 
@@ -201,15 +217,15 @@ private void DeleteItem_OnClick()
         //Name label to the FriendlyName property.
         Action<VisualElement, int> bindItem = (e, i) =>
         {
-            e.Q<VisualElement>("CardImage").style.backgroundImage = _cardManager.ListCards[i].CardImage == null ? _defaultItemIcon.texture :  _cardManager.ListCards[i].CardImage.texture;
-            e.Q<Label>("Name").text = _cardManager.ListCards[i].CardName;
-            e.Q<Label>("Type").text = _cardManager.ListCards[i].TypeOfCard.ToString();
-            e.Q<Label>("Rarity").text = _cardManager.ListCards[i].CardRarity.ToString();
-            e.Q<Label>("Star").text = _cardManager.ListCards[i].CardStar.ToString();
+            e.Q<VisualElement>("CardImage").style.backgroundImage = _listCardRender[i].CardImage == null ? _defaultItemIcon.texture :  _listCardRender[i].CardImage.texture;
+            e.Q<Label>("Name").text = _listCardRender[i].CardName;
+            e.Q<Label>("Type").text = _listCardRender[i].TypeOfCard.ToString();
+            e.Q<Label>("Rarity").text = _listCardRender[i].CardRarity.ToString();
+            e.Q<Label>("Star").text = _listCardRender[i].CardStar.ToString();
         };
 
         //Create the listview and set various properties
-        _itemListView = new ListView(_cardManager.ListCards, _itemHeight, makeItem, bindItem);
+        _itemListView = new ListView(_listCardRender, _itemHeight, makeItem, bindItem);
         _itemListView.selectionType = SelectionType.Single;
         _itemListView.style.height = 450;
         _itemsTab.Add(_itemListView);

@@ -40,7 +40,7 @@ public class EditorAddCard : EditorWindow
         
         _containerDetail = rootVisualElement.Q<VisualElement>("ContainerDetail");
         _cardImage = _containerDetail.Q<VisualElement>("Image");
-        _defaultItemIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/UI/Lobby Source UI/SignalIcon.png");
+        _defaultItemIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/UI/LobbyUI/SignalIcon.png");
         _towerStats = rootVisualElement.Q<VisualElement>("TowerStats");
         _spellStats = rootVisualElement.Q<VisualElement>("SpellStats");
         _monsterStats = rootVisualElement.Q<VisualElement>("MonsterStats");

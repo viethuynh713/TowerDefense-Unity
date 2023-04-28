@@ -6,10 +6,9 @@
                 <ui:Label text="List Card" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-center; width: 267px; font-size: 14px; white-space: nowrap; height: 23px;" />
                 <ui:Button text="Add" display-tooltip-when-elided="true" name="AddButton" style="display: flex; white-space: normal; width: 46px; height: 27px; font-size: 12px; flex-direction: row; overflow: visible; left: auto; right: auto; position: relative; top: auto; transform-origin: center; -unity-text-align: middle-center; opacity: 1; visibility: visible; flex-basis: auto;" />
             </ui:VisualElement>
-            <ui:VisualElement style="height: 100px; justify-content: space-between; display: none; margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px;">
-                <ui:DropdownField label="Card Type" index="-1" choices="None,TowerCard,MonsterCard,SpellCard" name="FilterByType" />
+            <ui:VisualElement style="height: 55px; justify-content: space-between; display: flex; margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px;">
+                <ui:TextField picking-mode="Ignore" label="Name" name="FilterByName" />
                 <ui:DropdownField label="Rarity" index="-1" choices="None,Common,Rare,Mythic,Legend" name="FilterByRarity" />
-                <ui:SliderInt picking-mode="Ignore" label="Star" value="42" high-value="5" show-input-field="true" name="FilterByStar" />
             </ui:VisualElement>
             <ui:VisualElement name="ItemTab" style="height: 456px; width: 100%; display: flex; opacity: 1; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 0; -unity-background-image-tint-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; align-items: stretch; justify-content: space-between; flex-direction: column; border-top-color: rgb(255, 255, 255);" />
         </ui:VisualElement>
@@ -23,7 +22,7 @@
                 <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/PlasticSCM/Assets/Images/d_genericbuho2.png?fileID=2800000&amp;guid=0f061b4bd0275bc4eb60f2af31e7375a&amp;type=3#d_genericbuho2&apos;); width: 200px; height: 172px; justify-content: flex-end; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;" />
                 <ui:VisualElement name="Container" style="width: 306px; height: 148px; align-items: stretch; justify-content: space-between; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; visibility: visible;">
                     <ui:TextField picking-mode="Ignore" label="Name" value="filler text" text="New Card" name="CardName" password="false" readonly="false" binding-path="CardName" />
-                    <ui:SliderInt picking-mode="Ignore" label="Star" value="42" high-value="5" name="CardStart" show-input-field="true" inverted="false" binding-path="CardStart" style="opacity: 1;" />
+                    <ui:SliderInt picking-mode="Ignore" label="Star" value="42" high-value="5" name="CardStar" show-input-field="true" inverted="false" binding-path="CardStar" style="opacity: 1;" />
                     <ui:DropdownField label="Card Type" index="0" name="CardType" focusable="true" binding-path="TypeOfCard" style="visibility: visible; overflow: visible; display: flex; opacity: 1;" />
                     <ui:DropdownField label="Rarity" index="0" name="RarityCard" focusable="true" binding-path="CardRarity" choices="None,Common,Rare,Mythic,Legend" />
                     <uie:ObjectField label="Object Field" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="CardImage" binding-path="CardImage" />

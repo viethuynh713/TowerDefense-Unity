@@ -9,12 +9,12 @@ namespace MythicEmpire.Card
 
 
     [CreateAssetMenu(fileName = "Card Data", menuName = "MythicEmpire Data/Data/Card")]
-
+    
     public class CardInfo : ScriptableObject
     {
         public string CardId = Guid.NewGuid().ToString();
         public string CardName;
-        [FormerlySerializedAs("CardStart")] [Range(0,5)]
+        [Range(0,5)]
         public int CardStar;
         public Sprite CardImage;
         public CardType TypeOfCard;

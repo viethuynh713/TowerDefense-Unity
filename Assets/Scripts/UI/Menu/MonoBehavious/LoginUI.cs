@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using DG.Tweening;
+﻿using DG.Tweening;
 using MythicEmpire.Manager;
-using MythicEmpire.Networking;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 using VContainer;
 
 namespace MythicEmpire.UI.Menu

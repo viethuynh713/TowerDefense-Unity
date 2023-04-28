@@ -20,6 +20,10 @@ namespace MythicEmpire.Card
             return ListCards.Find(card => card.CardId.Equals(id));
         }
 
+        public List<CardInfo> GetMultiCard()
+        {
+            return ListCards;
+        }
         public List<CardInfo> GetMultiCard(List<string> ids)
         {
             List<CardInfo> result = new List<CardInfo>();
@@ -38,7 +42,7 @@ namespace MythicEmpire.Card
 
         public List<CardInfo> GetMultiCard(RarityCard rarityCard)
         {
-            return ListCards.FindAll(card => card.CardRarity.Equals(rarityCard));
+            return ListCards.FindAll(card => card.CardRarity.Equals(rarityCard) && card.CardStar == 0);
 
         }
 

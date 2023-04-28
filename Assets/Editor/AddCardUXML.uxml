@@ -4,10 +4,10 @@
             <ui:Label text="Detail" display-tooltip-when-elided="true" style="height: 36px;" />
         </ui:VisualElement>
         <ui:VisualElement name="ContainerDetail" style="margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; flex-direction: row;">
-            <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/UI/Lobby%20Source%20UI/SignalIcon.png?fileID=2800000&amp;guid=c46a7b019e7c23b439bd4f4bc0a9d83b&amp;type=3#SignalIcon&apos;); width: 150px; height: 150px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px;" />
+            <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/UI/LobbyUI/SignalIcon.png?fileID=2800000&amp;guid=c46a7b019e7c23b439bd4f4bc0a9d83b&amp;type=3#SignalIcon&apos;); width: 150px; height: 150px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px;" />
             <ui:VisualElement name="VisualElement" style="width: 366px; margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px; justify-content: space-between; align-items: stretch;">
                 <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="CardName" name="CardName" />
-                <ui:SliderInt picking-mode="Ignore" label="Star" value="0" high-value="5" show-input-field="true" name="CardStart" binding-path="CardStart" />
+                <ui:SliderInt picking-mode="Ignore" label="Star" value="0" high-value="5" show-input-field="true" name="CardStar" binding-path="CardStar" />
                 <ui:DropdownField label="Type" index="-1" choices="None,Tower Card,Monster Card,Spell Card" name="TypeOfCard" binding-path="TypeOfCard" style="display: flex;" />
                 <ui:DropdownField label="Rarity" index="-1" choices="None,Common,Rare,Mythic,Legend" binding-path="CardRarity" name="CardRarity" />
                 <uie:ObjectField label="Sprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="CardImage" binding-path="CardImage" />
