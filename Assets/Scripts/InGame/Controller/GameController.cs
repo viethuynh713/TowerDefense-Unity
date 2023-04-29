@@ -44,6 +44,19 @@ namespace MythicEmpire.InGame
             }
             return null;
         }
+
+        public GameObject GetPlayer(bool isMyPlayer)
+        {
+            foreach (GameObject player in playerList)
+            {
+                if (player.GetComponent<PlayerController>().IsMyPlayer == isMyPlayer)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
+
         public GameObject Map { get { return map; } }
     }
 }

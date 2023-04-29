@@ -72,7 +72,7 @@ namespace MythicEmpire.InGame
                 }
                 Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
                 transform.LookAt(displayPos);
-                transform.Translate(transform.forward * stats.MoveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, displayPos, stats.MoveSpeed * Time.deltaTime);
                 if (Mathf.Abs((displayPos - transform.position).magnitude) < 0.01f)
                 {
                     path.RemoveAt(0);
@@ -89,7 +89,8 @@ namespace MythicEmpire.InGame
             anim.Play("MoveFWD_Normal_InPlace_SwordAndShield");
             isOnPath = false;
             transform.LookAt(target.transform.position);
-            transform.Translate(transform.forward * stats.MoveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position,
+                stats.MoveSpeed * Time.deltaTime);
         }
 
         public void AttackMonster(Transform target)
@@ -98,6 +99,7 @@ namespace MythicEmpire.InGame
             {
                 anim.Play("Attack01_SwordAndShiled");
                 isOnPath = false;
+                transform.LookAt(target.transform.position);
                 target.gameObject.GetComponent<Monster>().TakeDmg(stats.Damage);
                 canAttack = false;
                 StartCoroutine(AttackCD());
@@ -108,6 +110,7 @@ namespace MythicEmpire.InGame
         {
             anim.Play("Attack01_SwordAndShiled");
             isOnPath = true;
+            FindObjectOfType<GameController>().GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(stats.Damage);
         }
 
         public void TakeDmg(int dmg)

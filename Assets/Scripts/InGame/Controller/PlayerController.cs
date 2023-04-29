@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using MythicEmpire.CommonScript;
+
 namespace MythicEmpire.InGame
 {
     public class PlayerController : MonoBehaviour
     {
         private string playerID;
+        private int hp;
         private List<GameObject> cardList;
         private bool isMyPlayer;
         private Vector2Int monsterGatePos;
@@ -17,6 +20,7 @@ namespace MythicEmpire.InGame
         void Start()
         {
             playerID = Random.Range(10000000, 99999999).ToString();
+            hp = InGameService.playerHp;
             // generate monster (test)
             GenerateMonster();
         }
@@ -39,7 +43,17 @@ namespace MythicEmpire.InGame
             monsterObj.GetComponent<Monster>().Init(playerID, !isMyPlayer);
         }
 
+        public void TakeDmg(int dmg)
+        {
+            hp -= dmg;
+            if (hp <= 0)
+            {
+                Common.Log("End Game!");
+            }
+        }
+
         public string PlayerId { get { return playerID; } }
+        public int Hp { get { return hp; } set { hp = value; } }
         public bool IsMyPlayer { get { return isMyPlayer; } }
     }
 }

@@ -24,6 +24,8 @@ namespace MythicEmpire.InGame
         public static readonly int mapWidth = 23;
         public static readonly int mapHeight = 10;
 
+        public static readonly int playerHp = 15;
+
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {
             return new Vector3(logicPos.x, 0, logicPos.y);
