@@ -13,8 +13,11 @@ namespace MythicEmpire
         private float attackRange;
         private int damage;
 
+        public int Hp { get { return hp; } set { hp = value; } }
+        public float AttackSpeed { get { return attackSpeed; } set { attackSpeed = value; } }
         public float MoveSpeed { get { return moveSpeed; } set {  moveSpeed = value; } }
         public float DetectRange { get {  return detectRange; } set {  detectRange = value; } }
         public float AttackRange { get { return attackRange; } set {  attackRange = value; } }
+        public int Damage { get { return damage; } set { damage = value; } }
     }
 }

@@ -13,9 +13,20 @@ namespace MythicEmpire.InGame
             Node root = new Selector(new List<Node> {
                 new Sequence(new List<Node>
                 {
-                    new CheckAttackMonster(gameObject),
-                    new AttackMonster(gameObject)
-                })
+                    new CheckMonsterDie(transform),
+                    new MonsterDie(transform)
+                }),
+                new Sequence(new List<Node>
+                {
+                    new CheckAttackMonster(transform),
+                    new AttackMonster(transform)
+                }),
+                new Sequence(new List<Node>
+                {
+                    new CheckGoToMonster(transform),
+                    new GoToMonster(transform)
+                }),
+                new GoToHouse(transform)
             });
 
             return root;

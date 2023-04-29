@@ -19,6 +19,7 @@ namespace MythicEmpire.InGame
         public static readonly Dictionary<TypePlayer, Vector2Int> houseLogicPos = new Dictionary<TypePlayer, Vector2Int> {
             { TypePlayer.Player, new Vector2Int(22, 4) }, { TypePlayer.Opponent, new Vector2Int(0, 4) }
         };
+        public static Vector3 rootVector = Vector3.forward;
 
         public static readonly int mapWidth = 23;
         public static readonly int mapHeight = 10;

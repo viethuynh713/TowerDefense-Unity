@@ -6,15 +6,16 @@ using MythicEmpire.BehaviorTree;
 
 namespace MythicEmpire.InGame
 {
-    public class CheckAttackMonster : Node
+    public class CheckGoToMonster : Node
     {
         private static int layerMask = 1 << 3;
         private Transform transform;
         private float range;
 
-        public CheckAttackMonster(Transform transform) {
+        public CheckGoToMonster(Transform transform)
+        {
             this.transform = transform;
-            range = transform.gameObject.GetComponent<Monster>().Stats.AttackRange;
+            range = transform.gameObject.GetComponent<Monster>().Stats.DetectRange;
         }
 
         public override NodeState Evaluate()
@@ -30,10 +31,8 @@ namespace MythicEmpire.InGame
                     float distance = (transform.position - collider.transform.position).magnitude;
                     if (collider.gameObject != transform.gameObject && distance < minDistance)
                     {
-                        Monster component = transform.gameObject.GetComponent<Monster>();
-                        Monster colliderComponent = collider.gameObject.GetComponent<Monster>();
-                        if ((component.IsSummonedByPlayer || colliderComponent.IsSummonedByPlayer)
-                            && !component.IsDie && !colliderComponent.IsDie)
+                        if (transform.gameObject.GetComponent<Monster>().IsSummonedByPlayer
+                            && !collider.gameObject.GetComponent<Monster>().IsDie)
                         {
                             target = collider.gameObject;
                             minDistance = distance;

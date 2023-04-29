@@ -6,21 +6,22 @@ using MythicEmpire.BehaviorTree;
 
 namespace MythicEmpire.InGame
 {
-    public class AttackMonster : Node
+    public class MonsterDie : Node
     {
         private Transform transform;
+        private bool isAnimPlayed;
 
-        public AttackMonster(Transform transform)
-        {
+        public MonsterDie(Transform transform) {
             this.transform = transform;
+            isAnimPlayed = false;
         }
 
         public override NodeState Evaluate()
         {
-            GameObject target = (GameObject)GetData("target");
-            if (target != null)
+            if (!isAnimPlayed)
             {
-                transform.gameObject.GetComponent<Monster>().AttackMonster(target.transform);
+                transform.gameObject.GetComponent<Animator>().Play("Die01_SwordAndShield");
+                isAnimPlayed = true;
             }
 
             state = NodeState.RUNNING;

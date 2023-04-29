@@ -6,11 +6,11 @@ using MythicEmpire.BehaviorTree;
 
 namespace MythicEmpire.InGame
 {
-    public class AttackMonster : Node
+    public class GoToMonster : Node
     {
         private Transform transform;
 
-        public AttackMonster(Transform transform)
+        public GoToMonster(Transform transform)
         {
             this.transform = transform;
         }
@@ -20,7 +20,7 @@ namespace MythicEmpire.InGame
             GameObject target = (GameObject)GetData("target");
             if (target != null)
             {
-                transform.gameObject.GetComponent<Monster>().AttackMonster(target.transform);
+                transform.gameObject.GetComponent<Monster>().MoveToMonster(target.transform);
             }
 
             state = NodeState.RUNNING;

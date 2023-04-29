@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace MythicEmpire.InGame
 {
@@ -13,11 +14,16 @@ namespace MythicEmpire.InGame
         private string id;
         private string ownerId;
         private bool isMyPlayer;
-        private bool canAction;
-        private bool isSummonedByPlayer;
         private MonsterStats stats;
+        private bool isSummonedByPlayer;
+        private bool canAction;
+        private bool canAttack;
+        private bool isDie;
+        private bool isOnPath;
         //private List<Effect> state;
         private List<Vector2Int> path;
+
+        private Animator anim;
 
         // Start is called before the first frame update
         void Start()
@@ -25,10 +31,20 @@ namespace MythicEmpire.InGame
             path = new List<Vector2Int>();
             stats = new MonsterStats();
 
+            stats.Hp = 10;
+            stats.AttackSpeed = 1.5f;
             stats.MoveSpeed = 1;
-            stats.AttackRange = 3;
+            stats.DetectRange = 6;
+            stats.AttackRange = 2;
+            stats.Damage = 1;
 
-            isSummonedByPlayer = false;
+            canAttack = true;
+            isSummonedByPlayer = true;
+            isDie = false;
+            isOnPath = true;
+
+            anim = GetComponent<Animator>();
+
             FindPath();
         }
 
@@ -41,36 +57,69 @@ namespace MythicEmpire.InGame
         // Update is called once per frame
         void Update()
         {
-            Move();
+
         }
 
-        public void Move()
+        public void MoveToHouse()
         {
             if (path.Count > 0)
             {
-                transform.Translate((InGameService.Logic2DisplayPos(path[0]) - transform.position).normalized
-                    * stats.MoveSpeed * Time.deltaTime
-                );
-                if (Mathf.Abs((InGameService.Logic2DisplayPos(path[0]) - transform.position).magnitude) < 0.01f)
+                anim.Play("MoveFWD_Normal_InPlace_SwordAndShield");
+                if (!isOnPath)
+                {
+                    isOnPath = true;
+                    FindPath();
+                }
+                Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
+                transform.LookAt(displayPos);
+                transform.Translate(transform.forward * stats.MoveSpeed * Time.deltaTime);
+                if (Mathf.Abs((displayPos - transform.position).magnitude) < 0.01f)
                 {
                     path.RemoveAt(0);
                 }
             }
+            else
+            {
+                AttackHouse();
+            }
         }
 
-        public void AttackMonster(GameObject target)
+        public void MoveToMonster(Transform target)
         {
-            Debug.Log("Attack Monster");
+            anim.Play("MoveFWD_Normal_InPlace_SwordAndShield");
+            isOnPath = false;
+            transform.LookAt(target.transform.position);
+            transform.Translate(transform.forward * stats.MoveSpeed * Time.deltaTime);
+        }
+
+        public void AttackMonster(Transform target)
+        {
+            if (canAttack)
+            {
+                anim.Play("Attack01_SwordAndShiled");
+                isOnPath = false;
+                target.gameObject.GetComponent<Monster>().TakeDmg(stats.Damage);
+                canAttack = false;
+                StartCoroutine(AttackCD());
+            }
         }
 
         public void AttackHouse()
         {
-
+            anim.Play("Attack01_SwordAndShiled");
+            isOnPath = true;
         }
 
         public void TakeDmg(int dmg)
         {
-
+            if (!isDie)
+            {
+                stats.Hp -= dmg;
+                if (stats.Hp <= 0)
+                {
+                    Die();
+                }
+            }
         }
 
         public void AddEffect(Effect effect)
@@ -85,7 +134,9 @@ namespace MythicEmpire.InGame
 
         public void Die()
         {
-
+            isDie = true;
+            anim.Play("Die01_SwordAndShield");
+            StartCoroutine(DieModel());
         }
 
         public void FindPath()
@@ -97,6 +148,20 @@ namespace MythicEmpire.InGame
             );
         }
 
+        private IEnumerator AttackCD()
+        {
+            yield return new WaitForSeconds(1 / stats.AttackSpeed);
+            canAttack = true;
+        }
+
+        private IEnumerator DieModel()
+        {
+            yield return new WaitForSeconds(3);
+            Destroy(gameObject);
+        }
+
         public MonsterStats Stats { get { return stats; } }
+        public bool IsSummonedByPlayer { get { return isSummonedByPlayer; } }
+        public bool IsDie { get { return isDie; } }
     }
 }

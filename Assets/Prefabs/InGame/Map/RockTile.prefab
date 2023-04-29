@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2115052043444065490}
   - component: {fileID: 3095652129734237047}
   - component: {fileID: 941534329923530685}
+  - component: {fileID: 8920250292218381121}
   - component: {fileID: 4788634373965881387}
   m_Layer: 0
   m_Name: RockTile
@@ -86,6 +87,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8920250292218381121
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590329272852205160}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.99999994, y: 0.19999999, z: 0.99999994}
+  m_Center: {x: 0, y: 0.099999994, z: 0}
 --- !u!114 &4788634373965881387
 MonoBehaviour:
   m_ObjectHideFlags: 0

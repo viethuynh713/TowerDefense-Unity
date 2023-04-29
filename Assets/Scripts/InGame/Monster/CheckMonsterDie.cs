@@ -6,24 +6,23 @@ using MythicEmpire.BehaviorTree;
 
 namespace MythicEmpire.InGame
 {
-    public class AttackMonster : Node
+    public class CheckMonsterDie : Node
     {
         private Transform transform;
 
-        public AttackMonster(Transform transform)
-        {
+        public CheckMonsterDie(Transform transform) {
             this.transform = transform;
         }
 
         public override NodeState Evaluate()
         {
-            GameObject target = (GameObject)GetData("target");
-            if (target != null)
+            if (transform.gameObject.GetComponent<Monster>().IsDie)
             {
-                transform.gameObject.GetComponent<Monster>().AttackMonster(target.transform);
+                state = NodeState.SUCCESS;
+                return state;
             }
 
-            state = NodeState.RUNNING;
+            state = NodeState.FAILURE;
             return state;
         }
     }

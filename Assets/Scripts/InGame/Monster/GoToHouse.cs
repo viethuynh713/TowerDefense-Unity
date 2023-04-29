@@ -6,22 +6,18 @@ using MythicEmpire.BehaviorTree;
 
 namespace MythicEmpire.InGame
 {
-    public class AttackMonster : Node
+    public class GoToHouse : Node
     {
         private Transform transform;
 
-        public AttackMonster(Transform transform)
+        public GoToHouse(Transform transform)
         {
             this.transform = transform;
         }
 
         public override NodeState Evaluate()
         {
-            GameObject target = (GameObject)GetData("target");
-            if (target != null)
-            {
-                transform.gameObject.GetComponent<Monster>().AttackMonster(target.transform);
-            }
+            transform.gameObject.GetComponent<Monster>().MoveToHouse();
 
             state = NodeState.RUNNING;
             return state;
