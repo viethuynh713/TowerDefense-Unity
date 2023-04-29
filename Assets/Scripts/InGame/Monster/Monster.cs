@@ -26,7 +26,7 @@ namespace MythicEmpire.InGame
         private Animator anim;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             path = new List<Vector2Int>();
             stats = new MonsterStats();
@@ -34,7 +34,6 @@ namespace MythicEmpire.InGame
             stats.Hp = 10;
             stats.AttackSpeed = 1.5f;
             stats.MoveSpeed = 1;
-            stats.DetectRange = 6;
             stats.AttackRange = 2;
             stats.Damage = 1;
 
@@ -111,6 +110,7 @@ namespace MythicEmpire.InGame
             anim.Play("Attack01_SwordAndShiled");
             isOnPath = true;
             FindObjectOfType<GameController>().GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(stats.Damage);
+            Destroy(gameObject);
         }
 
         public void TakeDmg(int dmg)

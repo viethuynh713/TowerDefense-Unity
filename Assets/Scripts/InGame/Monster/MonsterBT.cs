@@ -21,11 +21,6 @@ namespace MythicEmpire.InGame
                     new CheckAttackMonster(transform),
                     new AttackMonster(transform)
                 }),
-                new Sequence(new List<Node>
-                {
-                    new CheckGoToMonster(transform),
-                    new GoToMonster(transform)
-                }),
                 new GoToHouse(transform)
             });
 
