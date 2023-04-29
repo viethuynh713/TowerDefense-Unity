@@ -19,7 +19,7 @@ namespace MythicEmpire.InGame
         // Start is called before the first frame update
         void Start()
         {
-            playerID = Random.Range(10000000, 99999999).ToString();
+            playerID = Random.Range(10000000, 99999999).ToString(); // temp id for testing
             hp = InGameService.playerHp;
             // generate monster (test)
             GenerateMonster();

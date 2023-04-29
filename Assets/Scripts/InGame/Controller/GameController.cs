@@ -16,6 +16,7 @@ namespace MythicEmpire.InGame
         // Start is called before the first frame update
         void Start()
         {
+            // initial 2 playerController (the first in playerList is myPlayer)
             playerList = new List<GameObject>();
             for (int i = 0; i < InGameService.nPlayer; i++)
             {

@@ -19,7 +19,7 @@ namespace MythicEmpire.InGame
         // Start is called before the first frame update
         void Start()
         {
-            // initial map
+            // initial empty map
             currentMap = new GameObject[InGameService.mapHeight][];
             for (int i = 0; i < InGameService.mapHeight; i++)
             {
@@ -29,6 +29,7 @@ namespace MythicEmpire.InGame
             {
                 for (int j = 0; j < InGameService.mapWidth; j++)
                 {
+                    // generate tiles at the first and last column
                     if (j == 0 || j == InGameService.mapWidth - 1)
                     {
                         bool isHouseTile = false;
@@ -44,12 +45,14 @@ namespace MythicEmpire.InGame
                             ? Instantiate(houseTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, j == 0 ? 90 : -90, 0))
                             : Instantiate(barrierTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
                     }
+                    // generate tiles at the middle column
                     else if (j == InGameService.columnIndexSplit)
                     {
                         currentMap[i][j] = InGameService.monsterGateLogicPos == new Vector2Int(j, i)
                             ? Instantiate(monsterGateTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, 90, 0))
                             : Instantiate(bridgeTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, 90, 0));
                     }
+                    // generate empty tiles in each side of players
                     else
                     {
                         currentMap[i][j] = Instantiate(emptyTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
@@ -59,6 +62,7 @@ namespace MythicEmpire.InGame
                     currentMap[i][j].transform.parent = transform;
                 }
             }
+            // generate cover tiles for decorating
             for (int j = 0; j < InGameService.mapWidth; j++)
             {
                 Instantiate(coverTile, new Vector3(j, 0, -1), Quaternion.identity);
