@@ -163,6 +163,7 @@ namespace MythicEmpire.InGame
             Destroy(gameObject);
         }
 
+        public bool IsMyPlayer { get { return isMyPlayer; } }
         public MonsterStats Stats { get { return stats; } }
         public bool IsSummonedByPlayer { get { return isSummonedByPlayer; } }
         public bool IsDie { get { return isDie; } }
