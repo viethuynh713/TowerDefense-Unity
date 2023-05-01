@@ -38,19 +38,18 @@ namespace MythicEmpire.InGame
             stats.Damage = 1;
 
             canAttack = true;
-            isSummonedByPlayer = true;
+            isSummonedByPlayer = false;
             isDie = false;
             isOnPath = true;
 
             anim = GetComponent<Animator>();
-
-            FindPath();
         }
 
         public void Init(string ownerId, bool isMyPlayer)
         {
             this.ownerId = ownerId;
             this.isMyPlayer = isMyPlayer;
+            FindPath();
         }
 
         // Update is called once per frame
@@ -59,7 +58,7 @@ namespace MythicEmpire.InGame
 
         }
 
-        public void MoveToHouse()
+        public void Move()
         {
             if (path.Count > 0)
             {
@@ -72,7 +71,7 @@ namespace MythicEmpire.InGame
                 Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
                 transform.LookAt(displayPos);
                 transform.position = Vector3.MoveTowards(transform.position, displayPos, stats.MoveSpeed * Time.deltaTime);
-                if (Mathf.Abs((displayPos - transform.position).magnitude) < 0.01f)
+                if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
                 {
                     path.RemoveAt(0);
                 }
@@ -81,15 +80,6 @@ namespace MythicEmpire.InGame
             {
                 AttackHouse();
             }
-        }
-
-        public void MoveToMonster(Transform target)
-        {
-            anim.Play("MoveFWD_Normal_InPlace_SwordAndShield");
-            isOnPath = false;
-            transform.LookAt(target.transform.position);
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position,
-                stats.MoveSpeed * Time.deltaTime);
         }
 
         public void AttackMonster(Transform target)
@@ -147,7 +137,7 @@ namespace MythicEmpire.InGame
             path = InGameService.FindPath(
                 FindObjectOfType<GameController>().Map.GetComponent<MapService>().CurrentMap,
                 InGameService.Display2LogicPos(transform.position),
-                InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Player : TypePlayer.Opponent]
+                InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Opponent : TypePlayer.Player]
             );
         }
 

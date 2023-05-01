@@ -8,7 +8,6 @@ namespace MythicEmpire.InGame
 {
     public class CheckAttackMonster : Node
     {
-        private static int layerMask = 1 << 3;
         private Transform transform;
         private float range;
 
@@ -19,7 +18,7 @@ namespace MythicEmpire.InGame
 
         public override NodeState Evaluate()
         {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, range, layerMask);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, range, InGameService.monsterLayerMask);
 
             if (colliders.Length > 0)
             {

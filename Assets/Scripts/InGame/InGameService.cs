@@ -19,16 +19,28 @@ namespace MythicEmpire.InGame
         public static readonly Dictionary<TypePlayer, Vector2Int> houseLogicPos = new Dictionary<TypePlayer, Vector2Int> {
             { TypePlayer.Player, new Vector2Int(22, 4) }, { TypePlayer.Opponent, new Vector2Int(0, 4) }
         };
-        public static Vector3 rootVector = Vector3.forward;
+        public static readonly Vector3 rootVector = Vector3.forward;
+        public static readonly float infinitesimal = 0.01f;
 
         public static readonly int mapWidth = 23;
         public static readonly int mapHeight = 10;
 
         public static readonly int playerHp = 15;
 
+        public static readonly int monsterLayerMask = 1 << 3;
+
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {
             return new Vector3(logicPos.x, 0, logicPos.y);
+        }
+
+        public static Vector3 Logic2DisplayPos(Vector2Int logicPos, bool isMyPlayer)
+        {
+            if (isMyPlayer)
+            {
+                return new Vector3(logicPos.x + columnIndexSplit + 1, 0, logicPos.y);
+            }
+            return new Vector3(columnIndexSplit - 1 - logicPos.x, 0, mapHeight - logicPos.y - 1);
         }
 
         public static Vector2Int Display2LogicPos(Vector3 displayPos)

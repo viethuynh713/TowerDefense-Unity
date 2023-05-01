@@ -17,7 +17,7 @@ namespace MythicEmpire.InGame
 
         public override NodeState Evaluate()
         {
-            transform.gameObject.GetComponent<Monster>().MoveToHouse();
+            transform.gameObject.GetComponent<Monster>().Move();
 
             state = NodeState.RUNNING;
             return state;

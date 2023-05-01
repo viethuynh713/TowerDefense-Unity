@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56ba4cceb7569124ab27eeb1d925119e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tower: {fileID: 7974010707245570086, guid: 9e77f9c1607c427409368c1bbb13a200, type: 3}
   monster: {fileID: 2168121448067137366, guid: 673b2e3a498ecfe4eb8fa5a9d1b1c91c, type: 3}

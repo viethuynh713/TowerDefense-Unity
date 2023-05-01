@@ -15,6 +15,7 @@ namespace MythicEmpire.InGame
         private bool isMyPlayer;
         private Vector2Int monsterGatePos;
 
+        [SerializeField] private GameObject tower;
         [SerializeField] private GameObject monster;
         // Start is called before the first frame update
         void Start()
@@ -23,6 +24,7 @@ namespace MythicEmpire.InGame
             hp = InGameService.playerHp;
             // generate monster (test)
             GenerateMonster();
+            BuildTower(5, 5);
         }
 
         public void Init(bool isMyPlayer)
@@ -35,6 +37,12 @@ namespace MythicEmpire.InGame
         void Update()
         {
 
+        }
+
+        public void BuildTower(int i, int j)
+        {
+            GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(new Vector2Int(i, j), isMyPlayer) + new Vector3(0, 0.16f, 0), Quaternion.identity);
+            t.GetComponent<Tower>().Init(isMyPlayer);
         }
 
         public void GenerateMonster()
