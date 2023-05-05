@@ -54,6 +54,7 @@ namespace MythicEmpire.InGame
                     }
                     if (target != null)
                     {
+                        transform.LookAt(target.transform.position);
                         GameObject b = Instantiate(bullet, transform.position, transform.rotation);
                         b.GetComponent<Bullet>().Init(target.transform, stats);
                         StartCoroutine(LoadBullet());

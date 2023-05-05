@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using MythicEmpire.Enums;
 
 namespace MythicEmpire.InGame
 {
     public class MapService : MonoBehaviour
     {
         private GameObject[][] currentMap;
+        private int width;
+        private int height;
+        private Vector2Int startPoint = InGameService.monsterGateLogicPos;
+        private Dictionary<TypePlayer, Vector2Int> endPoints = InGameService.houseLogicPos;
 
         [SerializeField] private GameObject emptyTile;
         [SerializeField] private GameObject barrierTile;
@@ -20,17 +25,19 @@ namespace MythicEmpire.InGame
         void Start()
         {
             // initial empty map
-            currentMap = new GameObject[InGameService.mapHeight][];
-            for (int i = 0; i < InGameService.mapHeight; i++)
+            width = InGameService.mapWidth;
+            height = InGameService.mapHeight;
+            currentMap = new GameObject[height][];
+            for (int i = 0; i < height; i++)
             {
-                currentMap[i] = new GameObject[InGameService.mapWidth];
+                currentMap[i] = new GameObject[width];
             }
-            for (int i = 0; i < InGameService.mapHeight; i++)
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < InGameService.mapWidth; j++)
+                for (int j = 0; j < width; j++)
                 {
                     // generate tiles at the first and last column
-                    if (j == 0 || j == InGameService.mapWidth - 1)
+                    if (j == 0 || j == width - 1)
                     {
                         bool isHouseTile = false;
                         foreach (var pos in InGameService.houseLogicPos)
@@ -63,10 +70,10 @@ namespace MythicEmpire.InGame
                 }
             }
             // generate cover tiles for decorating
-            for (int j = 0; j < InGameService.mapWidth; j++)
+            for (int j = 0; j < width; j++)
             {
                 Instantiate(coverTile, new Vector3(j, 0, -1), Quaternion.identity);
-                Instantiate(coverTile, new Vector3(j, 0, InGameService.mapHeight), Quaternion.identity);
+                Instantiate(coverTile, new Vector3(j, 0, height), Quaternion.identity);
             }
         }
 
@@ -86,9 +93,48 @@ namespace MythicEmpire.InGame
 
         }
 
-        public void IsValidPosition()
+        public bool IsValidPosition(Vector2Int logicPos, bool isMyPlayer)
         {
+            if (logicPos.y >= 0 && logicPos.y < height)
+            {
+                if ((isMyPlayer && (logicPos.x > InGameService.columnIndexSplit && logicPos.x < width - 1))
+                    || (!isMyPlayer && (logicPos.x > 0 && logicPos.x < InGameService.columnIndexSplit)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
+        public bool BuildTower(Vector2Int pos, bool isMyPlayer, Tower tower)
+        {
+            if (currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier)
+            {
+                return false;
+            }
+            if (IsValidPosition(pos, isMyPlayer))
+            {
+                currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier = true;
+                TypePlayer tp = isMyPlayer ? TypePlayer.Player : TypePlayer.Opponent;
+                if (InGameService.FindPath(currentMap, startPoint, endPoints[tp], isMyPlayer).Count > 0)
+                {
+                    currentMap[pos.y][pos.x].GetComponent<Tile>().BuildTower(tower.transform);
+
+                    Monster[] monsterList = FindObjectsOfType<Monster>();
+                    foreach (Monster monster in monsterList)
+                    {
+                        monster.FindPath(pos);
+                    }
+                    return true;
+                }
+                currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier = false;
+            }
+            return false;
+        }
+
+        public void SellTower(Vector2Int logicPos)
+        {
+            currentMap[logicPos.y][logicPos.x].GetComponent<Tile>().SellTower();
         }
 
         public GameObject[][] CurrentMap { get { return currentMap; } }

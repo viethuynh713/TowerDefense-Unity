@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 5930514226873879865}
   - component: {fileID: 8478479354461370867}
   - component: {fileID: 4783309156931679894}
+  - component: {fileID: 5648365280830253728}
   m_Layer: 0
   m_Name: ArrowTower
   m_TagString: Untagged
@@ -214,3 +215,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 6918885361370916446, guid: 4b28b3a58aed1f44788434e8ead327cb, type: 3}
+--- !u!65 &5648365280830253728
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974010707245570086}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.22992359, y: 0.15748088, z: 0.22992359}
+  m_Center: {x: 0, y: 0.07874044, z: 0}

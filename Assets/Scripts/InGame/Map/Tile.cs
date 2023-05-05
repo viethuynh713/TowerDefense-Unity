@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MythicEmpire.Enums;
+using UnityEngine.EventSystems;
 
 namespace MythicEmpire.InGame
 {
@@ -10,7 +11,7 @@ namespace MythicEmpire.InGame
         private Vector2Int pos;
         [SerializeField] private bool isBarrier;
         private TypeTile type;
-        // private Tower tower;
+        private Transform tower;
         // Start is called before the first frame update
         void Start()
         {
@@ -21,6 +22,18 @@ namespace MythicEmpire.InGame
         void Update()
         {
 
+        }
+
+        public void BuildTower(Transform tower)
+        {
+            isBarrier = true;
+            this.tower = tower;
+        }
+
+        public void SellTower()
+        {
+            isBarrier = false;
+            tower = null;
         }
 
         public bool IsBarrier { get { return isBarrier; } set { isBarrier = value; } }

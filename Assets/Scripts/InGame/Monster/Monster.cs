@@ -99,7 +99,7 @@ namespace MythicEmpire.InGame
         {
             anim.Play("Attack01_SwordAndShiled");
             isOnPath = true;
-            FindObjectOfType<GameController>().GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(stats.Damage);
+            GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(stats.Damage);
             Destroy(gameObject);
         }
 
@@ -132,13 +132,20 @@ namespace MythicEmpire.InGame
             StartCoroutine(DieModel());
         }
 
-        public void FindPath()
+        public void FindPath(Vector2Int? barrierPos = null)
         {
-            path = InGameService.FindPath(
-                FindObjectOfType<GameController>().Map.GetComponent<MapService>().CurrentMap,
-                InGameService.Display2LogicPos(transform.position),
-                InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Opponent : TypePlayer.Player]
-            );
+            if (!isDie)
+            {
+                if (barrierPos == null || path.Contains(barrierPos.Value))
+                {
+                    path = InGameService.FindPath(
+                        GameController.Instance.Map.GetComponent<MapService>().CurrentMap,
+                        InGameService.Display2LogicPos(transform.position),
+                        InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Opponent : TypePlayer.Player],
+                        !isMyPlayer
+                    );
+                }
+            }
         }
 
         private IEnumerator AttackCD()

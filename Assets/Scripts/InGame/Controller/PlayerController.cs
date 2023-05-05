@@ -24,7 +24,6 @@ namespace MythicEmpire.InGame
             hp = InGameService.playerHp;
             // generate monster (test)
             GenerateMonster();
-            BuildTower(5, 5);
         }
 
         public void Init(bool isMyPlayer)
@@ -39,10 +38,15 @@ namespace MythicEmpire.InGame
 
         }
 
-        public void BuildTower(int i, int j)
+        public void BuildTower(Vector3 displayPos)
         {
-            GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(new Vector2Int(i, j), isMyPlayer) + new Vector3(0, 0.16f, 0), Quaternion.identity);
-            t.GetComponent<Tower>().Init(isMyPlayer);
+            Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
+            if (GameController.Instance.Map.GetComponent<MapService>().BuildTower(
+                logicPos, isMyPlayer, tower.GetComponent<Tower>()))
+            {
+                GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(logicPos) + new Vector3(0, 0.16f, 0), Quaternion.identity);
+                t.GetComponent<Tower>().Init(isMyPlayer, logicPos);
+            }
         }
 
         public void GenerateMonster()

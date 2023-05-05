@@ -16,9 +16,10 @@ namespace MythicEmpire.InGame
 
         }
 
-        public void Init(bool isMyPlayer)
+        public void Init(bool isMyPlayer, Vector2Int logicPos)
         {
             this.isMyPlayer = isMyPlayer;
+            this.logicPos = logicPos;
         }
 
         // Update is called once per frame
@@ -30,6 +31,12 @@ namespace MythicEmpire.InGame
         public void Sell()
         {
 
+        }
+
+        public void OnMouseDown()
+        {
+            GameController.Instance.SellTower(logicPos);
+            Destroy(gameObject);
         }
     }
 }
