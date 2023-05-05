@@ -1,6 +1,7 @@
 ﻿
 using System;
 using MythicEmpire.Enums;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -16,9 +17,11 @@ namespace MythicEmpire.Card
         public string CardName;
         [Range(0,5)]
         public int CardStar;
+        [JsonIgnore]
         public Sprite CardImage;
         public CardType TypeOfCard;
         public RarityCard CardRarity;
+        [JsonIgnore]
         public StatsCard CardStats;
         
     }

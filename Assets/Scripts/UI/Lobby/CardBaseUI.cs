@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,10 +18,11 @@ public class CardBaseUI : MonoBehaviour
 
     public CardInfo CardData;
 
-    public void Start()
-    {
-        SetUI(CardData);
-    }
+    // public void Start()
+    // {
+    //      SetUI(CardData);
+    //     Debug.Log(JsonConvert.SerializeObject(CardData));
+    // }
 
     public void SetUI(CardInfo data)
     {
