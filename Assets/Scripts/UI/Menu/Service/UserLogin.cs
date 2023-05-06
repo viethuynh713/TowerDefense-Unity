@@ -6,13 +6,13 @@ using VContainer.Unity;
 
 namespace MythicEmpire.UI.Menu
 {
-    public class UserLogin : ILoginService,IStartable
+    public class UserLogin :ILoginService,IStartable
     {
         [Inject] private IVerifyUserNetwork _verifyUserNetwork;
         public void Login(string email, string password)
         {
-            _verifyUserNetwork.LoginRequest(email, password);
-            Notification.Instance.NotifyStatus("Login successfully");
+             _verifyUserNetwork.LoginRequest(email, password);
+
         }
 
         public void Start()
@@ -20,6 +20,7 @@ namespace MythicEmpire.UI.Menu
             if (PlayerPrefs.HasKey("old-UserId"))
             {
                 Notification.Instance.NotifyStatus("Login successfully");
+                
             }
         }
     }

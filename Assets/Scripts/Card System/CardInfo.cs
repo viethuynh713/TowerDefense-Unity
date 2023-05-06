@@ -14,14 +14,13 @@ namespace MythicEmpire.Card
     public class CardInfo : ScriptableObject
     {
         public string CardId = Guid.NewGuid().ToString();
+        public GameObject GameObjectPrefab;
         public string CardName;
         [Range(0,5)]
         public int CardStar;
-        [JsonIgnore]
         public Sprite CardImage;
         public CardType TypeOfCard;
         public RarityCard CardRarity;
-        [JsonIgnore]
         public StatsCard CardStats;
         
     }

@@ -49,3 +49,4 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _manager: {fileID: 11400000, guid: 860ee2851e012a0488ce61d0cd959d31, type: 2}
+  _userModel: {fileID: 11400000, guid: 0306ba696f8ee1842996e6bd9b2d595f, type: 2}

@@ -14,8 +14,7 @@ namespace MythicEmpire.UI.Menu
         [Inject]private IVerifyUserNetwork _verifyUserNetwork;
         public void Register(UserModel infos)
         {
-            _verifyUserNetwork.RegisterRequest("", "", "");
-            Notification.Instance.NotifyStatus("Register successfully");
+            _verifyUserNetwork.RegisterRequest(infos.nickName, infos.email, infos.password);
         }
     }
 }

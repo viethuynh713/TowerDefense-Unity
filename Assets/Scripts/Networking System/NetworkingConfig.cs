@@ -2,6 +2,6 @@
 {
     public class NetworkingConfig
     {
-        public string RootURL;
+        public string RootURL = "https://localhost:7097/api/";
     }
 }

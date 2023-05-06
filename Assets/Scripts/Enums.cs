@@ -7,7 +7,10 @@ namespace MythicEmpire.Enums
         OnLoginFail,
         OnRegisterSuccess,
         OnRegisterFail,
-        SelectedCard
+        SelectedCard,
+        OnUpdateNicknameSuccess,
+        OnUpgradeCardSuccess,
+        OnBuyCardSuccess
     }
     public enum GachaType
     {

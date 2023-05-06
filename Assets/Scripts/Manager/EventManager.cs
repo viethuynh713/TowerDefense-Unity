@@ -23,8 +23,9 @@ namespace MythicEmpire.Manager
 			// check if there's another instance already exist in scene
 			if (Instance != null && Instance.GetInstanceID() != this.GetInstanceID())
 			{
-				Common.Log("An instance of EventManager already exist : <{1}>, So destroy this instance : <{2}>!!", Instance.name, name);
-				Destroy(gameObject);
+				// Common.Log("An instance of EventManager already exist : <{1}>, So destroy this instance : <{2}>!!", Instance.name, name);
+				Destroy(Instance.gameObject);
+				Instance = this;
 			}
 			else
 			{

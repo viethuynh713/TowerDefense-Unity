@@ -1,5 +1,6 @@
 ﻿using System;
 using DG.Tweening;
+using MythicEmpire.Enums;
 using MythicEmpire.Manager;
 using MythicEmpire.PlayerInfos;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace MythicEmpire.UI.Menu
         [SerializeField] private TMP_InputField _confirmPwInputField;
 
         [Inject]private IRegisterService _registerService;
+        [Inject] private UserModel _userModel;
+
 
         private CanvasGroup _canvasGroup;
         private RectTransform _rectTransform;
@@ -28,6 +31,12 @@ namespace MythicEmpire.UI.Menu
             _canvasGroup = gameObject.GetComponent<CanvasGroup>();
             _rectTransform = gameObject.GetComponent<RectTransform>();
             _anchorPosition = _rectTransform.anchoredPosition;
+        }
+
+        private void Start()
+        {
+            EventManager.Instance.RegisterListener(EventID.OnRegisterSuccess, o => gameObject.SetActive(false));
+
         }
 
         private void OnEnable()
@@ -77,7 +86,13 @@ namespace MythicEmpire.UI.Menu
                 Notification.Instance.PopupNotifyWaring("Password and confirm password does not match");
                 return;
             }
-            _registerService.Register(new UserModel());
+
+            
+            _userModel.email = _emailInputField.text;
+            _userModel.password = _passwordInputField.text;
+            _userModel.nickName = _nicknameInputField.text;
+            
+            _registerService.Register(_userModel);
         }
     }
 }

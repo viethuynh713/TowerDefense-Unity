@@ -1,7 +1,11 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
+using MythicEmpire.Enums;
 using MythicEmpire.Manager;
+using MythicEmpire.PlayerInfos;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace MythicEmpire.UI.Menu
@@ -27,6 +31,17 @@ namespace MythicEmpire.UI.Menu
             _rectTransform = GetComponent<RectTransform>();
             _anchorPos = _rectTransform.anchoredPosition;
             _canvasGroup = GetComponent<CanvasGroup>();
+        }
+
+        private void Start()
+        {
+            EventManager.Instance.RegisterListener(EventID.OnLoginSuccess, LoadScene);
+            EventManager.Instance.RegisterListener(EventID.OnRegisterSuccess, o => gameObject.SetActive(true));
+        }
+
+        private void LoadScene(object obj)
+        {
+            SceneManager.LoadSceneAsync("Lobby");
         }
 
         private void OnEnable()

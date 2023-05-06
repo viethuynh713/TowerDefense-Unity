@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
@@ -18,11 +19,10 @@ public class CardBaseUI : MonoBehaviour
 
     public CardInfo CardData;
 
-    // public void Start()
-    // {
-    //      SetUI(CardData);
-    //     Debug.Log(JsonConvert.SerializeObject(CardData));
-    // }
+    private void Start()
+    {
+        SetUI(CardData);
+    }
 
     public void SetUI(CardInfo data)
     {
@@ -39,9 +39,9 @@ public class CardBaseUI : MonoBehaviour
     {
         listStar.ForEach(image => image.gameObject.SetActive(false));
 
-        for (int i = 0; i < star; i++)
+        for (int i = 0; i < listStar.Count; i++)
         {
-            listStar[i].gameObject.SetActive(true);
+            listStar[i].gameObject.SetActive(i<star);
         }
     }
 
