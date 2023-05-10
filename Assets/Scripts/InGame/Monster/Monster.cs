@@ -45,9 +45,10 @@ namespace MythicEmpire.InGame
             anim = GetComponent<Animator>();
         }
 
-        public void Init(string ownerId, bool isMyPlayer)
+        public void Init(string ownerId, string id, bool isMyPlayer)
         {
             this.ownerId = ownerId;
+            this.id = id;
             this.isMyPlayer = isMyPlayer;
             FindPath();
         }
@@ -128,6 +129,7 @@ namespace MythicEmpire.InGame
         public void Die()
         {
             isDie = true;
+            GameController.Instance.GainEnergy(1, !isMyPlayer);
             anim.Play("Die01_SwordAndShield");
             StartCoroutine(DieModel());
         }

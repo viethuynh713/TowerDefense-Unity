@@ -7,7 +7,6 @@ namespace MythicEmpire.InGame
     public class AttackTower : Tower
     {
         private int level;
-        private TowerStats stats;
         [SerializeField] private GameObject bullet;
         private bool canFire;
 

@@ -8,6 +8,7 @@ namespace MythicEmpire.InGame
     {
         private int id;
         private int ownerId;
+        protected TowerStats stats;
         private Vector2Int logicPos;
         protected bool isMyPlayer;
         // Start is called before the first frame update

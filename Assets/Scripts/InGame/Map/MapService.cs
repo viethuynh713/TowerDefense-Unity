@@ -64,7 +64,7 @@ namespace MythicEmpire.InGame
                     {
                         currentMap[i][j] = Instantiate(emptyTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
                         currentMap[i][j].GetComponent<Tile>().Type = j < InGameService.columnIndexSplit
-                            ? Enums.TypeTile.Opponent : Enums.TypeTile.Player;
+                            ? TypeTile.Opponent : TypeTile.Player;
                     }
                     currentMap[i][j].transform.parent = transform;
                 }

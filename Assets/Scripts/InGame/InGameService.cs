@@ -6,6 +6,7 @@ using MythicEmpire.Enums;
 using System.Linq;
 using System;
 using Unity.Burst.Intrinsics;
+using System.Runtime.CompilerServices;
 
 namespace MythicEmpire.InGame
 {
@@ -25,9 +26,101 @@ namespace MythicEmpire.InGame
         public static readonly int mapWidth = 23;
         public static readonly int mapHeight = 10;
 
-        public static readonly int playerHp = 15;
+        public static readonly int playerHp = 20;
+        public static readonly int playerEnergy = 15;
+        public static readonly int nWave = 5;
+        public static readonly int waveTimeDelay = 10;
 
         public static readonly int monsterLayerMask = 1 << 3;
+
+        public static readonly Dictionary<Tuple<TypeCard, string>, int> cardCost = new Dictionary<Tuple<TypeCard, string>, int>()
+        {
+            { new Tuple<TypeCard, string>(TypeCard.TowerCard, "1"), 8 }
+        };
+
+        public static readonly List<List<Tuple<string, int>>> monsterWave = new List<List<Tuple<string, int>>>
+        {
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 1),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 2),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 3),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 4),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 5),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 6),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 7),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 8),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 9),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 10),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 11),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 12),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 13),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 14),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 15),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 16),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 17),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 18),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 19),
+            },
+            new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("1", 20),
+            },
+        };
 
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {

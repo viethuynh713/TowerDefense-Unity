@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using MythicEmpire.Enums;
 
 namespace MythicEmpire.InGame
 {
     public class DragCard : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
-        [SerializeField] private RawImage dragIcon;
+        [SerializeField] private Image dragIcon;
+
+        [SerializeField] private TypeCard type;
+        [SerializeField] private string id;
         private Vector2 originAnchoredPos;
         private CanvasGroup canvasGroup;
 
@@ -40,7 +44,7 @@ namespace MythicEmpire.InGame
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycast))
             {
-                GameController.Instance.BuildTower(raycast.point, true);
+                GameController.Instance.BuildTower(id, raycast.point, true);
             }
             // reset icon
             dragIcon.gameObject.SetActive(false);
