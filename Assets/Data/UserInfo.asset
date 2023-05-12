@@ -13,10 +13,21 @@ MonoBehaviour:
   m_Name: UserInfo
   m_EditorClassIdentifier: 
   rank: 0
-  email: 1@2.com
-  password: c02f6b50d690049a9cee8eb0b5bbfd1afde25ac294c5adedb32cf6a582e5b7d9
-  userId: f6d21891-b82d-4107-86a6-492b3c330173
-  nickName: 111
-  gold: 0
-  cardListID: []
+  email: admin@gmail.com
+  password: 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
+  userId: 520e017c-5845-41bf-95f2-c7aa4d53414c
+  nickName: Admin
+  gold: 155
+  cardListID:
+  - 51957f85-9382-480a-966d-1f86a3406569
+  - 51957f85-9382-480a-966d-1f86a3406569
+  - 9aa575cc-78f8-4f61-955c-43a5589fa3cd
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
+  - 0e47c4ae-ff6d-4785-b98f-002a537055f2
   friendListID: []

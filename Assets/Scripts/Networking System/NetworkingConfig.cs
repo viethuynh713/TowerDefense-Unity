@@ -2,6 +2,7 @@
 {
     public class NetworkingConfig
     {
-        public string RootURL = "https://localhost:7097/api/";
+        public string ServiceURL = "https://localhost:7097/api/";
+        public string RealtimeURL = "https://localhost:7097/api/";
     }
 }

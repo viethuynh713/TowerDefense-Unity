@@ -1,61 +1,52 @@
 using System.Collections.Generic;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
-using MythicEmpire.Manager;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
 public class ShopCardUI : MonoBehaviour
 {
-    [Inject] private CardManager _manager;
+    [Inject] private CardManager _cardManager;
     [SerializeField] private CardBaseUI template;
     [SerializeField] private Transform parents;
-    private List<CardBaseUI> listItems;
+    private List<CardBaseUI> _listCardRendered;
     public void Start()
     {
-  
-        listItems = new List<CardBaseUI>();
-        foreach (var card in _manager.GetMultiCard())
+        _listCardRendered = new List<CardBaseUI>();
+        foreach (var card in _cardManager.GetMultiCard(RarityCard.Common))
         {
             var cardUi = Instantiate(template, parents);
             cardUi.SetUI(card);
-            listItems.Add(cardUi);
+            _listCardRendered.Add(cardUi);
         }
-        // foreach (var card in _manager.GetMultiCard(RarityCard.Common))
-        // {
-        //     var cardUi = Instantiate(template, parents);
-        //     cardUi.SetUI(card);
-        //     listItems.Add(cardUi);
-        // }
-        // foreach (var card in _manager.GetMultiCard(RarityCard.Rare))
-        // {
-        //     var cardUi = Instantiate(template, parents);
-        //     cardUi.SetUI(card);
-        //     listItems.Add(cardUi);
-        //
-        // }
+        foreach (var card in _cardManager.GetMultiCard(RarityCard.Rare))
+        {
+            var cardUi = Instantiate(template, parents);
+            cardUi.SetUI(card);
+            _listCardRendered.Add(cardUi);
+        
+        }
     }
     
-    public void FilterTower(Toggle toggle)
+    public void FilterTowerCard(Toggle toggle)
     {
         if(!toggle.isOn)return;
-        listItems.ForEach(card => card.gameObject.SetActive(card.CardData.TypeOfCard == CardType.TowerCard));
+        _listCardRendered.ForEach(card => card.gameObject.SetActive(card.CardData.TypeOfCard == CardType.TowerCard));
     }        
-    public void FilterMonster(Toggle toggle)
+    public void FilterMonsterCard(Toggle toggle)
     {
         if(!toggle.isOn)return;
-        listItems.ForEach(card => card.gameObject.SetActive(card.CardData.TypeOfCard == CardType.MonsterCard));
-    }public void FilterSupport(Toggle toggle)
+        _listCardRendered.ForEach(card => card.gameObject.SetActive(card.CardData.TypeOfCard == CardType.MonsterCard));
+    }
+    public void FilterSpellCard(Toggle toggle)
     {
         if(!toggle.isOn)return;
-        listItems.ForEach(card => card.gameObject.SetActive(card.CardData.TypeOfCard == CardType.SpellCard));
+        _listCardRendered.ForEach(card => card.gameObject.SetActive(card.CardData.TypeOfCard == CardType.SpellCard));
     }    
-    public void FilterAll(Toggle toggle)
+    public void FilterAllCard(Toggle toggle)
     {
         if(!toggle.isOn)return;
-        listItems.ForEach(card => card.gameObject.SetActive(true));
+        _listCardRendered.ForEach(card => card.gameObject.SetActive(true));
     }
 }

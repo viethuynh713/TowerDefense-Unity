@@ -12,12 +12,7 @@ namespace MythicEmpire.Manager
     public class EventManager : MonoBehaviour
     {
 	    public static EventManager Instance;
-       
-	    public static bool HasInstance()
-		{
-			return Instance != null;
-		}
-
+	    
 		void Awake ()
 		{
 			// check if there's another instance already exist in scene
@@ -133,7 +128,7 @@ namespace MythicEmpire.Manager
 		/// <summary>
 		/// Clears all the listener.
 		/// </summary>
-		public void ClearAllListener ()
+		private void ClearAllListener ()
 		{
 			_listeners.Clear();
 		}

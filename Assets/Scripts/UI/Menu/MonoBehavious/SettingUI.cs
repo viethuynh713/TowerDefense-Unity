@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 
 namespace MythicEmpire.UI.Menu
 {    
-    public class SettingData
+    public class SettingDataModel
     {
-        public float EffectSound;
-        public float MusicSound;
+        public float EffectSoundVolume;
+        public float MusicSoundVolume;
         public bool IsFullScreen;
     }
     [RequireComponent(typeof(CanvasGroup))]
@@ -21,7 +21,7 @@ namespace MythicEmpire.UI.Menu
         private CanvasGroup _canvasGroup;
         private RectTransform _rectTransform;
         private Vector2 _anchorPosition;
-        private SettingData _settingData;
+        private SettingDataModel _settingDataModel;
         
         private void OnEnable()
         {
@@ -35,54 +35,54 @@ namespace MythicEmpire.UI.Menu
             
             if (PlayerPrefs.HasKey("Setting-Config"))
             {
-                _settingData = JsonConvert.DeserializeObject<SettingData>(PlayerPrefs.GetString("Setting-Config"));
-                _fullscreemOption.isOn = _settingData.IsFullScreen;
-                _musicSoundSlider.value = _settingData.MusicSound;
-                _effectSoundSlider.value = _settingData.EffectSound;
+                _settingDataModel = JsonConvert.DeserializeObject<SettingDataModel>(PlayerPrefs.GetString("Setting-Config"));
+                _fullscreemOption.isOn = _settingDataModel.IsFullScreen;
+                _musicSoundSlider.value = _settingDataModel.MusicSoundVolume;
+                _effectSoundSlider.value = _settingDataModel.EffectSoundVolume;
 
             }
             else
             {
-                _settingData = new SettingData();
-                _settingData.EffectSound = 1;
-                _settingData.MusicSound = 1;
-                _settingData.IsFullScreen = true;
-                var data = JsonConvert.SerializeObject(_settingData);
+                _settingDataModel = new SettingDataModel();
+                _settingDataModel.EffectSoundVolume = 1;
+                _settingDataModel.MusicSoundVolume = 1;
+                _settingDataModel.IsFullScreen = true;
+                var data = JsonConvert.SerializeObject(_settingDataModel);
                 PlayerPrefs.SetString("Setting-Config",data);
-                _fullscreemOption.isOn = _settingData.IsFullScreen;
-                _musicSoundSlider.value = _settingData.MusicSound;
-                _effectSoundSlider.value = _settingData.EffectSound;
+                _fullscreemOption.isOn = _settingDataModel.IsFullScreen;
+                _musicSoundSlider.value = _settingDataModel.MusicSoundVolume;
+                _effectSoundSlider.value = _settingDataModel.EffectSoundVolume;
             }
-            _fullscreemOption.onValueChanged.AddListener(OnFullScreenChange);
+            _fullscreemOption.onValueChanged.AddListener(OnFullScreenOptionChange);
             _effectSoundSlider.onValueChanged.AddListener(OnEffectSoundChange);
             _musicSoundSlider.onValueChanged.AddListener(OnMusicSoundChange);
         }
 
         private void OnMusicSoundChange(float value)
         {
-            _settingData.MusicSound = value;
-            var data = JsonConvert.SerializeObject(_settingData);
+            _settingDataModel.MusicSoundVolume = value;
+            var data = JsonConvert.SerializeObject(_settingDataModel);
             PlayerPrefs.SetString("Setting-Config",data);
         }
 
         private void OnEffectSoundChange(float value)
         {
-            _settingData.EffectSound = value;
-            var data = JsonConvert.SerializeObject(_settingData);
+            _settingDataModel.EffectSoundVolume = value;
+            var data = JsonConvert.SerializeObject(_settingDataModel);
             PlayerPrefs.SetString("Setting-Config",data);
             
         }
 
-        private void OnFullScreenChange(bool value)
+        private void OnFullScreenOptionChange(bool value)
         {
-            _settingData.IsFullScreen = value;
+            _settingDataModel.IsFullScreen = value;
             Screen.fullScreen = value;
-            var data = JsonConvert.SerializeObject(_settingData);
+            var data = JsonConvert.SerializeObject(_settingDataModel);
             PlayerPrefs.SetString("Setting-Config",data);
             
         }
 
-        public void OnAppear()
+        private void OnAppear()
         {
             DOTween.KillAll(true);
             _rectTransform.anchoredPosition = _anchorPosition;

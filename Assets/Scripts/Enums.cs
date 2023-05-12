@@ -10,7 +10,11 @@ namespace MythicEmpire.Enums
         SelectedCard,
         OnUpdateNicknameSuccess,
         OnUpgradeCardSuccess,
-        OnBuyCardSuccess
+        OnBuyCardSuccess,
+        OnBuyGachaSuccess,
+        PrepareListCard,
+        OnStartGame,
+        OnEndGame
     }
     public enum GachaType
     {

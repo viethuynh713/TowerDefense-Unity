@@ -18,12 +18,18 @@ public class RenderUserInfo : MonoBehaviour
     void Start()
     {
         EventManager.Instance.RegisterListener(EventID.OnUpdateNicknameSuccess, o => userName.text = _userModel.nickName);
-        EventManager.Instance.RegisterListener(EventID.OnUpgradeCardSuccess, o => gold.text = _userModel.gold.ToString());
-        EventManager.Instance.RegisterListener(EventID.OnBuyCardSuccess, o => gold.text = _userModel.gold.ToString());
+        EventManager.Instance.RegisterListener(EventID.OnUpgradeCardSuccess,  UpdateGoldText);
+        EventManager.Instance.RegisterListener(EventID.OnBuyCardSuccess, UpdateGoldText);
+        EventManager.Instance.RegisterListener(EventID.OnBuyGachaSuccess, UpdateGoldText);
         gold.text = _userModel.gold.ToString();
         rank.text = String.Concat("Rank: ",_userModel.rank.ToString());
         userName.text = _userModel.nickName;
+        Notification.Instance.NotifyStatus($"Welcome {_userModel.nickName} comeback");
     }
 
+    private void UpdateGoldText(object o)
+    {
+        gold.text = _userModel.gold.ToString();
+    }
 
 }
