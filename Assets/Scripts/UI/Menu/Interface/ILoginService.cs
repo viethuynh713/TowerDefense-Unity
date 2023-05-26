@@ -1,4 +1,6 @@
-﻿namespace MythicEmpire
+﻿using System.Threading.Tasks;
+
+namespace MythicEmpire
 {
     public interface ILoginService
     {

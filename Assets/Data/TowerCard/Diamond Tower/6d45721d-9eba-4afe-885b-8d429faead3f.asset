@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: 6d45721d-9eba-4afe-885b-8d429faead3f
+  m_EditorClassIdentifier: 
+  CardId: 6d45721d-9eba-4afe-885b-8d429faead3f
+  CardName: Diamond Tower
+  CardStar: 3
+  CardImage: {fileID: 21300000, guid: b586f1edcfcedf946b80caff6d75ba42, type: 3}
+  TypeOfCard: 1
+  CardRarity: 2
+  CardStats: {fileID: 11400000, guid: a348f9c567e9d5e4da27a96c433ddcd5, type: 2}
+  GameObjectPrefab: {fileID: 919132149155446097, guid: d2e65523af88eda4e99fc18456470867,
+    type: 3}

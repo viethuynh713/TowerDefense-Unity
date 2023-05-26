@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MythicEmpire
+namespace MythicEmpire.Card
 {
-    public class StatsCard
+
+    [CreateAssetMenu(fileName = "New Data Manager", menuName = "MythicEmpire Data/Original Stat")]
+
+    public class StatsCard: ScriptableObject
     {
-        public int energy;
+        public int Energy;
+        
     }
+   
+    
 }
