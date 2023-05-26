@@ -76,7 +76,7 @@ namespace MythicEmpire.InGame
 
         public void BuildTower(string id, Vector3 displayPos)
         {
-            int cost = InGameService.cardCost[new Tuple<TypeCard, string>(TypeCard.TowerCard, id)];
+            int cost = InGameService.cardCost[new Tuple<CardType, string>(CardType.TowerCard, id)];
             if (energy >= cost)
             {
                 SetEnergyText();

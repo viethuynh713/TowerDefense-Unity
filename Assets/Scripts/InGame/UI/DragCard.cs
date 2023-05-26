@@ -11,7 +11,7 @@ namespace MythicEmpire.InGame
     {
         [SerializeField] private Image dragIcon;
 
-        [SerializeField] private TypeCard type;
+        [SerializeField] private CardType type;
         [SerializeField] private string id;
         private Vector2 originAnchoredPos;
         private CanvasGroup canvasGroup;

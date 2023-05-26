@@ -6,6 +6,7 @@ using System.Linq;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
+using MythicEmpire.Card;
 
 namespace MythicEmpire.InGame
 {

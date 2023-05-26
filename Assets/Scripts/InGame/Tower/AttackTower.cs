@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MythicEmpire.Card;
 
 namespace MythicEmpire.InGame
 {
@@ -17,7 +18,7 @@ namespace MythicEmpire.InGame
             stats.Damage = 4;
             stats.FireRange = 2;
             stats.ExploreRange = 0;
-            stats.SpeedAttack = 1.5f;
+            stats.AttackSpeed = 1.5f;
             stats.BulletSpeed = 2;
             canFire = true;
         }
@@ -70,7 +71,7 @@ namespace MythicEmpire.InGame
         private IEnumerator LoadBullet()
         {
             canFire = false;
-            yield return new WaitForSeconds(1 / stats.SpeedAttack);
+            yield return new WaitForSeconds(1 / stats.AttackSpeed);
             canFire = true;
         }
     }

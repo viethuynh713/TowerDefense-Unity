@@ -34,9 +34,9 @@ namespace MythicEmpire.InGame
 
         public static readonly int monsterLayerMask = 1 << 3;
 
-        public static readonly Dictionary<Tuple<TypeCard, string>, int> cardCost = new Dictionary<Tuple<TypeCard, string>, int>()
+        public static readonly Dictionary<Tuple<CardType, string>, int> cardCost = new Dictionary<Tuple<CardType, string>, int>()
         {
-            { new Tuple<TypeCard, string>(TypeCard.TowerCard, "1"), 8 }
+            { new Tuple<CardType, string>(CardType.TowerCard, "1"), 8 }
         };
 
         public static readonly List<List<Tuple<string, int>>> monsterWave = new List<List<Tuple<string, int>>>

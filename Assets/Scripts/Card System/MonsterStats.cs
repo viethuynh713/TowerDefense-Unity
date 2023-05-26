@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MythicEmpire
+namespace MythicEmpire.Card
 {
     public class MonsterStats : StatsCard
     {

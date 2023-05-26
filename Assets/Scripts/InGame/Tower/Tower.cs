@@ -1,8 +1,9 @@
-using MythicEmpire.Enums;
 using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using MythicEmpire.Card;
+using MythicEmpire.Enums;
 
 namespace MythicEmpire.InGame
 {
@@ -25,7 +26,7 @@ namespace MythicEmpire.InGame
             this.id = id;
             this.isMyPlayer = isMyPlayer;
             this.logicPos = logicPos;
-            cost = InGameService.cardCost[new Tuple<TypeCard, string>(TypeCard.TowerCard, id)];
+            cost = InGameService.cardCost[new Tuple<CardType, string>(CardType.TowerCard, id)];
         }
 
         // Update is called once per frame
