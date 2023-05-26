@@ -2,7 +2,8 @@
 using DG.Tweening;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager;
-using MythicEmpire.PlayerInfos;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.Model;
 using UnityEngine;
 using TMPro;
 using VContainer;

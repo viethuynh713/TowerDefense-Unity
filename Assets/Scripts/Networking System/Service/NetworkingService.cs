@@ -6,9 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
+using MythicEmpire.LocalDatabase;
 using MythicEmpire.Manager;
-using MythicEmpire.PlayerInfos;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.Model;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace MythicEmpire.Networking
@@ -18,6 +21,7 @@ namespace MythicEmpire.Networking
         [Inject]private NetworkingConfig _config;
         [Inject] private UserModel _userModel;
         [Inject] private CardManager _cardManager;
+        [Inject] private IUserDataLocal _userDataLocal;
         private readonly HttpClient _httpClient = new HttpClient();
         
         public async Task RegisterRequest(string nickName, string email, string password)
@@ -67,8 +71,35 @@ namespace MythicEmpire.Networking
                _userModel.password = obj.password;
                _userModel.cardListID = obj.cardListID;
                _userModel.friendListID = obj.friendListID;
-                
+               _userDataLocal.UpdateUserId(_userModel.userId);
                 EventManager.Instance.PostEvent(EventID.OnLoginSuccess);
+            }
+        }
+
+        public async Task LoginRequest(string id)
+        {
+            var url = $"{_config.ServiceURL}AuthenControl/login-id?userId={id}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                // Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                
+            }
+            else
+            {
+                var obj = JsonConvert.DeserializeObject<UserModel>(response.Content.ReadAsStringAsync().Result);
+                _userModel.userId = obj.userId;
+                _userModel.rank = obj.rank;
+                _userModel.gold = obj.gold;
+                _userModel.nickName = obj.nickName;
+                _userModel.email = obj.email;
+                _userModel.password = obj.password;
+                _userModel.cardListID = obj.cardListID;
+                _userModel.friendListID = obj.friendListID;
+                SceneManager.LoadSceneAsync("Lobby");
             }
         }
 
@@ -193,9 +224,28 @@ namespace MythicEmpire.Networking
             }
         }
 
-        public Task UpdateInfosRequest(string newNickName)
+        public async Task UpdateInfosRequest(string newNickName)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}CardControl/update-nickname/{_userModel.userId}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(newNickName), "newName");
+            request.Content = content;
+            
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _userModel.nickName = newNickName;
+                Notification.Instance.NotifyStatus("Update successfully");
+                EventManager.Instance.PostEvent(EventID.OnUpdateNicknameSuccess,newNickName);
+            }
+            else
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+
+            }
         }
 
         public Task UpdateRankRequest(string rankAdded)

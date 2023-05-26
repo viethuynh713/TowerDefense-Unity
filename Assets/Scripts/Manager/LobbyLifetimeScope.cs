@@ -1,9 +1,12 @@
 using VContainer;
 using VContainer.Unity;
 
-public class LobbyLifetimeScope : LifetimeScope
+namespace MythicEmpire.Manager
 {
-    protected override void Configure(IContainerBuilder builder)
+    public class LobbyLifetimeScope : LifetimeScope
     {
+        protected override void Configure(IContainerBuilder builder)
+        {
+        }
     }
 }

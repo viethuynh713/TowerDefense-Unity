@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MythicEmpire.PlayerInfos
+namespace MythicEmpire.Model
 {
     [CreateAssetMenu(fileName = "UserInfo", menuName = "MythicEmpire Data/ User")]
 

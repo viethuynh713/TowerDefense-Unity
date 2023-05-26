@@ -7,6 +7,7 @@ namespace MythicEmpire.Networking
     {
         Task RegisterRequest(string nickName, string email, string password);
         Task LoginRequest(string email, string password);
+        Task LoginRequest(string id);
         Task SendOTPRequest(string email);
         
         Task ConfirmOTPRequest(string email, string otp);

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+namespace MythicEmpire.UI.Lobby
+{
 public class CardSlot : MonoBehaviour, IDropHandler
 {
     
@@ -23,4 +24,5 @@ public class CardSlot : MonoBehaviour, IDropHandler
     {
         item.transform.SetParent(this.transform);
     }
+}
 }

@@ -9,47 +9,50 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-public class NetworkingRealtime : IPostStartable,IRealtimeCommunication
-
+namespace MythicEmpire.Networking
 {
-    [Inject] private NetworkingConfig _config;
-    private HubConnection _hubConnection;
-    private IHubProxy _hubProxy;
-    
-     public void PostStart()
-     {
-         _hubConnection = new HubConnection(_config.RealtimeURL);
-         _hubProxy = _hubConnection.CreateHubProxy("MythicEmpireRealtime");
+    public class NetworkingRealtime : IPostStartable, IRealtimeCommunication
 
-         try
-         {
-             _hubConnection.Start();
+    {
+        [Inject] private NetworkingConfig _config;
+        private HubConnection _hubConnection;
+        private IHubProxy _hubProxy;
 
-         }
-         catch (Exception e)
-         {
-             Debug.Log(e);
-             throw;
-         }
-     }
+        public void PostStart()
+        {
+            _hubConnection = new HubConnection(_config.RealtimeURL);
+            _hubProxy = _hubConnection.CreateHubProxy("MythicEmpireRealtime");
 
-     public void MatchMakingRequest(List<string> cards, ModeGame mode)
-     {
-         throw new NotImplementedException();
-     }
+            try
+            {
+                _hubConnection.Start();
 
-     public void CancelMatchMakingRequest()
-     {
-         throw new NotImplementedException();
-     }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                throw;
+            }
+        }
 
-     public void PlaceCard(PlaceCardData data)
-     {
-         throw new NotImplementedException();
-     }
+        public void MatchMakingRequest(List<string> cards, ModeGame mode)
+        {
+            throw new NotImplementedException();
+        }
 
-     public void SubCastleHP(SubHPData data)
-     {
-         throw new NotImplementedException();
-     }
+        public void CancelMatchMakingRequest()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlaceCard(PlaceCardData data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SubCastleHP(SubHPData data)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

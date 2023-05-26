@@ -2,14 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardUISelection : CardBaseUI
+namespace MythicEmpire.UI
 {
-    
-    public void OnPointerClick()
+
+
+    public class CardUISelection : CardBaseUI
     {
-        EventManager.Instance.PostEvent(EventID.SelectedCard,CardData.CardId);
+
+        public void OnPointerClick()
+        {
+            EventManager.Instance.PostEvent(EventID.SelectedCard, CardData.CardId);
+        }
     }
 }

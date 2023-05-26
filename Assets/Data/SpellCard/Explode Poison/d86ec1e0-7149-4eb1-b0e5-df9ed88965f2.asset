@@ -19,3 +19,4 @@ MonoBehaviour:
   TypeOfCard: 3
   CardRarity: 4
   CardStats: {fileID: 11400000, guid: 3ad2cbc15a71e7a48be236cd38c58438, type: 2}
+  GameObjectPrefab: {fileID: 100000, guid: 9a38c879ddeb74214b97b361e8e5fee9, type: 3}

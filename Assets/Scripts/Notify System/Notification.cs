@@ -35,19 +35,19 @@ namespace MythicEmpire.Manager
 
             mySequence.Append(_statusPanel.DOAnchorPosY(_statusPanelPos.y - 100, 0.5f));
             mySequence.Insert(1.5f, _statusPanel.DOAnchorPosY(_statusPanelPos.y, 0.5f));
-            _messageStatusText.text = "Log status: " + message;
+            _messageStatusText.text =  message;
         }
 
         public void PopupNotifyError(string message)
         {
             _popupPanel.SetActive(true);
-            _messagePopupText.text = "Popup error message: " + message;
+            _messagePopupText.text =  message;
         }
 
         public void PopupNotifyWaring(string message)
         {
             _popupPanel.SetActive(true);
-            _messagePopupText.text = "Popup waring message: " + message;
+            _messagePopupText.text = message;
 
         }
     }

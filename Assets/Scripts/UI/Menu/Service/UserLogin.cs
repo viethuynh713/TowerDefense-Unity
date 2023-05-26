@@ -1,27 +1,38 @@
-﻿using MythicEmpire.Manager;
+﻿using MythicEmpire.LocalDatabase;
+using MythicEmpire.Manager;
 using MythicEmpire.Networking;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
 namespace MythicEmpire.UI.Menu
 {
-    public class UserLogin :ILoginService,IStartable
+    public class UserLogin :ILoginService
     {
         [Inject] private IVerifyUserNetwork _verifyUserNetwork;
+        [Inject] private IUserDataLocal _userDataLocal;
         public void Login(string email, string password)
         {
              _verifyUserNetwork.LoginRequest(email, password);
 
         }
 
-        public void Start()
+       
+
+        public void PostInitialize()
         {
-            if (PlayerPrefs.HasKey("old-UserId"))
-            {
-                Notification.Instance.NotifyStatus("Login successfully");
-                
-            }
+            // var id = _userDataLocal.GetOldUserId();
+            // if (id != null)
+            // {
+            //     _verifyUserNetwork.LoginRequest(id);
+            // }
+            // else
+            // {
+            //     SceneManager.LoadScene("Menu");
+            // }
         }
+
+        
     }
 }

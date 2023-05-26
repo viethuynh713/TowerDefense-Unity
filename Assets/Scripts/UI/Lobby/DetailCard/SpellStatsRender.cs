@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using MythicEmpire.Card;
 using TMPro;
 using UnityEngine;
-
+namespace MythicEmpire.UI.Lobby
+{
 public class SpellStatsRender : MonoBehaviour
 {
     [SerializeField] private TMP_Text durationText;
@@ -19,4 +20,4 @@ public class SpellStatsRender : MonoBehaviour
         energyText.text = stats.Energy.ToString();
         detailText.text = stats.Detail;
     }
-}
+}}

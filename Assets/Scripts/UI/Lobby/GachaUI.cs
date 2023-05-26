@@ -5,13 +5,16 @@ using MythicEmpire.Networking;
 using UnityEngine;
 using VContainer;
 
-public class GachaUI : MonoBehaviour
+namespace MythicEmpire.UI.Lobby
 {
-    [Inject] private ICardServiceNetwork _cardServiceNetwork;
-    
-    public void BuyGachaButtonClick(int gachaType)
+    public class GachaUI : MonoBehaviour
     {
-        GachaType type = (GachaType)gachaType;
-        _cardServiceNetwork.BuyGachaRequest(type);
+        [Inject] private ICardServiceNetwork _cardServiceNetwork;
+
+        public void BuyGachaButtonClick(int gachaType)
+        {
+            GachaType type = (GachaType)gachaType;
+            _cardServiceNetwork.BuyGachaRequest(type);
+        }
     }
 }

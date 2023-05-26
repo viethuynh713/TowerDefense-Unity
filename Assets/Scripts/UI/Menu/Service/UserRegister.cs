@@ -1,6 +1,6 @@
 using MythicEmpire;
 using MythicEmpire.Networking;
-using MythicEmpire.PlayerInfos;
+using MythicEmpire.Model;
 using UnityEngine.Playables;
 using VContainer;
 using Notification = MythicEmpire.Manager.Notification;
