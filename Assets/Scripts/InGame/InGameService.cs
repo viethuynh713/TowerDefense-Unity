@@ -34,6 +34,8 @@ namespace MythicEmpire.InGame
 
         public static readonly int monsterLayerMask = 1 << 3;
 
+        public static readonly int maxTowerLevel = 3;
+
         public static readonly Dictionary<Tuple<CardType, string>, int> cardCost = new Dictionary<Tuple<CardType, string>, int>()
         {
             { new Tuple<CardType, string>(CardType.TowerCard, "1"), 8 }

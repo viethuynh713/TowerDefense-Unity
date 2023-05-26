@@ -36,7 +36,7 @@ namespace MythicEmpire.InGame
 
             SetHPText();
             energySlider.maxValue = InGameService.maxEnergy;
-            SetEnergyText();
+            SetEnergySlider();
         }
 
         public void Init(bool isMyPlayer)
@@ -79,12 +79,13 @@ namespace MythicEmpire.InGame
             int cost = InGameService.cardCost[new Tuple<CardType, string>(CardType.TowerCard, id)];
             if (energy >= cost)
             {
-                SetEnergyText();
+                SetEnergySlider();
                 Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
                 if (GameController.Instance.Map.GetComponent<MapService>().BuildTower(
                     logicPos, isMyPlayer, tower.GetComponent<Tower>()))
                 {
                     energy -= cost;
+                    SetEnergySlider();
                     GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(logicPos) + new Vector3(0, 0.16f, 0), Quaternion.identity);
                     t.GetComponent<Tower>().Init(id, isMyPlayer, logicPos);
                 }
@@ -123,7 +124,7 @@ namespace MythicEmpire.InGame
             hpText.GetComponent<TextMeshProUGUI>().text = "HP: " + hp.ToString();
         }
 
-        public void SetEnergyText()
+        public void SetEnergySlider()
         {
             energySlider.value = energy;
         }
@@ -131,12 +132,12 @@ namespace MythicEmpire.InGame
         public void GainEnergy(int energyGain)
         {
             energy += energyGain;
-            SetEnergyText();
+            SetEnergySlider();
         }
 
         public string PlayerId { get { return playerID; } }
         public int Hp { get { return hp; } set { hp = value; SetHPText(); } }
-        public int Energy { get { return energy; } set { energy = value; SetEnergyText(); } }
+        public int Energy { get { return energy; } set { energy = value; SetEnergySlider(); } }
         public bool IsMyPlayer { get { return isMyPlayer; } }
     }
 }

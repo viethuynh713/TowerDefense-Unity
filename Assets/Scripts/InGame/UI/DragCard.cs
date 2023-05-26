@@ -37,18 +37,19 @@ namespace MythicEmpire.InGame
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            Debug.Log("here");
             // blur icon
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
+            // reset icon
+            dragIcon.gameObject.SetActive(false);
+            dragIcon.GetComponent<RectTransform>().anchoredPosition = originAnchoredPos;
             // build tower
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycast))
             {
                 GameController.Instance.BuildTower(id, raycast.point, true);
             }
-            // reset icon
-            dragIcon.gameObject.SetActive(false);
-            dragIcon.GetComponent<RectTransform>().anchoredPosition = originAnchoredPos;
         }
     }
 }
