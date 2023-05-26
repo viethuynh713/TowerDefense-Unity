@@ -14,7 +14,7 @@ namespace MythicEmpire.InGame
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private GameObject hpText;
-        [SerializeField] private GameObject energyText;
+        [SerializeField] private Slider energySlider;
 
         private string playerID;
         private int hp;
@@ -35,6 +35,7 @@ namespace MythicEmpire.InGame
             wave = 0;
 
             SetHPText();
+            energySlider.maxValue = InGameService.maxEnergy;
             SetEnergyText();
         }
 
@@ -63,7 +64,7 @@ namespace MythicEmpire.InGame
 
             if (!isMyPlayer)
             {
-                energyText.SetActive(false);
+                energySlider.gameObject.SetActive(false);
             }
         }
 
@@ -78,14 +79,14 @@ namespace MythicEmpire.InGame
             int cost = InGameService.cardCost[new Tuple<TypeCard, string>(TypeCard.TowerCard, id)];
             if (energy >= cost)
             {
-                energy -= cost;
                 SetEnergyText();
                 Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
                 if (GameController.Instance.Map.GetComponent<MapService>().BuildTower(
                     logicPos, isMyPlayer, tower.GetComponent<Tower>()))
                 {
+                    energy -= cost;
                     GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(logicPos) + new Vector3(0, 0.16f, 0), Quaternion.identity);
-                    t.GetComponent<Tower>().Init(isMyPlayer, logicPos);
+                    t.GetComponent<Tower>().Init(id, isMyPlayer, logicPos);
                 }
             }
         }
@@ -124,7 +125,13 @@ namespace MythicEmpire.InGame
 
         public void SetEnergyText()
         {
-            energyText.GetComponent<TextMeshProUGUI>().text = "Energy: " + energy.ToString();
+            energySlider.value = energy;
+        }
+
+        public void GainEnergy(int energyGain)
+        {
+            energy += energyGain;
+            SetEnergyText();
         }
 
         public string PlayerId { get { return playerID; } }

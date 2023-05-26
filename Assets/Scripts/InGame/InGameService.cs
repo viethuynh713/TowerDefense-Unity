@@ -27,6 +27,7 @@ namespace MythicEmpire.InGame
         public static readonly int mapHeight = 10;
 
         public static readonly int playerHp = 20;
+        public static readonly int maxEnergy = 100;
         public static readonly int playerEnergy = 15;
         public static readonly int nWave = 5;
         public static readonly int waveTimeDelay = 10;

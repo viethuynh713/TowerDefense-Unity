@@ -20,7 +20,7 @@ namespace MythicEmpire.InGame
 
         [SerializeField] private GameObject playerController;
 
-        [SerializeField] private TextMeshProUGUI nextWaveTimeText;
+        [SerializeField] private Slider nextWaveTimeSlider;
 
         private void Awake()
         {
@@ -44,6 +44,10 @@ namespace MythicEmpire.InGame
                 playerList.Add(player);
             }
             wave = 0;
+
+            nextWaveTimeSlider.maxValue = InGameService.waveTimeDelay;
+            nextWaveTimeSlider.value = InGameService.waveTimeDelay;
+
             StartCoroutine(StartGame());
         }
 
@@ -90,9 +94,11 @@ namespace MythicEmpire.InGame
             playerList[index].GetComponent<PlayerController>().BuildTower(id, displayPos);
         }
 
-        public void SellTower(Vector2Int logicPos)
+        public void SellTower(Vector2Int logicPos, bool isMyPlayer, int energyGain)
         {
             map.GetComponent<MapService>().SellTower(logicPos);
+            int index = isMyPlayer ? 0 : 1;
+            playerList[index].GetComponent<PlayerController>().GainEnergy(energyGain);
         }
 
         public void GenerateMonsterAuto()
@@ -110,12 +116,12 @@ namespace MythicEmpire.InGame
         public void GainEnergy(int energyGain, bool isMyPlayer)
         {
             int index = isMyPlayer ? 0 : 1;
-            playerList[index].GetComponent<PlayerController>().Energy += energyGain;
+            playerList[index].GetComponent<PlayerController>().GainEnergy(energyGain);
         }
 
         private IEnumerator WaitForNextMonsterWave(int time)
         {
-            nextWaveTimeText.text = "Next Wave: " + time.ToString();
+            nextWaveTimeSlider.value = time;
             yield return new WaitForSeconds(1);
             time--;
             if (time == 0)
@@ -127,7 +133,7 @@ namespace MythicEmpire.InGame
                 }
                 else
                 {
-                    nextWaveTimeText.text = "Next Wave: " + time.ToString();
+                    nextWaveTimeSlider.value = time;
                     Debug.Log("End Game!");
                 }
             }
