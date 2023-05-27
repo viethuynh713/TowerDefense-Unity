@@ -14,7 +14,10 @@ namespace MythicEmpire.Enums
         OnBuyGachaSuccess,
         PrepareListCard,
         OnStartGame,
-        OnEndGame
+        OnEndGame,
+        ServeReceiveMatchMaking,
+        CancelMatchMakingSuccess,
+        PlaceCard
     }
     public enum GachaType
     {
