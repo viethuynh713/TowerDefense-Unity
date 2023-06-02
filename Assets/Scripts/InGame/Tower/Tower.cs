@@ -11,6 +11,7 @@ namespace MythicEmpire.InGame
     public class Tower : MonoBehaviour
     {
         private string id;
+        private string towerId;
         private string ownerId;
         protected TowerStats stats;
         private Vector2Int logicPos;

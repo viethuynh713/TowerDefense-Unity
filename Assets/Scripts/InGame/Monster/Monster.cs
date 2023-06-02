@@ -145,7 +145,8 @@ namespace MythicEmpire.InGame
                         GameController.Instance.Map.GetComponent<MapService>().CurrentMap,
                         InGameService.Display2LogicPos(transform.position),
                         InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Opponent : TypePlayer.Player],
-                        !isMyPlayer
+                        !isMyPlayer,
+                        true
                     );
                 }
             }

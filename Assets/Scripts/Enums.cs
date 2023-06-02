@@ -65,4 +65,17 @@ namespace MythicEmpire.Enums
         Player,
         Opponent
     }
+    public enum GameResult
+    {
+        Win,
+        Draw,
+        Loss
+    }
+    public enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
 }

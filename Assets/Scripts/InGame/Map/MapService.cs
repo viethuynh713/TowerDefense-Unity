@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MythicEmpire.Enums;
+using static UnityEditor.PlayerSettings;
 
 namespace MythicEmpire.InGame
 {
@@ -26,6 +27,61 @@ namespace MythicEmpire.InGame
             // initial empty map
             width = InGameService.mapWidth;
             height = InGameService.mapHeight;
+            InitMap();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        public void InitMapLogic()
+        {
+            Tile[][] currentMap = new Tile[height][];
+            for (int i = 0; i < height; i++)
+            {
+                currentMap[i] = new Tile[width];
+            }
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    // generate tiles at the first and last column
+                    if (j == 0 || j == width - 1)
+                    {
+                        bool isHouseTile = false;
+                        foreach (var pos in InGameService.houseLogicPos)
+                        {
+                            if (pos.Value == new Vector2Int(j, i))
+                            {
+                                isHouseTile = true;
+                                break;
+                            }
+                        }
+                        currentMap[i][j] = new Tile();
+                        currentMap[i][j].IsBarrier = isHouseTile ? false : true;
+                    }
+                    // generate tiles at the middle column
+                    else if (j == InGameService.columnIndexSplit)
+                    {
+                        currentMap[i][j] = new Tile();
+                        currentMap[i][j].IsBarrier = false;
+                    }
+                    // generate empty tiles in each side of players
+                    else
+                    {
+                        currentMap[i][j] = new Tile();
+                        currentMap[i][j].IsBarrier = false;
+                        currentMap[i][j].Type = j < InGameService.columnIndexSplit ? TypeTile.Opponent : TypeTile.Player;
+                    }
+                    currentMap[i][j].transform.parent = transform;
+                }
+            }
+        }
+
+        public void InitMap()
+        {
             currentMap = new GameObject[height][];
             for (int i = 0; i < height; i++)
             {
@@ -74,17 +130,9 @@ namespace MythicEmpire.InGame
                 Instantiate(coverTile, new Vector3(j, 0, -1), Quaternion.identity);
                 Instantiate(coverTile, new Vector3(j, 0, height), Quaternion.identity);
             }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        public void InitMap()
-        {
-
+            // init hole
+            InitTree1();
+            InitVirtualPath();
         }
 
         public void UpdateMap()
@@ -115,7 +163,7 @@ namespace MythicEmpire.InGame
             {
                 currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier = true;
                 TypePlayer tp = isMyPlayer ? TypePlayer.Player : TypePlayer.Opponent;
-                if (InGameService.FindPath(currentMap, startPoint, endPoints[tp], isMyPlayer).Count > 0)
+                if (InGameService.FindPath(currentMap, startPoint, endPoints[tp], isMyPlayer, true).Count > 0)
                 {
                     currentMap[pos.y][pos.x].GetComponent<Tile>().BuildTower(tower.transform);
 
@@ -138,92 +186,111 @@ namespace MythicEmpire.InGame
 
         public GameObject[][] CurrentMap { get { return currentMap; } }
 
-        //class TreeTileLinkedList
-        //{
-        //    public LinkedList<InitTree1Node> treeTileLinkedList;
-        //    public int nTree;
-        //    public TreeTileLinkedList(List<Vector2Int> tileList, int nTree)
-        //    {
-        //        // create a link list with the first node is start state
-        //        treeTileLinkedList = new LinkedList<InitTree1Node>();
-        //        treeTileLinkedList.AddLast(new InitTree1Node(tileList, null));
-        //        this.nTree = nTree;
-        //    }
-        //    public List<Vector2Int> createAllTree()
-        //    {
-        //        while (treeTileLinkedList.Count < nTree)
-        //        {
-        //            SelectTile();
-        //        }
-        //        List<Vector2Int> res = new List<Vector2Int>();
-        //        foreach (InitTree1Node node in treeTileLinkedList)
-        //        {
-        //            res.Add(node.selectedTile.Value);
-        //        }
-        //        return res;
-        //    }
-        //    public void SelectTile()
-        //    {
-        //        if (treeTileLinkedList.Last.Value.CanAdd())
-        //        {
-        //            InitTree1Node lastNode = treeTileLinkedList.Last.Value;
-        //            treeTileLinkedList.AddLast(new InitTree1Node(lastNode.restTile, lastNode.selectedTile));
-        //        }
-        //        else
-        //        {
-        //            treeTileLinkedList.RemoveLast();
-        //            treeTileLinkedList.Last.Value.RemoveDo();
-        //        }
-        //    }
-        //}
-        //class InitTree1Node
-        //{
-        //    public List<Vector2Int> restTile;
-        //    public Vector2Int? selectedTile;
-        //    public InitTree1Node(List<Vector2Int> prevRestTile, Vector2Int? prevSelectedTile)
-        //    {
-        //        restTile = prevRestTile;
-        //        if (prevSelectedTile != null)
-        //        {
-        //            for (int i = prevSelectedTile.Value.x - 1; i <= prevSelectedTile.Value.x + 1; i++)
-        //            {
-        //                for (int j = prevSelectedTile.Value.y - 1; j <= prevSelectedTile.Value.y + 1; j++)
-        //                {
-        //                    restTile.Remove(new Vector2Int(i, j));
-        //                }
-        //            }
-        //        }
-        //        if (restTile.Count == 0)
-        //        {
-        //            selectedTile = null;
-        //        }
-        //        else
-        //        {
-        //            selectedTile = restTile[Random.Range(0, restTile.Count)];
-        //        }
-        //    }
-        //    public bool CanAdd()
-        //    {
-        //        return selectedTile != null;
-        //    }
-        //    public void RemoveDo()
-        //    {
-        //        restTile.Remove(selectedTile.Value);
-        //        selectedTile = restTile[Random.Range(0, restTile.Count)];
-        //    }
-        //}
-        //private void InitTree1()
-        //{
-        //    List<Vector2Int> tileList = new List<Vector2Int>();
-        //    for (int i = 1; i < InGameService.mapHeight - 1; i++)
-        //    {
-        //        for (int j = 1; j < InGameService.mapWidth - 1; j++)
-        //        {
-        //            tileList.Add(new Vector2Int(i, j));
-        //        }
-        //    }
-        //    TreeTileLinkedList treeTileLinkedList = new TreeTileLinkedList(tileList, 9);
-        //    List<Vector2Int> treePosList = treeTileLinkedList.createAllTree();
-        //}
+        class TreeTileLinkedList
+        {
+            public LinkedList<InitTree1Node> treeTileLinkedList;
+            public int nTree;
+            public TreeTileLinkedList(List<Vector2Int> tileList, int nTree)
+            {
+                // create a link list with the first node is start state
+                treeTileLinkedList = new LinkedList<InitTree1Node>();
+                treeTileLinkedList.AddLast(new InitTree1Node(tileList, null));
+                this.nTree = nTree;
+            }
+            public List<Vector2Int> createAllTree()
+            {
+                while (treeTileLinkedList.Count < nTree)
+                {
+                    SelectTile();
+                }
+                List<Vector2Int> res = new List<Vector2Int>();
+                foreach (InitTree1Node node in treeTileLinkedList)
+                {
+                    res.Add(node.selectedTile.Value);
+                }
+                return res;
+            }
+            public void SelectTile()
+            {
+                if (treeTileLinkedList.Last.Value.CanAdd())
+                {
+                    InitTree1Node lastNode = treeTileLinkedList.Last.Value;
+                    treeTileLinkedList.AddLast(new InitTree1Node(lastNode.restTile, lastNode.selectedTile));
+                }
+                else
+                {
+                    treeTileLinkedList.RemoveLast();
+                    treeTileLinkedList.Last.Value.RemoveDo();
+                }
+            }
+        }
+        class InitTree1Node
+        {
+            public List<Vector2Int> restTile;
+            public Vector2Int? selectedTile;
+            public InitTree1Node(List<Vector2Int> prevRestTile, Vector2Int? prevSelectedTile)
+            {
+                restTile = prevRestTile;
+                if (prevSelectedTile != null)
+                {
+                    for (int i = prevSelectedTile.Value.x - 1; i <= prevSelectedTile.Value.x + 1; i++)
+                    {
+                        for (int j = prevSelectedTile.Value.y - 1; j <= prevSelectedTile.Value.y + 1; j++)
+                        {
+                            restTile.Remove(new Vector2Int(i, j));
+                        }
+                    }
+                }
+                if (restTile.Count == 0)
+                {
+                    selectedTile = null;
+                }
+                else
+                {
+                    selectedTile = restTile[Random.Range(0, restTile.Count)];
+                }
+            }
+            public bool CanAdd()
+            {
+                return selectedTile != null;
+            }
+            public void RemoveDo()
+            {
+                restTile.Remove(selectedTile.Value);
+                selectedTile = restTile[Random.Range(0, restTile.Count)];
+            }
+        }
+        private void InitTree1()
+        {
+            List<Vector2Int> tileList = new List<Vector2Int>();
+            for (int i = 1; i < InGameService.localMapWidth - 1; i++)
+            {
+                for (int j = 1; j < InGameService.mapHeight - 1; j++)
+                {
+                    tileList.Add(new Vector2Int(i, j));
+                }
+            }
+            TreeTileLinkedList treeTileLinkedList = new TreeTileLinkedList(tileList, 9);
+            List<Vector2Int> treePosList = treeTileLinkedList.createAllTree();
+            foreach (Vector2Int pos in treePosList)
+            {
+                Vector2Int playerPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, true);
+                Vector2Int opponentPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, false);
+                Destroy(currentMap[playerPos.y][playerPos.x].gameObject);
+                Destroy(currentMap[opponentPos.y][opponentPos.x].gameObject);
+                currentMap[playerPos.y][playerPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(playerPos), Quaternion.identity);
+                currentMap[opponentPos.y][opponentPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(opponentPos), Quaternion.identity);
+            }
+        }
+        private void InitVirtualPath()
+        {
+            List<Vector2Int> path = InGameService.FindPath(currentMap, startPoint, endPoints[TypePlayer.Player], true, false);
+            string s = "";
+            foreach (Vector2Int pos in path)
+            {
+                s += pos.ToString() + " -> ";
+            }
+            Debug.Log(s);
+        }
     }
 }

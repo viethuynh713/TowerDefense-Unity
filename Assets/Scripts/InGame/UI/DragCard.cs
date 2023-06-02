@@ -37,7 +37,6 @@ namespace MythicEmpire.InGame
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("here");
             // blur icon
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;

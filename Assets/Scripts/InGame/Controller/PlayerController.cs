@@ -22,7 +22,6 @@ namespace MythicEmpire.InGame
         private List<GameObject> cardList;
         private bool isMyPlayer;
         private Vector2Int monsterGatePos;
-        private int wave;
 
         [SerializeField] private GameObject tower;
         [SerializeField] private GameObject monster;
@@ -32,7 +31,6 @@ namespace MythicEmpire.InGame
             playerID = UnityEngine.Random.Range(10000000, 99999999).ToString(); // temp id for testing
             hp = InGameService.playerHp;
             energy = InGameService.playerEnergy;
-            wave = 0;
 
             SetHPText();
             energySlider.maxValue = InGameService.maxEnergy;
@@ -103,7 +101,7 @@ namespace MythicEmpire.InGame
             SetHPText();
             if (hp <= 0)
             {
-                Common.Log("End Game!");
+                GameController.Instance.EndGame();
             }
         }
 
