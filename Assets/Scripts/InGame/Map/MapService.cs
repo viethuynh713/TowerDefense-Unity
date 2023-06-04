@@ -131,8 +131,9 @@ namespace MythicEmpire.InGame
                 Instantiate(coverTile, new Vector3(j, 0, height), Quaternion.identity);
             }
             // init hole
-            InitTree1();
-            InitVirtualPath();
+            InitHole1();
+            var virtualPath = InitVirtualPath();
+            InitHole2(virtualPath);
         }
 
         public void UpdateMap()
@@ -163,7 +164,7 @@ namespace MythicEmpire.InGame
             {
                 currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier = true;
                 TypePlayer tp = isMyPlayer ? TypePlayer.Player : TypePlayer.Opponent;
-                if (InGameService.FindPath(currentMap, startPoint, endPoints[tp], isMyPlayer, true).Count > 0)
+                if (InGameService.FindPathForMonster(currentMap, startPoint, endPoints[tp], isMyPlayer).Count > 0)
                 {
                     currentMap[pos.y][pos.x].GetComponent<Tile>().BuildTower(tower.transform);
 
@@ -186,18 +187,18 @@ namespace MythicEmpire.InGame
 
         public GameObject[][] CurrentMap { get { return currentMap; } }
 
-        class TreeTileLinkedList
+        class HoleTileLinkedList
         {
             public LinkedList<InitTree1Node> treeTileLinkedList;
             public int nTree;
-            public TreeTileLinkedList(List<Vector2Int> tileList, int nTree)
+            public HoleTileLinkedList(List<Vector2Int> tileList, int nTree)
             {
                 // create a link list with the first node is start state
                 treeTileLinkedList = new LinkedList<InitTree1Node>();
                 treeTileLinkedList.AddLast(new InitTree1Node(tileList, null));
                 this.nTree = nTree;
             }
-            public List<Vector2Int> createAllTree()
+            public List<Vector2Int> createAllHole()
             {
                 while (treeTileLinkedList.Count < nTree)
                 {
@@ -260,7 +261,16 @@ namespace MythicEmpire.InGame
                 selectedTile = restTile[Random.Range(0, restTile.Count)];
             }
         }
-        private void InitTree1()
+        private void InitHole(Vector2Int pos)
+        {
+            Vector2Int playerPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, true);
+            Vector2Int opponentPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, false);
+            Destroy(currentMap[playerPos.y][playerPos.x].gameObject);
+            Destroy(currentMap[opponentPos.y][opponentPos.x].gameObject);
+            currentMap[playerPos.y][playerPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(playerPos), Quaternion.identity);
+            currentMap[opponentPos.y][opponentPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(opponentPos), Quaternion.identity);
+        }
+        private void InitHole1()
         {
             List<Vector2Int> tileList = new List<Vector2Int>();
             for (int i = 1; i < InGameService.localMapWidth - 1; i++)
@@ -270,27 +280,64 @@ namespace MythicEmpire.InGame
                     tileList.Add(new Vector2Int(i, j));
                 }
             }
-            TreeTileLinkedList treeTileLinkedList = new TreeTileLinkedList(tileList, 9);
-            List<Vector2Int> treePosList = treeTileLinkedList.createAllTree();
-            foreach (Vector2Int pos in treePosList)
+            HoleTileLinkedList holeTileLinkedList = new HoleTileLinkedList(tileList, 9);
+            List<Vector2Int> holePosList = holeTileLinkedList.createAllHole();
+            foreach (Vector2Int pos in holePosList)
             {
-                Vector2Int playerPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, true);
-                Vector2Int opponentPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, false);
-                Destroy(currentMap[playerPos.y][playerPos.x].gameObject);
-                Destroy(currentMap[opponentPos.y][opponentPos.x].gameObject);
-                currentMap[playerPos.y][playerPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(playerPos), Quaternion.identity);
-                currentMap[opponentPos.y][opponentPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(opponentPos), Quaternion.identity);
+                InitHole(pos);
             }
         }
-        private void InitVirtualPath()
+
+        private List<Vector2Int> InitVirtualPath()
         {
-            List<Vector2Int> path = InGameService.FindPath(currentMap, startPoint, endPoints[TypePlayer.Player], true, false);
-            string s = "";
-            foreach (Vector2Int pos in path)
+            List<Vector2Int> path = InGameService.FindPathForCreatingMap(currentMap, startPoint, endPoints[TypePlayer.Player]);
+            //string s = "";
+            //foreach (Vector2Int pos in path)
+            //{
+            //    s += pos.ToString() + " -> ";
+            //}
+            //Debug.Log(s);
+            return path;
+        }
+
+        private void InitHole2(List<Vector2Int> path)
+        {
+            // get a tile list which can generate barrier
+            List<Vector2Int> validTile = new List<Vector2Int>();
+            for (int i = 0; i < currentMap.Length; i++)
             {
-                s += pos.ToString() + " -> ";
+                for (int j = InGameService.columnIndexSplit + 1; j < currentMap[i].Length - 1; j++)
+                {
+                    if (!currentMap[i][j].GetComponent<Tile>().IsBarrier)
+                    {
+                        if (!path.Contains(new Vector2Int(j, i)))
+                        {
+                            if (path.Contains(new Vector2Int(j - 1, i)) || path.Contains(new Vector2Int(j + 1, i))
+                                || path.Contains(new Vector2Int(j, i - 1)) || path.Contains(new Vector2Int(j, i + 1)))
+                            {
+                                validTile.Add(new Vector2Int(j, i));
+                            }
+                        }
+                    }
+                }
             }
-            Debug.Log(s);
+            // init hole
+            int nHole = Random.Range(2, 7);
+            for (int i = 0; i < nHole; i++)
+            {
+                Vector2Int holePos = validTile[Random.Range(0, validTile.Count)];
+                Debug.Log(holePos);
+                InitHole(InGameService.PublicLogicPos2PrivateLogicPos(holePos, true));
+                validTile.Remove(holePos);
+                validTile.Remove(new Vector2Int(holePos.x - 1, holePos.y));
+                validTile.Remove(new Vector2Int(holePos.x + 1, holePos.y));
+                validTile.Remove(new Vector2Int(holePos.x, holePos.y - 1));
+                validTile.Remove(new Vector2Int(holePos.x, holePos.y + 1));
+                if (validTile.Count == 0)
+                {
+                    break;
+                }
+            }
         }
     }
 }

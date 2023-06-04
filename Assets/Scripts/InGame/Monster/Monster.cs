@@ -141,12 +141,11 @@ namespace MythicEmpire.InGame
             {
                 if (barrierPos == null || path.Contains(barrierPos.Value))
                 {
-                    path = InGameService.FindPath(
+                    path = InGameService.FindPathForMonster(
                         GameController.Instance.Map.GetComponent<MapService>().CurrentMap,
                         InGameService.Display2LogicPos(transform.position),
                         InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Opponent : TypePlayer.Player],
-                        !isMyPlayer,
-                        true
+                        !isMyPlayer
                     );
                 }
             }

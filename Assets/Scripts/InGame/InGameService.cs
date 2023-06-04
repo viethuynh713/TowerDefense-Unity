@@ -8,6 +8,8 @@ using System;
 using Unity.Burst.Intrinsics;
 using System.Runtime.CompilerServices;
 using UnityEditor;
+using static UnityEngine.Rendering.DebugUI.Table;
+using System.Diagnostics;
 
 namespace MythicEmpire.InGame
 {
@@ -136,6 +138,15 @@ namespace MythicEmpire.InGame
             return new Vector2Int(columnIndexSplit - 1 - logicPos.x, mapHeight - logicPos.y - 1);
         }
 
+        public static Vector2Int PublicLogicPos2PrivateLogicPos(Vector2Int logicPos, bool isMyPlayer)
+        {
+            if (isMyPlayer)
+            {
+                return new Vector2Int(logicPos.x - columnIndexSplit - 1, logicPos.y);
+            }
+            return new Vector2Int(columnIndexSplit - 1 - logicPos.x, mapHeight - 1 - logicPos.y);
+        }
+
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {
             return new Vector3(logicPos.x, 0, logicPos.y);
@@ -176,320 +187,25 @@ namespace MythicEmpire.InGame
             return false;
         }
 
-        // find path
-        interface FPCost: IComparable
-        {
-            public bool LessThan(FPCost other);
-            public bool GreaterThan(FPCost other);
-            public FPCost Add(FPCost other);
-            public int GetDistance();
-            public void SetDistance(int distance);
-            public int GetNAdjacentNode();
-            public void SetNAdjacentNode(int nAdjacentNode);
-            public int GetNTurn();
-            public void SetNTurn(int nTurn);
-        }
-        class FPMonsterCost: FPCost
-        {
-            public int distance { get; set; }
-            public FPMonsterCost()
-            {
-                distance = 0;
-            }
-            public FPMonsterCost(int distance)
-            {
-                this.distance = distance + 1;
-            }
-            public int CompareTo(object incomingObj)
-            {
-                FPMonsterCost cost = (FPMonsterCost)incomingObj;
-                return distance.CompareTo(cost.distance);
-            }
-            public bool LessThan(FPCost other)
-            {
-                if (other is FPMonsterCost _other)
-                {
-                    if (distance <= _other.distance)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                throw new ArgumentException("Invalid type for LessThan method.");
-            }
-            public bool GreaterThan(FPCost other)
-            {
-                if (other is FPMonsterCost _other)
-                {
-                    if (distance > _other.distance)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                throw new ArgumentException("Invalid type for GreaterThan method.");
-            }
-            public FPCost Add(FPCost other)
-            {
-                if (other is FPMonsterCost _other)
-                {
-                    FPMonsterCost result = new FPMonsterCost();
-                    result.distance = distance + _other.distance;
-                    return result;
-                }
-                throw new ArgumentException("Invalid type for Add method.");
-            }
-            public int GetDistance()
-            {
-                return distance;
-            }
-            public void SetDistance(int distance)
-            {
-                this.distance = distance;
-            }
-            public int GetNAdjacentNode()
-            {
-                throw new Exception("No variable nAdjacentNode");
-            }
-            public void SetNAdjacentNode(int nAdjacentNode)
-            {
-                throw new Exception("No variable nAdjacentNode");
-            }
-            public int GetNTurn()
-            {
-                throw new Exception("No variable nTurn");
-            }
-            public void SetNTurn(int nTurn)
-            {
-                throw new Exception("No variable nTurn");
-            }
-        }
-        class FPVirtualCost: FPCost
-        {
-            public int nAdjacentNode { get; set; }
-            public int distance { get; set; }
-            public int nTurn { get; set; }
-
-            public FPVirtualCost()
-            {
-                nAdjacentNode = 0;
-                distance = 0;
-                nTurn = 0;
-            }
-            public FPVirtualCost(List<string> map, int x, int y, FPTile parent)
-            {
-                // check if checked tile is next to one other tile at maximum
-                FPTile iterTile = parent.parent;
-                bool isValid = true;
-                while (iterTile != null)
-                {
-                    if ((x > 0 && iterTile.x == x - 1 && iterTile.y == y)
-                        || (x < mapWidth - 1 && iterTile.x == x + 1 && iterTile.y == y)
-                        || (y > 0 && iterTile.x == x && iterTile.y == y - 1)
-                        || (y < mapHeight - 1 && iterTile.x == x && iterTile.y == y + 1))
-                    {
-                        isValid = false;
-                        break;
-                    }
-                    iterTile = iterTile.parent;
-                }
-                if (!isValid)
-                {
-                    distance = -1;
-                    return;
-                }
-                // check if checked tile is next to a hole tile
-                nAdjacentNode = parent.cost.GetNAdjacentNode();
-                if ((y > 0 && map[y - 1][x] == '#') || (y < mapHeight - 1 && map[y + 1][x] == '#')
-                    || (x > 1 && map[y][x - 1] == '#') || (x < mapWidth - 2 && map[y][x + 1] == '#')
-                    || (y > 0 && x > 1 && map[y - 1][x - 1] == '#')
-                    || (y < mapHeight - 1 && x > 1 && map[y + 1][x - 1] == '#')
-                    || (y > 0 && x < mapWidth - 2 && map[y - 1][x + 1] == '#')
-                    || (y < mapHeight - 1 && x < mapWidth - 2 && map[y + 1][x + 1] == '#'))
-                {
-                    nAdjacentNode++;
-                }
-                // increase distance
-                distance = parent.cost.GetDistance() + 1;
-                // check if checked tile is a turn
-                nTurn = parent.cost.GetNTurn();
-                if (parent.parent != null)
-                {
-                    if (!(x - parent.x == parent.x - parent.parent.x && y - parent.y == parent.y - parent.parent.y))
-                    {
-                        nTurn++;
-                    }
-                }
-            }
-            public int CompareTo(object incomingObj)
-            {
-                FPVirtualCost cost = (FPVirtualCost)incomingObj;
-                if (nAdjacentNode != cost.nAdjacentNode)
-                {
-                    return cost.nAdjacentNode.CompareTo(nAdjacentNode);
-                }
-                if (distance != cost.distance)
-                {
-                    return cost.distance.CompareTo(distance);
-                }
-                return cost.nTurn.CompareTo(nTurn);
-                
-            }
-            public bool LessThan(FPCost other)
-            {
-                if (other is FPVirtualCost _other)
-                {
-                    if (nAdjacentNode > _other.nAdjacentNode)
-                    {
-                        return true;
-                    }
-                    if (nAdjacentNode == _other.nAdjacentNode)
-                    {
-                        if (distance > _other.distance)
-                        {
-                            return true;
-                        }
-                        if (distance == _other.distance)
-                        {
-                            if (nTurn >= _other.nTurn)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                }
-                throw new ArgumentException("Invalid type for LessThan method.");
-            }
-
-            public bool GreaterThan(FPCost other)
-            {
-                if (other is FPVirtualCost _other)
-                {
-                    if (nAdjacentNode > _other.nAdjacentNode)
-                    {
-                        return false;
-                    }
-                    if (nAdjacentNode == _other.nAdjacentNode)
-                    {
-                        if (distance > _other.distance)
-                        {
-                            return false;
-                        }
-                        if (distance == _other.distance)
-                        {
-                            if (nTurn > _other.nTurn)
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    return true;
-                }
-                throw new ArgumentException("Invalid type for GreaterThan method.");
-            }
-            public FPCost Add(FPCost other)
-            {
-                if (other is FPVirtualCost _other)
-                {
-                    FPVirtualCost res = new FPVirtualCost();
-                    res.nAdjacentNode = nAdjacentNode + _other.nAdjacentNode;
-                    res.distance = distance + _other.distance;
-                    res.nTurn = nTurn + _other.nTurn;
-                    return res;
-                }
-                throw new ArgumentException("Invalid type for Add method.");
-            }
-            public int GetDistance()
-            {
-                return distance;
-            }
-            public void SetDistance(int distance)
-            {
-                this.distance = distance;
-            }
-            public int GetNAdjacentNode()
-            {
-                return nAdjacentNode;
-            }
-            public void SetNAdjacentNode(int nAdjacentNode)
-            {
-                this.nAdjacentNode = nAdjacentNode;
-            }
-            public int GetNTurn()
-            {
-                return nTurn;
-            }
-            public void SetNTurn(int nTurn)
-            {
-                this.nTurn = nTurn;
-            }
-        }
+        // find path for monster
         class FPTile
         {
             public int x { get; set; }
             public int y { get; set; }
+            public int cost { get; set; }
+            public int distance { get; set; }
+            public int costDistance => cost + distance;
             public FPTile parent { get; set; }
-            public FPCost cost { get; set; } // g(x)
-            public FPCost distance { get; set; } // h(x)
-            public FPCost costDistance { get => cost.Add(distance); } // f(x)
 
-            public FPTile(bool isFindRealPath, int x = 0, int y = 0, FPTile parent = null, List<string> map = null)
-            {
-                this.x = x;
-                this.y = y;
-                this.parent = parent;
-                if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
-                {
-                    return;
-                }
-                if (isFindRealPath)
-                {
-                    if (parent == null)
-                    {
-                        cost = new FPMonsterCost();
-                    }
-                    else
-                    {
-                        cost = new FPMonsterCost(parent.cost.GetDistance());
-                    }
-                    distance = new FPMonsterCost();
-                }
-                else
-                {
-                    if (parent == null)
-                    {
-                        cost = new FPVirtualCost();
-                    }
-                    else
-                    {
-                        cost = new FPVirtualCost(map, x, y, parent);
-                        if (cost.GetDistance() < 0)
-                        {
-                            x = -1;
-                        }
-                    }
-                    distance = new FPVirtualCost();
-                }
-            }
             //The distance is essentially the estimated distance, ignoring walls to our target. 
             //So how many tiles left and right, up and down, ignoring walls, to get there. 
             public void SetDistance(int targetX, int targetY)
             {
-                if (cost is FPMonsterCost)
-                {
-                    distance = (FPMonsterCost)distance;
-                    distance.SetDistance(Mathf.Abs(targetX - x) + Mathf.Abs(targetY - y));
-                }
-                else if (cost is FPVirtualCost)
-                {
-                    distance = (FPVirtualCost)distance;
-                    distance.SetDistance(Mathf.Abs(targetX - x) + Mathf.Abs(targetY - y));
-                }
+                distance = Mathf.Abs(targetX - x) + Mathf.Abs(targetY - y);
             }
         }
 
-        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile, bool isMyPlayer, bool isFindRealPath)
+        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile, bool isMyPlayer)
         {
             List<FPTile> possibleTiles;
 
@@ -499,24 +215,24 @@ namespace MythicEmpire.InGame
                 {
                     possibleTiles = new List<FPTile>()
                     {
-                        new FPTile(isFindRealPath, currentTile.x + 1, currentTile.y, currentTile, map)
+                        new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
                     };
                 }
                 else
                 {
                     possibleTiles = new List<FPTile>()
                     {
-                        new FPTile(isFindRealPath, currentTile.x - 1, currentTile.y, currentTile, map)
+                        new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
                     };
                 }
             }
             else
             {
                 possibleTiles = new List<FPTile>() {
-                    new FPTile(isFindRealPath, currentTile.x, currentTile.y - 1, currentTile, map),
-                    new FPTile(isFindRealPath, currentTile.x, currentTile.y + 1, currentTile, map),
-                    new FPTile(isFindRealPath, currentTile.x - 1, currentTile.y, currentTile, map),
-                    new FPTile(isFindRealPath, currentTile.x + 1, currentTile.y, currentTile, map)
+                    new FPTile { x = currentTile.x, y = currentTile.y - 1, parent = currentTile, cost = currentTile.cost + 1 },
+                    new FPTile { x = currentTile.x, y = currentTile.y + 1, parent = currentTile, cost = currentTile.cost + 1 },
+                    new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 },
+                    new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
                 };
             }
 
@@ -532,7 +248,7 @@ namespace MythicEmpire.InGame
                     .ToList();
         }
 
-        public static List<Vector2Int> FindPath(GameObject[][] realMap, Vector2Int startPos, Vector2Int des, bool isMyPlayer, bool isFindRealPath)
+        public static List<Vector2Int> FindPathForMonster(GameObject[][] realMap, Vector2Int startPos, Vector2Int des, bool isMyPlayer)
         {
             List<string> map = new List<string>();
             for (int i = 0; i < realMap.Length; i++)
@@ -560,11 +276,11 @@ namespace MythicEmpire.InGame
                 map.Add(row);
             }
 
-            var start = new FPTile(isFindRealPath);
+            var start = new FPTile();
             start.y = map.FindIndex(x => x.Contains("A"));
             start.x = map[start.y].IndexOf("A");
 
-            var finish = new FPTile(isFindRealPath);
+            var finish = new FPTile();
             finish.y = map.FindIndex(x => x.Contains("B"));
             finish.x = map[finish.y].IndexOf("B");
 
@@ -572,9 +288,6 @@ namespace MythicEmpire.InGame
 
             var activeTiles = new List<FPTile> { start };
             var visitedTiles = new List<FPTile>();
-            int idx = 1;
-
-            List<Vector2Int> resultPath = new List<Vector2Int>();
 
             //This is where we created the map from our previous step etc. 
 
@@ -599,30 +312,15 @@ namespace MythicEmpire.InGame
                         tile = tile.parent;
                         if (tile == null)
                         {
-                            if (isFindRealPath)
-                            {
-                                return path;
-                            }
-                            Debug.Log("Index: " + idx.ToString());
-                            Debug.Log("nAdjacentNode: " + checkTile.cost.GetNAdjacentNode().ToString());
-                            Debug.Log("Distance: " + checkTile.cost.GetDistance().ToString());
-                            Debug.Log("nTurn: " + checkTile.cost.GetNTurn().ToString());
-                            idx++;
-                            resultPath = path;
-                            break;
+                            return path;
                         }
                     }
                 }
 
                 visitedTiles.Add(checkTile);
                 activeTiles.Remove(checkTile);
-                if (!isFindRealPath && checkTile.x == finish.x && checkTile.y == finish.y)
-                {
-                    Debug.Log("Jump!");
-                    continue;
-                }
 
-                var walkableTiles = GetWalkableTiles(map, checkTile, finish, isMyPlayer, isFindRealPath);
+                var walkableTiles = GetWalkableTiles(map, checkTile, finish, isMyPlayer);
 
                 foreach (var walkableTile in walkableTiles)
                 {
@@ -635,7 +333,7 @@ namespace MythicEmpire.InGame
                     if (activeTiles.Any(x => x.x == walkableTile.x && x.y == walkableTile.y))
                     {
                         var existingTile = activeTiles.First(x => x.x == walkableTile.x && x.y == walkableTile.y);
-                        if (existingTile.costDistance.GreaterThan(checkTile.costDistance))
+                        if (existingTile.costDistance > checkTile.costDistance)
                         {
                             activeTiles.Remove(existingTile);
                             activeTiles.Add(walkableTile);
@@ -649,11 +347,200 @@ namespace MythicEmpire.InGame
                 }
             }
 
-            if (isFindRealPath)
+            return new List<Vector2Int>();
+        }
+
+        // find path for creating map
+        class GenerateMapNodeCost
+        {
+            public List<Vector2Int> path { get; set; }
+            public int nAdjacentNode { get; set; }
+            public int distance { get; set; }
+            public int nTurn { get; set; }
+            public GenerateMapNodeCost()
             {
-                return new List<Vector2Int>();
+                path = new List<Vector2Int>();
+                nAdjacentNode = 0;
+                distance = 0;
+                nTurn = 0;
             }
-            return resultPath;
+            public GenerateMapNodeCost Clone()
+            {
+                var clone = new GenerateMapNodeCost();
+                clone.path = new List<Vector2Int>(path);
+                clone.nAdjacentNode = nAdjacentNode;
+                clone.distance = distance;
+                clone.nTurn = nTurn;
+                return clone;
+            }
+            public static bool operator >(GenerateMapNodeCost lhs, GenerateMapNodeCost rhs)
+            {
+                if (lhs.nAdjacentNode > rhs.nAdjacentNode) return true;
+                if (lhs.nAdjacentNode < rhs.nAdjacentNode) return false;
+                if (lhs.distance > rhs.distance) return true;
+                if (lhs.distance < rhs.distance) return false;
+                if (lhs.nTurn > rhs.nTurn) return true;
+                if (lhs.nTurn < rhs.nTurn) return false;
+                return false;
+            }
+            public static bool operator <(GenerateMapNodeCost lhs, GenerateMapNodeCost rhs)
+            {
+                if (lhs.nAdjacentNode > rhs.nAdjacentNode) return false;
+                if (lhs.nAdjacentNode < rhs.nAdjacentNode) return true;
+                if (lhs.distance > rhs.distance) return false;
+                if (lhs.distance < rhs.distance) return true;
+                if (lhs.nTurn > rhs.nTurn) return false;
+                if (lhs.nTurn < rhs.nTurn) return true;
+                return false;
+            }
+        }
+        class Graph
+        {
+            Dictionary<Vector2Int, LinkedList<Vector2Int>> linkedListArray;
+
+            public Graph()
+            {
+                linkedListArray = new Dictionary<Vector2Int, LinkedList<Vector2Int>>();
+            }
+
+            /// The method takes two nodes for which to add edge.
+            public void AddEdge(Vector2Int u, Vector2Int v, bool blnBiDir = true)
+            {
+                LinkedList<Vector2Int> value;
+                if (linkedListArray.TryGetValue(u, out value))
+                {
+                    var last = value.Last;
+                    value.AddAfter(last, v);
+                }
+                else
+                {
+                    linkedListArray.Add(u, new LinkedList<Vector2Int>());
+                    linkedListArray[u].AddFirst(v);
+                }
+
+                if (blnBiDir)
+                {
+                    if (linkedListArray.TryGetValue(v, out value))
+                    {
+                        var last = value.Last;
+                        value.AddAfter(last, u);
+                    }
+                    else
+                    {
+                        linkedListArray.Add(v, new LinkedList<Vector2Int>());
+                        linkedListArray[v].AddFirst(u);
+                    }
+                }
+            }
+
+            internal GenerateMapNodeCost DFSHelper(Vector2Int src, Vector2Int des, GenerateMapNodeCost cost)
+            {
+                if (src == des)
+                {
+                    return cost;
+                }
+                GenerateMapNodeCost bestCost = null;
+                if (linkedListArray[src] != null)
+                {
+                    foreach (var item in linkedListArray[src])
+                    {
+                        var costClone = cost.Clone();
+                        var path = cost.path;
+                        // check if the item is in path or adjacent any node in path
+                        if (path.Contains(item))
+                        {
+                            continue;
+                        }
+                        bool isValid = true;
+                        for (int i = 0; i < path.Count - 1; i++)
+                        {
+                            var node = path[i];
+                            if ((node.x > 0 && item.x == node.x - 1 && item.y == node.y)
+                                || (node.x < mapWidth - 1 && item.x == node.x + 1 && item.y == node.y)
+                                || (node.y > 0 && item.x == node.x && item.y == node.y - 1)
+                                || (node.y < mapHeight - 1 && item.x == node.x && item.y == node.y + 1))
+                            {
+                                isValid = false;
+                                break;
+                            }
+                        }
+                        if (!isValid)
+                        {
+                            continue;
+                        }
+                        // check if the item is adjacent any holes
+                        LinkedList<Vector2Int> value;
+                        if ((item.y > 0 && !linkedListArray.TryGetValue(new Vector2Int(item.x, item.y - 1), out value))
+                            || (item.y < mapHeight - 1 && !linkedListArray.TryGetValue(new Vector2Int(item.x, item.y + 1), out value))
+                            || (item.x > columnIndexSplit + 1 && !linkedListArray.TryGetValue(new Vector2Int(item.x - 1, item.y), out value))
+                            || (item.x < mapWidth - 2 && !linkedListArray.TryGetValue(new Vector2Int(item.x + 1, item.y), out value))
+                            || (item.y > 0 && item.x > columnIndexSplit + 1 && !linkedListArray.TryGetValue(new Vector2Int(item.x - 1, item.y - 1), out value))
+                            || (item.y < mapHeight - 1 && item.x > columnIndexSplit + 1 && !linkedListArray.TryGetValue(new Vector2Int(item.x - 1, item.y + 1), out value))
+                            || (item.y > 0 && item.x < mapWidth - 2 && !linkedListArray.TryGetValue(new Vector2Int(item.x + 1, item.y - 1), out value))
+                            || (item.y < mapHeight - 1 && item.x < mapWidth - 2 && !linkedListArray.TryGetValue(new Vector2Int(item.x + 1, item.y + 1), out value)))
+                        {
+                            costClone.nAdjacentNode++;
+                        }
+                        // increase distance
+                        costClone.distance++;
+                        // check if the item is a turn
+                        if (path.Count > 1
+                            && !(item.x - path[path.Count - 1].x == path[path.Count - 1].x - path[path.Count - 2].x
+                                && item.y - path[path.Count - 1].y == path[path.Count - 1].y - path[path.Count - 2].y))
+                        {
+                            costClone.nTurn++;
+                        }
+                        costClone.path.Add(item);
+                        var checkCost = DFSHelper(item, des, costClone);
+                        if (bestCost == null || (checkCost != null && checkCost > bestCost))
+                        {
+                            bestCost = checkCost;
+                        }
+                    }
+                }
+                return bestCost;
+            }
+
+            internal List<Vector2Int> DFS(Vector2Int src, Vector2Int des)
+            {
+                GenerateMapNodeCost cost = new GenerateMapNodeCost();
+                cost.path.Add(src);
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var resCost = DFSHelper(src, des, cost);
+                stopwatch.Stop();
+                UnityEngine.Debug.Log("Elapsed Time is {0} ms" + stopwatch.ElapsedMilliseconds.ToString());
+                if (resCost == null)
+                {
+                    throw new Exception("Path is null. Maybe the graph is invalid.");
+                }
+                return resCost.path;
+            }
+        }
+
+        public static List<Vector2Int> FindPathForCreatingMap(GameObject[][] realMap, Vector2Int startPos, Vector2Int des)
+        {
+            startPos.x++;
+            des.x--;
+            Graph graph = new Graph();
+            for (int i = 0; i < realMap.Length; i++)
+            {
+                for (int j = columnIndexSplit + 1; j < realMap[i].Length - 1; j++)
+                {
+                    if (!realMap[i][j].GetComponent<Tile>().IsBarrier)
+                    {
+                        if (i < realMap.Length - 1 && !realMap[i + 1][j].GetComponent<Tile>().IsBarrier)
+                        {
+                            graph.AddEdge(new Vector2Int(j, i), new Vector2Int(j, i + 1));
+                        }
+                        if (j < realMap[i].Length - 1 && !realMap[i][j + 1].GetComponent<Tile>().IsBarrier)
+                        {
+                            graph.AddEdge(new Vector2Int(j, i), new Vector2Int(j + 1, i));
+                        }
+                    }
+                }
+            }
+            return graph.DFS(startPos, des);
         }
     }
 }
