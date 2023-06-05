@@ -11,6 +11,7 @@ using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
@@ -71,7 +72,9 @@ namespace MythicEmpire.Networking
                _userModel.password = obj.password;
                _userModel.cardListID = obj.cardListID;
                _userModel.friendListID = obj.friendListID;
+               
                _userDataLocal.UpdateUserId(_userModel.userId);
+               
                 EventManager.Instance.PostEvent(EventID.OnLoginSuccess);
             }
         }
@@ -103,19 +106,62 @@ namespace MythicEmpire.Networking
             }
         }
 
-        public Task SendOTPRequest(string email)
+        public async Task SendOTPRequest(string email)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}AuthenControl/send-otp?email={email}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                
+            }
+            else
+            {
+                EventManager.Instance.PostEvent(EventID.SendOTPSuccess);
+
+            }
         }
 
-        public Task ConfirmOTPRequest(string email, string otp)
+        public async Task ConfirmOTPRequest(string email, string otp)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}AuthenControl/valid-otp?email={email}&otp={otp}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                
+            }
+            else
+            {
+                EventManager.Instance.PostEvent(EventID.ConfirmOTPSuccess);
+
+            }
         }
 
-        public Task ResetPasswordRequest(string email, string newPassword)
+        public async Task ResetPasswordRequest(string email, string newPassword)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}AuthenControl/reset-password?email={email}&newPassword={HashPassword(newPassword)}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Put, url);
+            
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                Debug.Log("");
+            }
+            else
+            {
+                EventManager.Instance.PostEvent(EventID.ResetPasswordSuccess);
+            }
+
+            
         }
 
 

@@ -11,9 +11,9 @@ namespace MythicEmpire.Manager
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<UserLogin>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<UserRegister>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<ForgotPassword>(Lifetime.Singleton).AsImplementedInterfaces();
+            // builder.Register<UserLogin>(Lifetime.Singleton).AsImplementedInterfaces();
+            // builder.Register<UserRegister>(Lifetime.Singleton).AsImplementedInterfaces();
+            // builder.Register<ForgotPassword>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }
 }

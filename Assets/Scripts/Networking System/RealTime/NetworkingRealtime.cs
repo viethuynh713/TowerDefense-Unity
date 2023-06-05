@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNetCore.SignalR.Client;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
@@ -23,42 +23,35 @@ namespace MythicEmpire.Networking
         CastleTakeDamageRequest
     }
     public class NetworkingRealtime : IPostStartable, IRealtimeCommunication
-
     {
-        
         [Inject] private NetworkingConfig _config;
         [Inject] private UserModel _userModel;
         private HubConnection _hubConnection;
-        private IHubProxy _hubProxy;
         private string _gameId;
 
         public void PostStart()
         {
-            _hubConnection = new HubConnection(_config.RealtimeURL);
-            _hubProxy = _hubConnection.CreateHubProxy("MythicEmpireRealtime");
 
-            try
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl(_config.RealtimeURL)
+                .Build();
+            
+            _hubConnection.On<string, string>("ReceiveMessage", (user, msg) =>
             {
-                _hubConnection.Start();
-
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-                throw;
-            }
-            // Process in Lobby
-            _hubProxy.On<byte[]>("OnReceiveMatchMakingSuccess", (data) =>
-            {
-                Debug.Log("Waiting to find game ...");
-                EventManager.Instance.PostEvent(EventID.ServeReceiveMatchMaking);
+                Debug.Log($"{user} send message: {msg}");
             });
-            _hubProxy.On<byte[]>("CancelMatchMakingSuccess", (data) =>
+            // Process in Lobby
+            _hubConnection.On<int>("OnReceiveMatchMakingSuccess", (data) =>
+            {
+                Debug.Log("Waiting to find game ... : " + data);
+                EventManager.Instance.PostEvent(EventID.ServeReceiveMatchMaking,data);
+            });
+            _hubConnection.On("CancelSuccess", () =>
             {
                 Debug.Log("Cancel matchMaking success");
                 EventManager.Instance.PostEvent(EventID.CancelMatchMakingSuccess);
             });
-            _hubProxy.On<byte[]>("OnStartGame", (data) =>
+            _hubConnection.On<byte[]>("OnStartGame", (data) =>
             {
                 _gameId = Encoding.UTF8.GetString(data);
                 Debug.Log($"Start Game {_gameId}");
@@ -66,30 +59,40 @@ namespace MythicEmpire.Networking
             });
             
             // Process in game
-            _hubProxy.On<byte[]>("OnEndGame", (data) =>
+            _hubConnection.On<byte[]>("OnEndGame", (data) =>
             {
                 Debug.Log("EndGame");
                 EventManager.Instance.PostEvent(EventID.OnEndGame);
             });
-            _hubProxy.On<byte[]>("PlaceCard", (data) =>
+            _hubConnection.On<byte[]>("PlaceCard", (data) =>
             {
                 Debug.Log("Place card networking");
                 EventManager.Instance.PostEvent(EventID.PlaceCard);
             });
+            _hubConnection.StartAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.Log("Fail connect : " + task.Exception);
+                }
+            });
+            
         }
-
+    
         public async Task MatchMakingRequest(List<string> cards, ModeGame mode)
         {
             var jsonString = JsonConvert.SerializeObject(cards);
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString);
-            await _hubProxy.Invoke("OnReceiveMatchMakingRequest", _userModel.userId, byteArray, mode);
+            
+            await _hubConnection.SendAsync("OnReceiveMatchMakingRequest", _userModel.userId, byteArray, mode);
         }
-
+    
         public async Task CancelMatchMakingRequest()
         {
-            await _hubProxy.Invoke("OnCancelMatchMakingRequest", _userModel.userId);
+            
+            await _hubConnection.SendAsync("OnCancelMatchMakingRequest");
         }
-
+    
         public async Task PlaceCardRequest(PlaceCardData data)
         {
             JObject jsonString = new JObject(
@@ -99,10 +102,10 @@ namespace MythicEmpire.Networking
                 new JProperty("data", data)
             );
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
-            await _hubProxy.Invoke("OnListeningData", byteArray);
-
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+    
         }
-
+    
         public async Task CastleTakeDamage(SubHPData data)
         {
             JObject jsonString = new JObject(
@@ -112,10 +115,10 @@ namespace MythicEmpire.Networking
                 new JProperty("data", data)
             );
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
-            await _hubProxy.Invoke("CastleHPLostRequest", _userModel.userId,byteArray);
-
+            await _hubConnection.SendAsync("CastleHPLostRequest", _userModel.userId,byteArray);
+    
         }
-    }
+     }
 
 
 }

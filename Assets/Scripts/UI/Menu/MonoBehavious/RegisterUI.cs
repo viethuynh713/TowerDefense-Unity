@@ -18,6 +18,7 @@ namespace MythicEmpire.UI.Menu
         [SerializeField] private TMP_InputField _passwordInputField;
         [SerializeField] private TMP_InputField _confirmPwInputField;
 
+        [SerializeField] private LoginUI _loginUI;
         [Inject]private IRegisterService _registerService;
         [Inject] private UserModel _userModel;
 
@@ -36,7 +37,12 @@ namespace MythicEmpire.UI.Menu
 
         private void Start()
         {
-            EventManager.Instance.RegisterListener(EventID.OnRegisterSuccess, o => gameObject.SetActive(false));
+            EventManager.Instance.RegisterListener(EventID.OnRegisterSuccess, o =>
+            {
+                gameObject.SetActive(false);
+                _loginUI.gameObject.SetActive(true);
+                Notification.Instance.NotifyStatus("Register successfully");
+            });
 
         }
 

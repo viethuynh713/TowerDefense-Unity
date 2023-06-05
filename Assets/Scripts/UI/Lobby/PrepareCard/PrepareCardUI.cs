@@ -6,6 +6,7 @@ using MythicEmpire.Enums;
 using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
+using MythicEmpire.Networking;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -18,6 +19,7 @@ namespace MythicEmpire.UI.Lobby
     {
         [Header("UI")] [Inject] private CardManager _cardManager;
         [Inject] private UserModel _userModel;
+        [Inject] private IRealtimeCommunication _realtimeCommunication;
         [SerializeField] private CardBaseUI prefabs;
         [SerializeField] private Transform parents;
         [SerializeField] private ModeGame mode;
@@ -27,6 +29,9 @@ namespace MythicEmpire.UI.Lobby
         [FormerlySerializedAs("_listSlot")] [Header("Handle action")] [SerializeField]
         private List<CardSlot> _listCardSlot;
 
+        [SerializeField] private GameObject _framePanel;
+        [SerializeField] private GameObject _waitingPanel;
+        
 
         private void HandleListCardSelected(object card)
         {
@@ -49,10 +54,18 @@ namespace MythicEmpire.UI.Lobby
         private void Start()
         {
             EventManager.Instance.RegisterListener(EventID.PrepareListCard, HandleListCardSelected);
+            EventManager.Instance.RegisterListener(EventID.ServeReceiveMatchMaking, o =>
+            {
+                _framePanel.SetActive(false);
+                _waitingPanel.SetActive(true);
+                Debug.Log("1");
+            });
         }
 
         private void OnEnable()
         {
+            _framePanel.SetActive(true);
+            _waitingPanel.SetActive(false);
             _listRender = _userModel.cardListID;
             if (_listItems != null)
             {
@@ -128,7 +141,14 @@ namespace MythicEmpire.UI.Lobby
             {
                 Debug.Log(card);
             }
-            // Debug.Log(  GetListCard().ToString());
+
+            _realtimeCommunication.MatchMakingRequest(GetListCard(), mode);
+            
+        }
+
+        public void ButtonCancelClick()
+        {
+            _realtimeCommunication.CancelMatchMakingRequest();
         }
     }
 }
