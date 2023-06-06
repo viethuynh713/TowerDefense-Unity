@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MythicEmpire.Enums;
+using MythicEmpire.Map;
 using static UnityEditor.PlayerSettings;
+using System.Diagnostics;
+using System;
 
 namespace MythicEmpire.InGame
 {
     public class MapService : MonoBehaviour
     {
         private GameObject[][] currentMap;
+        private Tile[][] currentMapLogic;
         private int width;
         private int height;
         private Vector2Int startPoint = InGameService.monsterGateLogicPos;
@@ -27,6 +31,7 @@ namespace MythicEmpire.InGame
             // initial empty map
             width = InGameService.mapWidth;
             height = InGameService.mapHeight;
+            InitMapLogic();
             InitMap();
         }
 
@@ -38,15 +43,16 @@ namespace MythicEmpire.InGame
 
         public void InitMapLogic()
         {
-            Tile[][] currentMap = new Tile[height][];
+            currentMapLogic = new Tile[height][];
             for (int i = 0; i < height; i++)
             {
-                currentMap[i] = new Tile[width];
+                currentMapLogic[i] = new Tile[width];
             }
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
+                    currentMapLogic[i][j] = new Tile();
                     // generate tiles at the first and last column
                     if (j == 0 || j == width - 1)
                     {
@@ -59,81 +65,69 @@ namespace MythicEmpire.InGame
                                 break;
                             }
                         }
-                        currentMap[i][j] = new Tile();
-                        currentMap[i][j].IsBarrier = isHouseTile ? false : true;
+                        currentMapLogic[i][j].IsBarrier = isHouseTile ? false : true;
                     }
-                    // generate tiles at the middle column
-                    else if (j == InGameService.columnIndexSplit)
-                    {
-                        currentMap[i][j] = new Tile();
-                        currentMap[i][j].IsBarrier = false;
-                    }
-                    // generate empty tiles in each side of players
+                    // generate tiles in the rest
                     else
                     {
-                        currentMap[i][j] = new Tile();
-                        currentMap[i][j].IsBarrier = false;
-                        currentMap[i][j].Type = j < InGameService.columnIndexSplit ? TypeTile.Opponent : TypeTile.Player;
+                        currentMapLogic[i][j].IsBarrier = false;
                     }
-                    currentMap[i][j].transform.parent = transform;
+                    // mark the tile is on player field or opponent field
+                    if (j != InGameService.columnIndexSplit)
+                    {
+                        currentMapLogic[i][j].Owner = j < InGameService.columnIndexSplit ? OwnerType.Opponent : OwnerType.Player;
+                    }
                 }
-            }
-        }
-
-        public void InitMap()
-        {
-            currentMap = new GameObject[height][];
-            for (int i = 0; i < height; i++)
-            {
-                currentMap[i] = new GameObject[width];
-            }
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    // generate tiles at the first and last column
-                    if (j == 0 || j == width - 1)
-                    {
-                        bool isHouseTile = false;
-                        foreach (var pos in InGameService.houseLogicPos)
-                        {
-                            if (pos.Value == new Vector2Int(j, i))
-                            {
-                                isHouseTile = true;
-                                break;
-                            }
-                        }
-                        currentMap[i][j] = isHouseTile
-                            ? Instantiate(houseTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, j == 0 ? 90 : -90, 0))
-                            : Instantiate(barrierTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
-                    }
-                    // generate tiles at the middle column
-                    else if (j == InGameService.columnIndexSplit)
-                    {
-                        currentMap[i][j] = InGameService.monsterGateLogicPos == new Vector2Int(j, i)
-                            ? Instantiate(monsterGateTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, 90, 0))
-                            : Instantiate(bridgeTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.Euler(0, 90, 0));
-                    }
-                    // generate empty tiles in each side of players
-                    else
-                    {
-                        currentMap[i][j] = Instantiate(emptyTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
-                        currentMap[i][j].GetComponent<Tile>().Type = j < InGameService.columnIndexSplit
-                            ? TypeTile.Opponent : TypeTile.Player;
-                    }
-                    currentMap[i][j].transform.parent = transform;
-                }
-            }
-            // generate cover tiles for decorating
-            for (int j = 0; j < width; j++)
-            {
-                Instantiate(coverTile, new Vector3(j, 0, -1), Quaternion.identity);
-                Instantiate(coverTile, new Vector3(j, 0, height), Quaternion.identity);
             }
             // init hole
             InitHole1();
             var virtualPath = InitVirtualPath();
             InitHole2(virtualPath);
+        }
+
+        public void InitMap()
+        {
+            // generate a null map
+            currentMap = new GameObject[height][];
+            for (int i = 0; i < height; i++)
+            {
+                currentMap[i] = new GameObject[width];
+                for (int j = 0; j < width; j++)
+                {
+                    currentMap[i][j] = null;
+                }
+            }
+            // generate houses
+            foreach (var pos in InGameService.houseLogicPos)
+            {
+                currentMap[pos.Value.y][pos.Value.x] = Instantiate(houseTile, InGameService.Logic2DisplayPos(pos.Value), Quaternion.Euler(0, pos.Value.x == 0 ? 90 : -90, 0));
+            }
+            // generate monster gate
+            currentMap[InGameService.monsterGateLogicPos.y][InGameService.monsterGateLogicPos.x] = Instantiate(monsterGateTile, InGameService.Logic2DisplayPos(InGameService.monsterGateLogicPos), Quaternion.Euler(0, 90, 0));
+            // generate bridge tile
+            for (int i = 0; i < height; i++)
+            {
+                currentMap[i][InGameService.columnIndexSplit] = Instantiate(bridgeTile, InGameService.Logic2DisplayPos(new Vector2Int(InGameService.columnIndexSplit, i)), Quaternion.Euler(0, 90, 0));
+            }
+            // generate the rest
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (currentMap[i][j] == null)
+                    {
+                        if (currentMapLogic[i][j].IsBarrier)
+                        {
+                            currentMap[i][j] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
+                        }
+                        else
+                        {
+                            currentMap[i][j] = Instantiate(emptyTile, InGameService.Logic2DisplayPos(new Vector2Int(j, i)), Quaternion.identity);
+                        }
+                    }
+                    currentMap[i][j].transform.parent = transform;
+                }
+            }
         }
 
         public void UpdateMap()
@@ -186,89 +180,12 @@ namespace MythicEmpire.InGame
         }
 
         public GameObject[][] CurrentMap { get { return currentMap; } }
-
-        class HoleTileLinkedList
+        private void InitHole(Vector2Int generalPos)
         {
-            public LinkedList<InitTree1Node> treeTileLinkedList;
-            public int nTree;
-            public HoleTileLinkedList(List<Vector2Int> tileList, int nTree)
-            {
-                // create a link list with the first node is start state
-                treeTileLinkedList = new LinkedList<InitTree1Node>();
-                treeTileLinkedList.AddLast(new InitTree1Node(tileList, null));
-                this.nTree = nTree;
-            }
-            public List<Vector2Int> createAllHole()
-            {
-                while (treeTileLinkedList.Count < nTree)
-                {
-                    SelectTile();
-                }
-                List<Vector2Int> res = new List<Vector2Int>();
-                foreach (InitTree1Node node in treeTileLinkedList)
-                {
-                    res.Add(node.selectedTile.Value);
-                }
-                return res;
-            }
-            public void SelectTile()
-            {
-                if (treeTileLinkedList.Last.Value.CanAdd())
-                {
-                    InitTree1Node lastNode = treeTileLinkedList.Last.Value;
-                    treeTileLinkedList.AddLast(new InitTree1Node(lastNode.restTile, lastNode.selectedTile));
-                }
-                else
-                {
-                    treeTileLinkedList.RemoveLast();
-                    treeTileLinkedList.Last.Value.RemoveDo();
-                }
-            }
-        }
-        class InitTree1Node
-        {
-            public List<Vector2Int> restTile;
-            public Vector2Int? selectedTile;
-            public InitTree1Node(List<Vector2Int> prevRestTile, Vector2Int? prevSelectedTile)
-            {
-                restTile = prevRestTile;
-                if (prevSelectedTile != null)
-                {
-                    for (int i = prevSelectedTile.Value.x - 1; i <= prevSelectedTile.Value.x + 1; i++)
-                    {
-                        for (int j = prevSelectedTile.Value.y - 1; j <= prevSelectedTile.Value.y + 1; j++)
-                        {
-                            restTile.Remove(new Vector2Int(i, j));
-                        }
-                    }
-                }
-                if (restTile.Count == 0)
-                {
-                    selectedTile = null;
-                }
-                else
-                {
-                    selectedTile = restTile[Random.Range(0, restTile.Count)];
-                }
-            }
-            public bool CanAdd()
-            {
-                return selectedTile != null;
-            }
-            public void RemoveDo()
-            {
-                restTile.Remove(selectedTile.Value);
-                selectedTile = restTile[Random.Range(0, restTile.Count)];
-            }
-        }
-        private void InitHole(Vector2Int pos)
-        {
-            Vector2Int playerPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, true);
-            Vector2Int opponentPos = InGameService.PrivateLogicPos2PublicLogicPos(pos, false);
-            Destroy(currentMap[playerPos.y][playerPos.x].gameObject);
-            Destroy(currentMap[opponentPos.y][opponentPos.x].gameObject);
-            currentMap[playerPos.y][playerPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(playerPos), Quaternion.identity);
-            currentMap[opponentPos.y][opponentPos.x] = Instantiate(barrierTile, InGameService.Logic2DisplayPos(opponentPos), Quaternion.identity);
+            Vector2Int playerPos = InGameService.PrivateLogicPos2PublicLogicPos(generalPos, true);
+            Vector2Int opponentPos = InGameService.PrivateLogicPos2PublicLogicPos(generalPos, false);
+            currentMapLogic[playerPos.y][playerPos.x].IsBarrier = true;
+            currentMapLogic[opponentPos.y][opponentPos.x].IsBarrier = true;
         }
         private void InitHole1()
         {
@@ -287,28 +204,41 @@ namespace MythicEmpire.InGame
                 InitHole(pos);
             }
         }
-
+        
         private List<Vector2Int> InitVirtualPath()
         {
-            List<Vector2Int> path = InGameService.FindPathForCreatingMap(currentMap, startPoint, endPoints[TypePlayer.Player]);
-            //string s = "";
-            //foreach (Vector2Int pos in path)
-            //{
-            //    s += pos.ToString() + " -> ";
-            //}
-            //Debug.Log(s);
-            return path;
+            Vector2Int startPos = new Vector2Int(startPoint.x + 1, startPoint.y);
+            Vector2Int des = new Vector2Int(endPoints[TypePlayer.Player].x - 1, endPoints[TypePlayer.Player].y);
+            MapGraph graph = new MapGraph();
+            for (int i = 0; i < currentMapLogic.Length; i++)
+            {
+                for (int j = InGameService.columnIndexSplit + 1; j < currentMapLogic[i].Length - 1; j++)
+                {
+                    if (!currentMapLogic[i][j].IsBarrier)
+                    {
+                        if (i < currentMapLogic.Length - 1 && !currentMapLogic[i + 1][j].IsBarrier)
+                        {
+                            graph.AddEdge(new Vector2Int(j, i), new Vector2Int(j, i + 1));
+                        }
+                        if (j < currentMapLogic[i].Length - 1 && !currentMapLogic[i][j + 1].IsBarrier)
+                        {
+                            graph.AddEdge(new Vector2Int(j, i), new Vector2Int(j + 1, i));
+                        }
+                    }
+                }
+            }
+            return graph.DFS(startPos, des);
         }
 
         private void InitHole2(List<Vector2Int> path)
         {
             // get a tile list which can generate barrier
             List<Vector2Int> validTile = new List<Vector2Int>();
-            for (int i = 0; i < currentMap.Length; i++)
+            for (int i = 0; i < currentMapLogic.Length; i++)
             {
-                for (int j = InGameService.columnIndexSplit + 1; j < currentMap[i].Length - 1; j++)
+                for (int j = InGameService.columnIndexSplit + 1; j < currentMapLogic[i].Length - 1; j++)
                 {
-                    if (!currentMap[i][j].GetComponent<Tile>().IsBarrier)
+                    if (!currentMapLogic[i][j].IsBarrier)
                     {
                         if (!path.Contains(new Vector2Int(j, i)))
                         {
@@ -322,11 +252,10 @@ namespace MythicEmpire.InGame
                 }
             }
             // init hole
-            int nHole = Random.Range(2, 7);
+            int nHole = UnityEngine.Random.Range(2, 7);
             for (int i = 0; i < nHole; i++)
             {
-                Vector2Int holePos = validTile[Random.Range(0, validTile.Count)];
-                Debug.Log(holePos);
+                Vector2Int holePos = validTile[UnityEngine.Random.Range(0, validTile.Count)];
                 InitHole(InGameService.PublicLogicPos2PrivateLogicPos(holePos, true));
                 validTile.Remove(holePos);
                 validTile.Remove(new Vector2Int(holePos.x - 1, holePos.y));
