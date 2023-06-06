@@ -260,7 +260,7 @@ namespace MythicEmpire.Networking
                 var newCardInfo = _cardManager.GetCardById(_userModel.cardListID[^1]);
                 
                 Notification.Instance.PopupNotifyWaring(
-                    $"Give card : {newCardInfo.CardName} - {newCardInfo.CardRarity}");
+                    $"Give new card : {newCardInfo.CardName} - {newCardInfo.CardRarity}");
                 EventManager.Instance.PostEvent(EventID.OnBuyGachaSuccess);
             }
             else
@@ -272,7 +272,7 @@ namespace MythicEmpire.Networking
 
         public async Task UpdateInfosRequest(string newNickName)
         {
-            var url = $"{_config.ServiceURL}CardControl/update-nickname/{_userModel.userId}";
+            var url = $"{_config.ServiceURL}UserControl/update-nickname/{_userModel.userId}";
             CommonScript.Common.Log(url);
             var request = new HttpRequestMessage(HttpMethod.Post, url);
             var content = new MultipartFormDataContent();

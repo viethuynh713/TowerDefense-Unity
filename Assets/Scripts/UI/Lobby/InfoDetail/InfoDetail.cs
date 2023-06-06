@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MythicEmpire.Card;
+using MythicEmpire.LocalDatabase;
 using MythicEmpire.Networking;
 using MythicEmpire.Model;
 using TMPro;
@@ -18,6 +19,7 @@ namespace MythicEmpire.UI.Lobby
         [Inject] private CardManager _cardManager;
         [Inject] private UserModel _userModel;
         [Inject] private IUserInfosNetwork _userInfosNetwork;
+        [Inject] private IUserDataLocal _userDataLocal;
 
         [SerializeField] private ShowUserStatsCard _showUserStatsCard;
         [SerializeField] private TMP_InputField _nicknameText;
@@ -41,18 +43,20 @@ namespace MythicEmpire.UI.Lobby
             _showUserStatsCard.ShowStatCard(_cardManager.GetMultiCard(_userModel.cardListID));
             _idText.text = $"PlayerId: {_userModel.userId}";
             _nicknameText.text = _userModel.nickName;
-            _rankText.text = $"Rank: {_userModel.rank.ToString()}";
+            _rankText.text = $"Rank: #{_userModel.rank.ToString()}";
             _emailText.text = $"Email: {_userModel.email}";
             
         }
 
         public void OnEndEditNickName(string newName)
         {
-            Debug.Log(newName);
+            // Debug.Log(newName);
+            _userInfosNetwork.UpdateInfosRequest(newName);
         }
 
         public void LogoutButtonClick()
         {
+            _userDataLocal.DeleteUserId();
             SceneManager.LoadSceneAsync("Menu");
         }
     }

@@ -20,7 +20,8 @@ namespace MythicEmpire.Enums
         PlaceCard,
         ResetPasswordSuccess,
         ConfirmOTPSuccess,
-        SendOTPSuccess
+        SendOTPSuccess,
+        DeselectCardPrepare
     }
     public enum GachaType
     {

@@ -40,6 +40,7 @@ namespace MythicEmpire.UI.Lobby
             {
                 if (slot.transform.childCount == 0)
                 {
+                    _listItems.Remove(cardSelected);
                     slot.SetParentFor(cardSelected);
                     return;
                 }
@@ -54,12 +55,20 @@ namespace MythicEmpire.UI.Lobby
         private void Start()
         {
             EventManager.Instance.RegisterListener(EventID.PrepareListCard, HandleListCardSelected);
+            EventManager.Instance.RegisterListener(EventID.DeselectCardPrepare, HandleDeselected);
             EventManager.Instance.RegisterListener(EventID.ServeReceiveMatchMaking, o =>
             {
                 _framePanel.SetActive(false);
                 _waitingPanel.SetActive(true);
                 Debug.Log("1");
             });
+        }
+
+        private void HandleDeselected(object card)
+        {
+            var cardDeselected = (CardUIDrag)card;
+            cardDeselected.transform.SetParent(parents);
+            _listItems.Add(cardDeselected);
         }
 
         private void OnEnable()

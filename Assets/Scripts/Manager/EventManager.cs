@@ -10,8 +10,6 @@ namespace MythicEmpire.Manager
 	namespace MythicEmpire.Manager
 	{
 
-
-
 		public class EventManager : MonoBehaviour
 		{
 			public static EventManager Instance;
