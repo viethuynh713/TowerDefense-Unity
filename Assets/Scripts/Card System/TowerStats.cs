@@ -7,7 +7,8 @@ namespace MythicEmpire.Card
         public int Damage;
         public float Range;
         public float AttackSpeed;
-        
-        
+        public float FireRange;
+        public float ExploreRange;
+        public float BulletSpeed;
     }
 }

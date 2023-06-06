@@ -61,5 +61,28 @@ namespace MythicEmpire.Enums
         Legend
 
     }
-
+    public enum TypeTile
+    {
+        None,
+        Player,
+        Opponent
+    }
+    public enum TypePlayer
+    {
+        Player,
+        Opponent
+    }
+    public enum GameResult
+    {
+        Win,
+        Draw,
+        Loss
+    }
+    public enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
 }
