@@ -10,12 +10,12 @@ namespace MythicEmpire.InGame
     {
         private Vector2Int pos;
         [SerializeField] private bool isBarrier;
-        private TypeTile type;
+        private OwnerType owner;
         private Transform tower;
         // Start is called before the first frame update
         void Start()
         {
-            type = TypeTile.None;
+            owner = OwnerType.None;
         }
 
         // Update is called once per frame
@@ -37,6 +37,6 @@ namespace MythicEmpire.InGame
         }
 
         public bool IsBarrier { get { return isBarrier; } set { isBarrier = value; } }
-        public TypeTile Type { get { return type; } set { type = value; } }
+        public OwnerType Owner { get { return owner; } set { owner = value; } }
     }
 }

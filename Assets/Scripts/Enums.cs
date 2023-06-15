@@ -61,7 +61,7 @@ namespace MythicEmpire.Enums
         Legend
 
     }
-    public enum TypeTile
+    public enum OwnerType
     {
         None,
         Player,
