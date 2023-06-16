@@ -155,7 +155,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6604848600540149366}
         m_TargetAssemblyTypeName: MythicEmpire.InGame.Tower, Assembly-CSharp
         m_MethodName: UpgradeDamage
         m_Mode: 1
@@ -475,9 +475,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 6
-  stats: {fileID: 0}
-  canvas: {fileID: 0}
-  bullet: {fileID: 0}
+  stats: {fileID: 11400000, guid: a22a4a1158e62724f9c163a7e63f10e3, type: 2}
+  canvas: {fileID: 6196368835553077086}
+  bullet: {fileID: 8203199907653219295, guid: 9e0faf0d10576204892af86392a3df5d, type: 3}
 --- !u!114 &5341394751852352163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,7 +694,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6604848600540149366}
         m_TargetAssemblyTypeName: MythicEmpire.InGame.Tower, Assembly-CSharp
         m_MethodName: Sell
         m_Mode: 1
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6604848600540149366}
         m_TargetAssemblyTypeName: MythicEmpire.InGame.Tower, Assembly-CSharp
         m_MethodName: UpgradeAttackSpeed
         m_Mode: 1
@@ -960,7 +960,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6604848600540149366}
         m_TargetAssemblyTypeName: MythicEmpire.InGame.Tower, Assembly-CSharp
         m_MethodName: UpgradeRange
         m_Mode: 1

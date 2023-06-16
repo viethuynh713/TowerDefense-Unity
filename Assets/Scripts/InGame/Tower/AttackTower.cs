@@ -9,22 +9,8 @@ namespace MythicEmpire.InGame
     public class AttackTower : Tower
     {
         [SerializeField] private GameObject bullet;
-        private bool canFire;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            OnStart();
-            canFire = true;
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            Fire();
-        }
-
-        public void Fire()
+        public override void Fire()
         {
             // if the tower can fire (by attack speed)
             if (canFire)
@@ -57,7 +43,7 @@ namespace MythicEmpire.InGame
                     if (target != null)
                     {
                         // play fire animation
-                        GetComponent<TowerAnimation>().PlayAnimation(Id, "fire", target.transform);
+                        GetComponent<TowerAnimation>().PlayAnimation(id, "fire", target.transform);
                         // look at monster
                         transform.LookAt(target.transform.position);
                         // create bullet
@@ -70,19 +56,7 @@ namespace MythicEmpire.InGame
                 }
             }
             // play idle animation
-            GetComponent<TowerAnimation>().PlayAnimation(Id, "idle");
-        }
-
-        public void Upgrade()
-        {
-
-        }
-
-        private IEnumerator LoadBullet()
-        {
-            canFire = false;
-            yield return new WaitForSeconds(1 / stats.AttackSpeed);
-            canFire = true;
+            GetComponent<TowerAnimation>().PlayAnimation(id, "idle");
         }
     }
 }

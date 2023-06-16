@@ -2,17 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConeBullet : MonoBehaviour
+namespace MythicEmpire.InGame
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ConeBullet : Bullet
     {
-        
-    }
+        public override void Move()
+        {
+            DealDamage(damage);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void DealDamage(int damage)
+        {
+            Monster[] monsterList = FindObjectsOfType<Monster>();
+            foreach (Monster monster in monsterList)
+            {
+                // check if monster is in explore range and in degree of explore
+                if ((monster.transform.position - transform.position).magnitude < exploreRange)
+                {
+                    if (Vector3.Angle(monster.transform.position - transform.position, target.position - transform.position) <= 60)
+                    {
+                        monster.TakeDmg(damage);
+                    }
+                }
+            }
+            Destroy(gameObject);
+        }
     }
 }

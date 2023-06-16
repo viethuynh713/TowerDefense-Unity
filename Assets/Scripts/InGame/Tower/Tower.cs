@@ -10,15 +10,16 @@ namespace MythicEmpire.InGame
 {
     public class Tower : MonoBehaviour
     {
-        [SerializeField] private string id;
-        private string towerId;
-        private string ownerId;
+        [SerializeField] protected string id;
+        protected string towerId;
+        protected string ownerId;
         [SerializeField] protected TowerStats stats;
-        private Vector2Int logicPos;
+        protected Vector2Int logicPos;
         protected bool isMyPlayer;
         protected int damageLevel;
         protected int rangeLevel;
         protected int attackSpeedLevel;
+        protected bool canFire;
 
         protected int damage;
         protected float attackSpeed;
@@ -28,7 +29,7 @@ namespace MythicEmpire.InGame
 
         [SerializeField] protected Canvas canvas;
         // Start is called before the first frame update
-        protected void OnStart()
+        protected void Start()
         {
             damageLevel = 1;
             rangeLevel = 1;
@@ -39,6 +40,8 @@ namespace MythicEmpire.InGame
             fireRange = stats.FireRange;
             exploreRange = stats.ExploreRange;
             bulletSpeed = stats.BulletSpeed;
+
+            canFire = true;
         }
 
         public void Init(string id, bool isMyPlayer, Vector2Int logicPos)
@@ -52,10 +55,16 @@ namespace MythicEmpire.InGame
         // Update is called once per frame
         void Update()
         {
+            Fire();
             if (Input.GetMouseButtonDown(0))
             {
                 canvas.gameObject.SetActive(false);
             }
+        }
+
+        public virtual void Fire()
+        {
+
         }
 
         public void UpgradeDamage()
@@ -63,7 +72,7 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(false);
             if (damageLevel < InGameService.maxTowerLevel)
             {
-                damage = (damage + 1 >= damage * 1.1f) ? damage + 1 : Mathf.RoundToInt(damage * 1.1f);
+                damage = Mathf.RoundToInt(damage * 1.5f);
             }
         }
 
@@ -90,6 +99,13 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(false);
             GameController.Instance.SellTower(logicPos, isMyPlayer, stats.Energy / 2);
             Destroy(gameObject);
+        }
+
+        protected IEnumerator LoadBullet()
+        {
+            canFire = false;
+            yield return new WaitForSeconds(1 / stats.AttackSpeed);
+            canFire = true;
         }
 
         public void OnMouseUp()
