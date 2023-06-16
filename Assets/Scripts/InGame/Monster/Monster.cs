@@ -15,7 +15,7 @@ namespace MythicEmpire.InGame
         private string id;
         private string ownerId;
         private bool isMyPlayer;
-        private MonsterStats stats;
+        [SerializeField] private MonsterStats stats;
         private bool isSummonedByPlayer;
         private bool canAction;
         private bool canAttack;
@@ -24,24 +24,29 @@ namespace MythicEmpire.InGame
         //private List<Effect> state;
         private List<Vector2Int> path;
 
+        private int hp;
+        private float attackSpeed;
+        private float moveSpeed;
+        private float attackRange;
+        private int damage;
+
         private Animator anim;
 
         // Start is called before the first frame update
         void Awake()
         {
             path = new List<Vector2Int>();
-            stats = new MonsterStats();
-
-            stats.Hp = 10;
-            stats.AttackSpeed = 1.5f;
-            stats.MoveSpeed = 1;
-            stats.AttackRange = 2;
-            stats.Damage = 1;
 
             canAttack = true;
             isSummonedByPlayer = false;
             isDie = false;
             isOnPath = true;
+
+            hp = stats.Hp;
+            attackSpeed = stats.AttackSpeed;
+            moveSpeed = stats.MoveSpeed;
+            attackRange = stats.AttackRange;
+            damage = stats.Damage;
 
             anim = GetComponent<Animator>();
         }
@@ -72,7 +77,7 @@ namespace MythicEmpire.InGame
                 }
                 Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
                 transform.LookAt(displayPos);
-                transform.position = Vector3.MoveTowards(transform.position, displayPos, stats.MoveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, displayPos, moveSpeed * Time.deltaTime);
                 if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
                 {
                     path.RemoveAt(0);
@@ -91,7 +96,7 @@ namespace MythicEmpire.InGame
                 anim.Play("Attack01_SwordAndShiled");
                 isOnPath = false;
                 transform.LookAt(target.transform.position);
-                target.gameObject.GetComponent<Monster>().TakeDmg(stats.Damage);
+                target.gameObject.GetComponent<Monster>().TakeDmg(damage);
                 canAttack = false;
                 StartCoroutine(AttackCD());
             }
@@ -101,7 +106,7 @@ namespace MythicEmpire.InGame
         {
             anim.Play("Attack01_SwordAndShiled");
             isOnPath = true;
-            GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(stats.Damage);
+            GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(damage);
             Destroy(gameObject);
         }
 
@@ -109,8 +114,8 @@ namespace MythicEmpire.InGame
         {
             if (!isDie)
             {
-                stats.Hp -= dmg;
-                if (stats.Hp <= 0)
+                hp -= dmg;
+                if (hp <= 0)
                 {
                     Die();
                 }
@@ -130,7 +135,7 @@ namespace MythicEmpire.InGame
         public void Die()
         {
             isDie = true;
-            GameController.Instance.GainEnergy(1, !isMyPlayer);
+            GameController.Instance.GainEnergy(stats.EnergyGainWhenDie, !isMyPlayer);
             anim.Play("Die01_SwordAndShield");
             StartCoroutine(DieModel());
         }
@@ -153,7 +158,7 @@ namespace MythicEmpire.InGame
 
         private IEnumerator AttackCD()
         {
-            yield return new WaitForSeconds(1 / stats.AttackSpeed);
+            yield return new WaitForSeconds(1 / attackSpeed);
             canAttack = true;
         }
 
@@ -164,7 +169,7 @@ namespace MythicEmpire.InGame
         }
 
         public bool IsMyPlayer { get { return isMyPlayer; } }
-        public MonsterStats Stats { get { return stats; } }
+        public float AttackRange { get { return attackRange; } }
         public bool IsSummonedByPlayer { get { return isSummonedByPlayer; } }
         public bool IsDie { get { return isDie; } }
     }

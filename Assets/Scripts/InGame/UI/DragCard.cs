@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using MythicEmpire.Enums;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.UI;
 
 namespace MythicEmpire.InGame
 {
-    public class DragCard : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+    public class DragCard : CardBaseUI, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         [SerializeField] private Image dragIcon;
 
@@ -49,6 +51,9 @@ namespace MythicEmpire.InGame
             {
                 GameController.Instance.BuildTower(id, raycast.point, true);
             }
+
+            //
+            //EventManager.Instance.PostEvent(EventID.BuildTower, CardData);
         }
     }
 }

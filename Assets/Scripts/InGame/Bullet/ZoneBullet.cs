@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MythicEmpire.InGame
 {
-    public class DirectionalBullet : Bullet
+    public class ZoneBullet : Bullet
     {
         public override void Move()
         {
@@ -45,15 +45,6 @@ namespace MythicEmpire.InGame
                 target.gameObject.GetComponent<Monster>().TakeDmg(damage);
             }
             Destroy(gameObject);
-        }
-
-        public void OnCollisionEnter(Collision other)
-        {
-            // if colliding other monster when moving, explore
-            if (other.gameObject.GetComponent<Monster>() != null)
-            {
-                DealDamage(damage);
-            }
         }
     }
 }

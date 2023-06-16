@@ -31,26 +31,21 @@ namespace MythicEmpire.InGame
         public static readonly int mapWidth = 21;
         public static readonly int mapHeight = 9;
 
-        public static readonly int playerHp = 20;
+        public static readonly int playerHp = 2000;
         public static readonly int maxEnergy = 100;
-        public static readonly int playerEnergy = 15;
-        public static readonly int nWave = 5;
-        public static readonly int waveTimeDelay = 10;
+        public static readonly int playerEnergy = 100;
+        public static readonly int nWave = 20;
+        public static readonly int waveTimeDelay = 20;
 
         public static readonly int monsterLayerMask = 1 << 3;
 
         public static readonly int maxTowerLevel = 3;
 
-        public static readonly Dictionary<Tuple<CardType, string>, int> cardCost = new Dictionary<Tuple<CardType, string>, int>()
-        {
-            { new Tuple<CardType, string>(CardType.TowerCard, "1"), 8 }
-        };
-
         public static readonly List<List<Tuple<string, int>>> monsterWave = new List<List<Tuple<string, int>>>
         {
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 1),
+                new Tuple<string, int>("1", 5),
             },
             new List<Tuple<string, int>>
             {

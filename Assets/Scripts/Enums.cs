@@ -14,6 +14,7 @@ namespace MythicEmpire.Enums
         OnBuyGachaSuccess,
         PrepareListCard,
         OnStartGame,
+        BuildTower,
         OnEndGame
     }
     public enum GachaType

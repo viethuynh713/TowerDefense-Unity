@@ -13,7 +13,7 @@ namespace MythicEmpire.InGame
 
         public CheckAttackMonster(Transform transform) {
             this.transform = transform;
-            range = transform.gameObject.GetComponent<Monster>().Stats.AttackRange;
+            range = transform.gameObject.GetComponent<Monster>().AttackRange;
         }
 
         public override NodeState Evaluate()

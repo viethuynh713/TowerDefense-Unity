@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using MythicEmpire.CommonScript;
 using TMPro;
 using MythicEmpire.Enums;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.Card;
 
 namespace MythicEmpire.InGame
 {
@@ -23,7 +25,6 @@ namespace MythicEmpire.InGame
         private bool isMyPlayer;
         private Vector2Int monsterGatePos;
 
-        [SerializeField] private GameObject tower;
         [SerializeField] private GameObject monster;
         // Start is called before the first frame update
         void Start()
@@ -35,6 +36,8 @@ namespace MythicEmpire.InGame
             SetHPText();
             energySlider.maxValue = InGameService.maxEnergy;
             SetEnergySlider();
+
+            //EventManager.Instance.RegisterListener(EventID.BuildTower, BuildTower);
         }
 
         public void Init(bool isMyPlayer)
@@ -72,9 +75,11 @@ namespace MythicEmpire.InGame
 
         }
 
+        // use to test in client
         public void BuildTower(string id, Vector3 displayPos)
         {
-            int cost = InGameService.cardCost[new Tuple<CardType, string>(CardType.TowerCard, id)];
+            GameObject tower = GameController.Instance.GetComponent<TowerFactory>().GetTower(id);
+            int cost = tower.GetComponent<Tower>().Cost;
             if (energy >= cost)
             {
                 SetEnergySlider();
@@ -88,6 +93,26 @@ namespace MythicEmpire.InGame
                     t.GetComponent<Tower>().Init(id, isMyPlayer, logicPos);
                 }
             }
+        }
+
+        // use to communicate with server
+        public void BuildTower(object _cardData)
+        {
+            //var cardData = (CardInfo)_cardData;
+            //int cost = cardData.CardStats.Energy;
+            //if (energy >= cost)
+            //{
+            //    SetEnergySlider();
+            //    Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
+            //    if (GameController.Instance.Map.GetComponent<MapService>().BuildTower(
+            //        logicPos, isMyPlayer, tower.GetComponent<Tower>()))
+            //    {
+            //        energy -= cost;
+            //        SetEnergySlider();
+            //        GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(logicPos) + new Vector3(0, 0.16f, 0), Quaternion.identity);
+            //        t.GetComponent<Tower>().Init(cardData.CardId, isMyPlayer, logicPos);
+            //    }
+            //}
         }
 
         public IEnumerator GenerateMonster(string id, int nMonster)
