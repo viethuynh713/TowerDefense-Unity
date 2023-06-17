@@ -12,7 +12,7 @@ namespace MythicEmpire.InGame
 {
     public class Monster : MonoBehaviour
     {
-        private string id;
+        [SerializeField] private string id;
         private string ownerId;
         private bool isMyPlayer;
         [SerializeField] private MonsterStats stats;
@@ -30,15 +30,12 @@ namespace MythicEmpire.InGame
         private float attackRange;
         private int damage;
 
-        private Animator anim;
-
         // Start is called before the first frame update
         void Awake()
         {
             path = new List<Vector2Int>();
 
             canAttack = true;
-            isSummonedByPlayer = false;
             isDie = false;
             isOnPath = true;
 
@@ -47,15 +44,13 @@ namespace MythicEmpire.InGame
             moveSpeed = stats.MoveSpeed;
             attackRange = stats.AttackRange;
             damage = stats.Damage;
-
-            anim = GetComponent<Animator>();
         }
 
-        public void Init(string ownerId, string id, bool isMyPlayer)
+        public void Init(string ownerId, bool isMyPlayer, bool isSummonedByPlayer)
         {
             this.ownerId = ownerId;
-            this.id = id;
             this.isMyPlayer = isMyPlayer;
+            this.isSummonedByPlayer = isSummonedByPlayer;
             FindPath();
         }
 
@@ -69,7 +64,7 @@ namespace MythicEmpire.InGame
         {
             if (path.Count > 0)
             {
-                anim.Play("MoveFWD_Normal_InPlace_SwordAndShield");
+                GetComponent<MonsterAnimation>().PlayAnimation("move");
                 if (!isOnPath)
                 {
                     isOnPath = true;
@@ -81,11 +76,11 @@ namespace MythicEmpire.InGame
                 if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
                 {
                     path.RemoveAt(0);
+                    if (path.Count == 0)
+                    {
+                        AttackHouse();
+                    }
                 }
-            }
-            else
-            {
-                AttackHouse();
             }
         }
 
@@ -93,7 +88,7 @@ namespace MythicEmpire.InGame
         {
             if (canAttack)
             {
-                anim.Play("Attack01_SwordAndShiled");
+                GetComponent<MonsterAnimation>().PlayAnimation("attack");
                 isOnPath = false;
                 transform.LookAt(target.transform.position);
                 target.gameObject.GetComponent<Monster>().TakeDmg(damage);
@@ -104,7 +99,7 @@ namespace MythicEmpire.InGame
 
         public void AttackHouse()
         {
-            anim.Play("Attack01_SwordAndShiled");
+            GetComponent<MonsterAnimation>().PlayAnimation("attack");
             isOnPath = true;
             GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(damage);
             Destroy(gameObject);
@@ -136,7 +131,7 @@ namespace MythicEmpire.InGame
         {
             isDie = true;
             GameController.Instance.GainEnergy(stats.EnergyGainWhenDie, !isMyPlayer);
-            anim.Play("Die01_SwordAndShield");
+            GetComponent<MonsterAnimation>().PlayAnimation("die");
             StartCoroutine(DieModel());
         }
 
@@ -168,9 +163,11 @@ namespace MythicEmpire.InGame
             Destroy(gameObject);
         }
 
+        public string Id { get { return id; } }
         public bool IsMyPlayer { get { return isMyPlayer; } }
         public float AttackRange { get { return attackRange; } }
         public bool IsSummonedByPlayer { get { return isSummonedByPlayer; } }
         public bool IsDie { get { return isDie; } }
+        public int Cost { get { return stats.Energy; } }
     }
 }

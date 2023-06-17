@@ -127,9 +127,15 @@ namespace MythicEmpire.InGame
             {
                 foreach (var ele in InGameService.monsterWave[wave])
                 {
-                    StartCoroutine(player.GetComponent<PlayerController>().GenerateMonster(ele.Item1, ele.Item2));
+                    StartCoroutine(player.GetComponent<PlayerController>().GenerateMonsterAuto(ele.Item1, ele.Item2));
                 }
             }
+        }
+
+        public void GenerateMonsterByPlayer(string id, Vector3 displayPos, bool isMyPlayer)
+        {
+            int index = isMyPlayer ? 0 : 1;
+            playerList[index].GetComponent<PlayerController>().GenerateMonsterByPlayer(id, displayPos);
         }
 
         public void GainEnergy(int energyGain, bool isMyPlayer)

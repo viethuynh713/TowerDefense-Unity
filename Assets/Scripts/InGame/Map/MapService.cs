@@ -179,6 +179,22 @@ namespace MythicEmpire.InGame
             currentMap[logicPos.y][logicPos.x].GetComponent<Tile>().SellTower();
         }
 
+        public bool IsGenMonsterValid(Vector2Int pos, bool isMyPlayer)
+        {
+            // it is invalid if the tile is barrier
+            if (currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier)
+            {
+                return false;
+            }
+            // it is valid if the monster is generated in owner field
+            // note: the middle column is valid
+            if (isMyPlayer)
+            {
+                return pos.x >= InGameService.columnIndexSplit ? true : false;
+            }
+            return pos.x <= InGameService.columnIndexSplit ? true : false;
+        }
+
         public GameObject[][] CurrentMap { get { return currentMap; } }
         private void InitHole(Vector2Int generalPos)
         {

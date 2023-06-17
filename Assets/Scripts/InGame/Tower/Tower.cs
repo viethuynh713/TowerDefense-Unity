@@ -44,7 +44,7 @@ namespace MythicEmpire.InGame
             canFire = true;
         }
 
-        public void Init(string id, bool isMyPlayer, Vector2Int logicPos)
+        public void Init(bool isMyPlayer, Vector2Int logicPos)
         {
             this.isMyPlayer = isMyPlayer;
             this.logicPos = logicPos;

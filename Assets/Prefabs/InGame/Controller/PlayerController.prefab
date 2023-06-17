@@ -483,8 +483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpText: {fileID: 1811570671727883656}
   energySlider: {fileID: 8993727972888816657}
-  tower: {fileID: 7974010707245570086, guid: 9e77f9c1607c427409368c1bbb13a200, type: 3}
-  monster: {fileID: 2168121448067137366, guid: 673b2e3a498ecfe4eb8fa5a9d1b1c91c, type: 3}
+  monster: {fileID: 4232759657298820643, guid: 81a58fe20a5bae143a2c1f1525c990d9, type: 3}
 --- !u!1 &3571283507451647796
 GameObject:
   m_ObjectHideFlags: 0

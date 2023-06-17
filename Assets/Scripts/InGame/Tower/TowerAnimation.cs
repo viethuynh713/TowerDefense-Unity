@@ -9,23 +9,19 @@ namespace MythicEmpire.InGame
     {
         public void PlayAnimation(string id, string state, Transform target = null)
         {
-            if (state == "idle")
+            switch (id)
             {
-                switch (id)
-                {
-                    case "4":
-                        GetComponent<GatlingGun>().go_target = null;
-                        break;
-                }
-            }
-            else
-            {
-                switch (id)
-                {
-                    case "4":
-                        GetComponent<GatlingGun>().go_target = target;
-                        break;
-                }
+                case "4":
+                    switch (state)
+                    {
+                        case "idle":
+                            GetComponent<GatlingGun>().go_target = null;
+                            break;
+                        case "attack":
+                            GetComponent<GatlingGun>().go_target = target;
+                            break;
+                    }
+                    break;
             }
         }
     }

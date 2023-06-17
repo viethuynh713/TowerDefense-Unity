@@ -24,8 +24,6 @@ namespace MythicEmpire.InGame
         private List<GameObject> cardList;
         private bool isMyPlayer;
         private Vector2Int monsterGatePos;
-
-        [SerializeField] private GameObject monster;
         // Start is called before the first frame update
         void Start()
         {
@@ -78,19 +76,21 @@ namespace MythicEmpire.InGame
         // use to test in client
         public void BuildTower(string id, Vector3 displayPos)
         {
+            // get tower by id and check if having enough energy to build
             GameObject tower = GameController.Instance.GetComponent<TowerFactory>().GetTower(id);
             int cost = tower.GetComponent<Tower>().Cost;
             if (energy >= cost)
             {
-                SetEnergySlider();
+                // check if building tower is valid
                 Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
                 if (GameController.Instance.Map.GetComponent<MapService>().BuildTower(
                     logicPos, isMyPlayer, tower.GetComponent<Tower>()))
                 {
+                    // cost energy and build tower
                     energy -= cost;
                     SetEnergySlider();
                     GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(logicPos) + new Vector3(0, 0.16f, 0), Quaternion.identity);
-                    t.GetComponent<Tower>().Init(id, isMyPlayer, logicPos);
+                    t.GetComponent<Tower>().Init(isMyPlayer, logicPos);
                 }
             }
         }
@@ -115,9 +115,29 @@ namespace MythicEmpire.InGame
             //}
         }
 
-        public IEnumerator GenerateMonster(string id, int nMonster)
+        public IEnumerator GenerateMonsterAuto(string id, int nMonster)
         {
-            yield return GenerateMonster(id, nMonster, nMonster);
+            yield return GenerateMonster(id, nMonster, nMonster, false);
+        }
+
+        public void GenerateMonsterByPlayer(string id, Vector3 displayPos)
+        {
+            // get monster by id and check if having enough energy to generate
+            GameObject monster = GameController.Instance.GetComponent<MonsterFactory>().GetMonster(id);
+            int cost = monster.GetComponent<Monster>().Cost;
+            if (energy >= cost)
+            {
+                // check if generating is valid
+                Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
+                if (GameController.Instance.Map.GetComponent<MapService>().IsGenMonsterValid(logicPos, isMyPlayer))
+                {
+                    // cost energy and generate monster
+                    energy -= cost;
+                    SetEnergySlider();
+                    GameObject monsterObj = Instantiate(monster, InGameService.Logic2DisplayPos(logicPos), Quaternion.identity);
+                    monsterObj.GetComponent<Monster>().Init(playerID, isMyPlayer, true);
+                }
+            }
         }
 
         public void TakeDmg(int dmg)
@@ -130,15 +150,16 @@ namespace MythicEmpire.InGame
             }
         }
 
-        public IEnumerator GenerateMonster(string id, int nRestMonster, int nMonster)
+        public IEnumerator GenerateMonster(string id, int nRestMonster, int nMonster, bool isSummonedByPlayer = false)
         {
+            GameObject monster = GameController.Instance.GetComponent<MonsterFactory>().GetMonster(id);
             GameObject monsterObj = Instantiate(monster, InGameService.Logic2DisplayPos(monsterGatePos), Quaternion.identity);
-            monsterObj.GetComponent<Monster>().Init(playerID, id, !isMyPlayer);
+            monsterObj.GetComponent<Monster>().Init(playerID, !isMyPlayer, false);
             nRestMonster--;
             if (nRestMonster > 0)
             {
                 yield return new WaitForSeconds(1);
-                StartCoroutine(GenerateMonster(id, nRestMonster, nMonster));
+                StartCoroutine(GenerateMonster(id, nRestMonster, nMonster, isSummonedByPlayer));
             }
         }
 

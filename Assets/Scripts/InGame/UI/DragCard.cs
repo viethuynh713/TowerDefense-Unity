@@ -13,7 +13,7 @@ namespace MythicEmpire.InGame
     {
         [SerializeField] private Image dragIcon;
 
-        [SerializeField] private CardType type;
+        [SerializeField] private CardType cardType;
         [SerializeField] private string id;
         private Vector2 originAnchoredPos;
         private CanvasGroup canvasGroup;
@@ -49,7 +49,17 @@ namespace MythicEmpire.InGame
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycast))
             {
-                GameController.Instance.BuildTower(id, raycast.point, true);
+                switch (cardType)
+                {
+                    case CardType.TowerCard:
+                        GameController.Instance.BuildTower(id, raycast.point, true);
+                        break;
+                    case CardType.MonsterCard:
+                        GameController.Instance.GenerateMonsterByPlayer(id, raycast.point, true);
+                        break;
+                    case CardType.SpellCard:
+                        break;
+                }
             }
 
             //
