@@ -17,13 +17,16 @@ namespace MythicEmpire.InGame
         private bool isMyPlayer;
         [SerializeField] private MonsterStats stats;
         private bool isSummonedByPlayer;
-        private bool canAction;
         private bool canAttack;
         private bool isDie;
         private bool isOnPath;
-        //private List<Effect> state;
         private List<Vector2Int> path;
+        private float speedupRate;
 
+        private bool canAction;
+        private float notActionTime;
+
+        private int maxHp;
         private int hp;
         private float attackSpeed;
         private float moveSpeed;
@@ -35,11 +38,15 @@ namespace MythicEmpire.InGame
         {
             path = new List<Vector2Int>();
 
+            canAction = true;
             canAttack = true;
             isDie = false;
             isOnPath = true;
+            speedupRate = 1f;
+            notActionTime = 0f;
 
-            hp = stats.Hp;
+            maxHp = stats.Hp;
+            hp = maxHp;
             attackSpeed = stats.AttackSpeed;
             moveSpeed = stats.MoveSpeed;
             attackRange = stats.AttackRange;
@@ -54,31 +61,29 @@ namespace MythicEmpire.InGame
             FindPath();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public void Move()
         {
-            if (path.Count > 0)
+            if (canAction)
             {
-                GetComponent<MonsterAnimation>().PlayAnimation("move");
-                if (!isOnPath)
+                if (path.Count > 0)
                 {
-                    isOnPath = true;
-                    FindPath();
-                }
-                Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
-                transform.LookAt(displayPos);
-                transform.position = Vector3.MoveTowards(transform.position, displayPos, moveSpeed * Time.deltaTime);
-                if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
-                {
-                    path.RemoveAt(0);
-                    if (path.Count == 0)
+                    GetComponent<MonsterAnimation>().PlayAnimation("move");
+                    if (!isOnPath)
                     {
-                        AttackHouse();
+                        isOnPath = true;
+                        FindPath();
+                    }
+                    Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
+                    transform.LookAt(displayPos);
+                    transform.position = Vector3.MoveTowards(transform.position, displayPos, moveSpeed * speedupRate * Time.deltaTime);
+                    speedupRate = 1f;
+                    if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
+                    {
+                        path.RemoveAt(0);
+                        if (path.Count == 0)
+                        {
+                            AttackHouse();
+                        }
                     }
                 }
             }
@@ -86,7 +91,7 @@ namespace MythicEmpire.InGame
 
         public void AttackMonster(Transform target)
         {
-            if (canAttack)
+            if (canAction && canAttack)
             {
                 GetComponent<MonsterAnimation>().PlayAnimation("attack");
                 isOnPath = false;
@@ -105,6 +110,18 @@ namespace MythicEmpire.InGame
             Destroy(gameObject);
         }
 
+        public void Heal(int hp)
+        {
+            if (!isDie)
+            {
+                this.hp += hp;
+                if (this.hp > maxHp)
+                {
+                    this.hp = maxHp;
+                }
+            }
+        }
+
         public void TakeDmg(int dmg)
         {
             if (!isDie)
@@ -117,14 +134,42 @@ namespace MythicEmpire.InGame
             }
         }
 
-        public void AddEffect(Effect effect)
+        public void Freezed(float freezeTime)
         {
-
+            if (!isDie)
+            {
+                if (notActionTime < freezeTime)
+                {
+                    notActionTime = freezeTime;
+                }
+                if (canAction)
+                {
+                    StartCoroutine(FreezeCD());
+                }
+                canAction = false;
+            }
         }
 
-        public void ExecuteEffect()
+        private IEnumerator FreezeCD()
         {
+            yield return new WaitForSeconds(0.1f);
+            notActionTime -= 0.1f;
+            if (notActionTime > 0)
+            {
+                StartCoroutine(FreezeCD());
+            }
+            else
+            {
+                canAction = true;
+            }
+        }
 
+        public void Speedup(float rateup)
+        {
+            if (!isDie)
+            {
+                speedupRate *= rateup;
+            }
         }
 
         public void Die()
@@ -169,5 +214,6 @@ namespace MythicEmpire.InGame
         public bool IsSummonedByPlayer { get { return isSummonedByPlayer; } }
         public bool IsDie { get { return isDie; } }
         public int Cost { get { return stats.Energy; } }
+        public bool CanAction { get { return canAction; } set { canAction = value; } }
     }
 }

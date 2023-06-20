@@ -58,6 +58,7 @@ namespace MythicEmpire.InGame
                         GameController.Instance.GenerateMonsterByPlayer(id, raycast.point, true);
                         break;
                     case CardType.SpellCard:
+                        GameController.Instance.UseSpell(id, raycast.point, true);
                         break;
                 }
             }

@@ -11,7 +11,6 @@ namespace MythicEmpire.InGame
     public class Tower : MonoBehaviour
     {
         [SerializeField] protected string id;
-        protected string towerId;
         protected string ownerId;
         [SerializeField] protected TowerStats stats;
         protected Vector2Int logicPos;

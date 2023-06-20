@@ -195,6 +195,16 @@ namespace MythicEmpire.InGame
             return pos.x <= InGameService.columnIndexSplit ? true : false;
         }
 
+        public bool IsGenSpellValid(Vector3 displayPos, bool isMyPlayer)
+        {
+            Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
+            if (logicPos.x > 0 && logicPos.x < width - 1 && logicPos.y >= 0 && logicPos.y < height)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public GameObject[][] CurrentMap { get { return currentMap; } }
         private void InitHole(Vector2Int generalPos)
         {

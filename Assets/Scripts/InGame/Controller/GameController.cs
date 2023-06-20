@@ -138,6 +138,12 @@ namespace MythicEmpire.InGame
             playerList[index].GetComponent<PlayerController>().GenerateMonsterByPlayer(id, displayPos);
         }
 
+        public void UseSpell(string id, Vector3 displayPos, bool isMyPlayer)
+        {
+            int index = isMyPlayer ? 0 : 1;
+            playerList[index].GetComponent<PlayerController>().UseSpell(id, displayPos);
+        }
+
         public void GainEnergy(int energyGain, bool isMyPlayer)
         {
             int index = isMyPlayer ? 0 : 1;

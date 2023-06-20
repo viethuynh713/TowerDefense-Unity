@@ -140,6 +140,25 @@ namespace MythicEmpire.InGame
             }
         }
 
+        public void UseSpell(string id, Vector3 displayPos)
+        {
+            // get spell by id and check if having enough energy to use
+            GameObject spell = GameController.Instance.GetComponent<SpellFactory>().GetSpell(id);
+            int cost = spell.GetComponent<Spell>().Cost;
+            if (energy >= cost)
+            {
+                // check if using spell is valid
+                if (GameController.Instance.Map.GetComponent<MapService>().IsGenSpellValid(displayPos, isMyPlayer))
+                {
+                    // cost energy and use spell
+                    energy -= cost;
+                    SetEnergySlider();
+                    GameObject spellObj = Instantiate(spell, displayPos, Quaternion.identity);
+                    spellObj.GetComponent<Spell>().Init(playerID, isMyPlayer);
+                }
+            }
+        }
+
         public void TakeDmg(int dmg)
         {
             hp -= dmg;
