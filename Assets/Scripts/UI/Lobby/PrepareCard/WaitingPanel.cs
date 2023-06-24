@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MythicEmpire.Enums;
@@ -10,12 +11,17 @@ public class WaitingPanel : MonoBehaviour
     [SerializeField] private TMP_Text _timeText;
     void Start()
     {
-        EventManager.Instance.RegisterListener(EventID.ServeReceiveMatchMaking,DisplayTime);
+        _timeText.text = "00:00";
+
+        EventManager.Instance.RegisterListener(EventID.ServerReceiveMatchMaking,DisplayTime);
     }
 
-    private void DisplayTime(object obj)
+    private void DisplayTime(object time)
     {
-        _timeText.text = (string)obj;
+        TimeSpan timeSpan = TimeSpan.FromMinutes((int)time);
+        string formattedTime = timeSpan.ToString(@"hh\:mm");
+        Debug.Log(formattedTime);
+        _timeText.text = formattedTime;
     }
     
 }

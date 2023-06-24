@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
+using InGame.Map;
 using UnityEngine;
 using MythicEmpire.Enums;
 using MythicEmpire.Map;
-using static UnityEditor.PlayerSettings;
-using System.Diagnostics;
-using System;
 
 namespace MythicEmpire.InGame
 {
@@ -25,7 +22,6 @@ namespace MythicEmpire.InGame
         [SerializeField] private GameObject houseTile;
         [SerializeField] private GameObject coverTile;
 
-        // Start is called before the first frame update
         void Start()
         {
             // initial empty map
@@ -35,12 +31,7 @@ namespace MythicEmpire.InGame
             InitMap();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
+       
         public void InitMapLogic()
         {
             currentMapLogic = new Tile[height][];

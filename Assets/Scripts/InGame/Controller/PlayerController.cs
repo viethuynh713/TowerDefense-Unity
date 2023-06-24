@@ -19,7 +19,7 @@ namespace MythicEmpire.InGame
         private string playerID;
         private int hp;
         private int energy;
-        private List<GameObject> cardList;
+        // private List<GameObject> cardList;
         private bool isMyPlayer;
         private Vector2Int monsterGatePos;
 
@@ -41,7 +41,7 @@ namespace MythicEmpire.InGame
         {
             this.isMyPlayer = isMyPlayer;
             monsterGatePos = InGameService.monsterGateLogicPos;
-            //
+            
             RectTransform rt = hpText.GetComponent<RectTransform>();
             if (isMyPlayer)
             {

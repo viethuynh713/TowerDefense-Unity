@@ -47,6 +47,7 @@ namespace MythicEmpire.InGame
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycast))
             {
+                Debug.Log(raycast.point);
                 GameController.Instance.BuildTower(id, raycast.point, true);
             }
         }

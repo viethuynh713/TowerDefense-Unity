@@ -51,31 +51,40 @@ namespace MythicEmpire.Networking
 
         public async Task LoginRequest(string email, string password)
         {
+            
             var url = $"{_config.ServiceURL}AuthenControl/login?email={email}&userPassword={HashPassword(password)}";
             CommonScript.Common.Log(url);
             var request = new HttpRequestMessage(HttpMethod.Get, url);
+            try
+            {
+                var response = await _httpClient.SendAsync(request);
+                // Debug.Log(response.StatusCode);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
 
-            var response  = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
-                
+                }
+                else
+                {
+                    var obj = JsonConvert.DeserializeObject<UserModel>(response.Content.ReadAsStringAsync().Result);
+                    _userModel.userId = obj.userId;
+                    _userModel.rank = obj.rank;
+                    _userModel.gold = obj.gold;
+                    _userModel.nickName = obj.nickName;
+                    _userModel.email = obj.email;
+                    _userModel.password = obj.password;
+                    _userModel.cardListID = obj.cardListID;
+                    _userModel.friendListID = obj.friendListID;
+
+                    _userDataLocal.UpdateUserId(_userModel.userId);
+
+                    EventManager.Instance.PostEvent(EventID.OnLoginSuccess);
+                }
             }
-            else
+            catch 
             {
-               var obj = JsonConvert.DeserializeObject<UserModel>(response.Content.ReadAsStringAsync().Result);
-               _userModel.userId = obj.userId;
-               _userModel.rank = obj.rank;
-               _userModel.gold = obj.gold;
-               _userModel.nickName = obj.nickName;
-               _userModel.email = obj.email;
-               _userModel.password = obj.password;
-               _userModel.cardListID = obj.cardListID;
-               _userModel.friendListID = obj.friendListID;
-               
-               _userDataLocal.UpdateUserId(_userModel.userId);
-               
-                EventManager.Instance.PostEvent(EventID.OnLoginSuccess);
+                Notification.Instance.PopupNotifyWaring("Error request");
+
             }
         }
 
@@ -280,7 +289,7 @@ namespace MythicEmpire.Networking
             request.Content = content;
             
             var response = await _httpClient.SendAsync(request);
-
+            
             if (response.IsSuccessStatusCode)
             {
                 _userModel.nickName = newNickName;

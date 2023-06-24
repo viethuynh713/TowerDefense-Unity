@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using InGame.Map;
 using UnityEngine;
 using MythicEmpire.Enums;
 using UnityEngine.EventSystems;
@@ -8,10 +9,19 @@ namespace MythicEmpire.InGame
 {
     public class Tile : MonoBehaviour
     {
-        private Vector2Int pos;
+        public Vector2Int logicPosition;
+        public TypeTile typeOfTile;
+        public string ownerId;
         [SerializeField] private bool isBarrier;
         private OwnerType owner;
         private Transform tower;
+
+        public void SetInfo(Vector2Int position, TypeTile type, string ownerId)
+        {
+            this.logicPosition = position;
+            this.typeOfTile = type;
+            this.ownerId = ownerId;
+        }
         // Start is called before the first frame update
         void Start()
         {

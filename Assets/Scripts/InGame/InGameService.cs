@@ -22,7 +22,8 @@ namespace MythicEmpire.InGame
         public static readonly Vector2Int mapLogicPos = Vector2Int.zero;
         public static readonly Vector2Int monsterGateLogicPos = new Vector2Int(10, 4);
         public static readonly Dictionary<TypePlayer, Vector2Int> houseLogicPos = new Dictionary<TypePlayer, Vector2Int> {
-            { TypePlayer.Player, new Vector2Int(20, 4) }, { TypePlayer.Opponent, new Vector2Int(0, 4) }
+            { TypePlayer.Player, new Vector2Int(20, 4) },
+            { TypePlayer.Opponent, new Vector2Int(0, 4) }
         };
         public static readonly Vector3 rootVector = Vector3.forward;
         public static readonly float infinitesimal = 0.01f;

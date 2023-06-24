@@ -15,13 +15,18 @@ namespace MythicEmpire.Enums
         PrepareListCard,
         OnStartGame,
         OnEndGame,
-        ServeReceiveMatchMaking,
+        ServerReceiveMatchMaking,
         CancelMatchMakingSuccess,
         PlaceCard,
         ResetPasswordSuccess,
         ConfirmOTPSuccess,
         SendOTPSuccess,
-        DeselectCardPrepare
+        DeselectCardPrepare,
+        UpdateEnergy,
+        UpdateWaveTime,
+        RenderListCard,
+        OnGetMap,
+        OnGetCard
     }
     public enum GachaType
     {

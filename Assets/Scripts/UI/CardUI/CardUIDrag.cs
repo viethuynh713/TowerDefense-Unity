@@ -39,7 +39,7 @@ namespace MythicEmpire.UI
 
         public void OnPointerClick(PointerEventData eventData)
         {
-             Debug.Log(eventData.pointerId);
+             // Debug.Log(eventData.pointerId);
             if (!isDrag && eventData.pointerId == -1)
             {
                 EventManager.Instance.PostEvent(EventID.PrepareListCard, this);

@@ -8,7 +8,9 @@ using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using MythicEmpire.Networking;
 using Newtonsoft.Json.Serialization;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VContainer;
@@ -31,8 +33,8 @@ namespace MythicEmpire.UI.Lobby
 
         [SerializeField] private GameObject _framePanel;
         [SerializeField] private GameObject _waitingPanel;
-        
 
+        public TMP_Text timeTxt;
         private void HandleListCardSelected(object card)
         {
             var cardSelected = (CardUIDrag)card;
@@ -50,18 +52,54 @@ namespace MythicEmpire.UI.Lobby
         private void Awake()
         {
             _listItems = new List<CardBaseUI>();
+            mainAction = new List<Action>();
         }
 
+        private List<Action> mainAction;
+        private void Update()
+        {
+            if (mainAction.Count > 0)
+            {
+                mainAction[0].Invoke();
+                mainAction.RemoveAt(0);
+            }
+        }
         private void Start()
         {
             EventManager.Instance.RegisterListener(EventID.PrepareListCard, HandleListCardSelected);
             EventManager.Instance.RegisterListener(EventID.DeselectCardPrepare, HandleDeselected);
-            EventManager.Instance.RegisterListener(EventID.ServeReceiveMatchMaking, o =>
+            EventManager.Instance.RegisterListener(EventID.ServerReceiveMatchMaking, time =>
             {
-                _framePanel.SetActive(false);
-                _waitingPanel.SetActive(true);
-                Debug.Log("1");
+                if ((int)time == 0)
+                {
+                    mainAction.Add((() =>
+                    {
+                        _framePanel.SetActive(false);
+                        _waitingPanel.SetActive(true);
+                    }));
+                }
+                mainAction.Add(()=>
+                {
+                    TimeSpan timeSpan = TimeSpan.FromMinutes((int)time);
+                    string formattedTime = timeSpan.ToString(@"hh\:mm");
+                    timeTxt.text = formattedTime;
+                });
             });
+            EventManager.Instance.RegisterListener(EventID.CancelMatchMakingSuccess, o =>
+            {
+                mainAction.Add((() =>
+                {
+                    _framePanel.SetActive(true);
+                    _waitingPanel.SetActive(false);
+                }));
+            });
+        }
+
+        IEnumerator EnableWaitingPanel(bool active)
+        {
+            yield return null;
+            _framePanel.SetActive(!active);
+            _waitingPanel.SetActive(active);
         }
 
         private void HandleDeselected(object card)
@@ -146,10 +184,10 @@ namespace MythicEmpire.UI.Lobby
         public void ButtonReadyClick()
         {
 
-            foreach (var card in GetListCard())
-            {
-                Debug.Log(card);
-            }
+            // foreach (var card in GetListCard())
+            // {
+            //     Debug.Log(card);
+            // }
 
             _realtimeCommunication.MatchMakingRequest(GetListCard(), mode);
             

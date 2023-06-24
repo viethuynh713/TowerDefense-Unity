@@ -95,15 +95,15 @@ namespace MythicEmpire.InGame
             int opponentHp = playerList[1].GetComponent<PlayerController>().Hp;
             if (playerHp > opponentHp)
             {
-                GetComponent<EndGameUI>().ShowResult(GameResult.Win);
+                GetComponent<EndGameUI>().ShowResult(GameResult.Win,1);
             }
             else if (playerHp == opponentHp)
             {
-                GetComponent<EndGameUI>().ShowResult(GameResult.Draw);
+                GetComponent<EndGameUI>().ShowResult(GameResult.Draw,1);
             }
             else
             {
-                GetComponent<EndGameUI>().ShowResult(GameResult.Loss);
+                GetComponent<EndGameUI>().ShowResult(GameResult.Loss,1);
             }
         }
 

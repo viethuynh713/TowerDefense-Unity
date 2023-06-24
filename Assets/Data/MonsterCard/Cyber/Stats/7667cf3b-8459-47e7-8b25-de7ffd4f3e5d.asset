@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b024d2e9be704a36ac29c5b945abc255, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b576fef79ce0d241b694143d6f6510e, type: 3}
   m_Name: 7667cf3b-8459-47e7-8b25-de7ffd4f3e5d
   m_EditorClassIdentifier: 
   Energy: 3
-  Hp: 180
-  AttackSpeed: 1.6
-  MoveSpeed: 1.6
-  Damage: 6
