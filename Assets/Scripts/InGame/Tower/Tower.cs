@@ -10,32 +10,43 @@ namespace MythicEmpire.InGame
 {
     public class Tower : MonoBehaviour
     {
-        private string id;
-        private string towerId;
-        private string ownerId;
-        protected TowerStats stats;
-        private Vector2Int logicPos;
+        [SerializeField] protected string id;
+        protected string ownerId;
+        [SerializeField] protected TowerStats stats;
+        protected Vector2Int logicPos;
         protected bool isMyPlayer;
-        protected int cost;
         protected int damageLevel;
         protected int rangeLevel;
         protected int attackSpeedLevel;
+        protected bool canFire;
+
+        protected int damage;
+        protected float attackSpeed;
+        protected float fireRange;
+        protected float exploreRange;
+        protected float bulletSpeed;
 
         [SerializeField] protected Canvas canvas;
         // Start is called before the first frame update
-        void Start()
+        protected void Start()
         {
             damageLevel = 1;
             rangeLevel = 1;
             attackSpeedLevel = 1;
+
+            damage = stats.Damage;
+            attackSpeed = stats.AttackSpeed;
+            fireRange = stats.FireRange;
+            exploreRange = stats.ExploreRange;
+            bulletSpeed = stats.BulletSpeed;
+
+            canFire = true;
         }
 
-        public void Init(string id, bool isMyPlayer, Vector2Int logicPos)
+        public void Init(bool isMyPlayer, Vector2Int logicPos)
         {
-            this.id = id;
             this.isMyPlayer = isMyPlayer;
             this.logicPos = logicPos;
-            cost = InGameService.cardCost[new Tuple<CardType, string>(CardType.TowerCard, id)];
             canvas.gameObject.GetComponent<TowerUI>().SetElementPosition(transform.position);
             canvas.gameObject.SetActive(false);
         }
@@ -43,10 +54,16 @@ namespace MythicEmpire.InGame
         // Update is called once per frame
         void Update()
         {
+            Fire();
             if (Input.GetMouseButtonDown(0))
             {
                 canvas.gameObject.SetActive(false);
             }
+        }
+
+        public virtual void Fire()
+        {
+
         }
 
         public void UpgradeDamage()
@@ -54,7 +71,7 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(false);
             if (damageLevel < InGameService.maxTowerLevel)
             {
-                stats.Damage = (stats.Damage + 1 >= stats.Damage * 1.1f) ? stats.Damage + 1 : Mathf.RoundToInt(stats.Damage * 1.1f);
+                damage = Mathf.RoundToInt(damage * 1.5f);
             }
         }
 
@@ -63,7 +80,7 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(false);
             if (rangeLevel < InGameService.maxTowerLevel)
             {
-                stats.Range *= 1.1f;
+                fireRange *= 1.1f;
             }
         }
 
@@ -72,15 +89,22 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(false);
             if (attackSpeedLevel < InGameService.maxTowerLevel)
             {
-                stats.AttackSpeed *= 1.1f;
+                attackSpeed *= 1.1f;
             }
         }
 
         public void Sell()
         {
             canvas.gameObject.SetActive(false);
-            GameController.Instance.SellTower(logicPos, isMyPlayer, cost / 2);
+            GameController.Instance.SellTower(logicPos, isMyPlayer, stats.Energy / 2);
             Destroy(gameObject);
+        }
+
+        protected IEnumerator LoadBullet()
+        {
+            canFire = false;
+            yield return new WaitForSeconds(1 / stats.AttackSpeed);
+            canFire = true;
         }
 
         public void OnMouseUp()
@@ -88,6 +112,7 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(!canvas.gameObject.activeInHierarchy);
         }
 
-        public int Cost { get { return cost; } }
+        public int Cost { get { return stats.Energy; } }
+        public string Id { get { return id; } }
     }
 }

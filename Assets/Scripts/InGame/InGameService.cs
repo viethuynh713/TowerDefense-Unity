@@ -32,102 +32,45 @@ namespace MythicEmpire.InGame
         public static readonly int mapWidth = 21;
         public static readonly int mapHeight = 9;
 
-        public static readonly int playerHp = 20;
+        public static readonly int playerHp = 2000;
         public static readonly int maxEnergy = 100;
-        public static readonly int playerEnergy = 15;
-        public static readonly int nWave = 5;
-        public static readonly int waveTimeDelay = 10;
+        public static readonly int playerEnergy = 100;
+        public static readonly int waveTimeDelay = 20;
 
         public static readonly int monsterLayerMask = 1 << 3;
 
         public static readonly int maxTowerLevel = 3;
 
-        public static readonly Dictionary<Tuple<CardType, string>, int> cardCost = new Dictionary<Tuple<CardType, string>, int>()
-        {
-            { new Tuple<CardType, string>(CardType.TowerCard, "1"), 8 }
-        };
-
+        public static readonly int nWave = 7;
         public static readonly List<List<Tuple<string, int>>> monsterWave = new List<List<Tuple<string, int>>>
         {
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 1),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 2),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 3),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 4),
-            },
             new List<Tuple<string, int>>
             {
                 new Tuple<string, int>("1", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 6),
+                new Tuple<string, int>("2", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 7),
+                new Tuple<string, int>("3", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 8),
+                new Tuple<string, int>("4", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 9),
+                new Tuple<string, int>("5", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 10),
+                new Tuple<string, int>("6", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 11),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 12),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 13),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 14),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 15),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 16),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 17),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 18),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 19),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 20),
+                new Tuple<string, int>("7", 5),
             },
         };
 

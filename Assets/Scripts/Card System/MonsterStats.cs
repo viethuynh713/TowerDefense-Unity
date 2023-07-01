@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace MythicEmpire.Card
 {
+    [CreateAssetMenu(fileName = "Card Data", menuName = "MythicEmpire Data/Data/Monster")]
     public class MonsterStats : StatsCard
     {
         public int Hp;
@@ -11,5 +12,6 @@ namespace MythicEmpire.Card
         public float MoveSpeed;
         public float AttackRange;
         public int Damage;
+        public int EnergyGainWhenDie;
     }
 }

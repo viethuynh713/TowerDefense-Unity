@@ -10,17 +10,17 @@ namespace MythicEmpire.InGame
         protected int id;
         protected int ownerId;
         protected Transform target;
-        protected TowerStats stats;
-        // Start is called before the first frame update
-        void Start()
-        {
 
-        }
+        protected int damage;
+        protected float exploreRange;
+        protected float bulletSpeed;
 
-        public void Init(Transform target, TowerStats stats)
+        public void Init(Transform target, int damage, float exploreRange, float bulletSpeed)
         {
             this.target = target;
-            this.stats = stats;
+            this.damage = damage;
+            this.exploreRange = exploreRange;
+            this.bulletSpeed = bulletSpeed;
         }
 
         // Update is called once per frame

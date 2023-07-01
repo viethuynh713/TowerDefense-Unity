@@ -72,8 +72,8 @@ namespace MythicEmpire.InGame
             }
             // init hole
             InitHole1();
-            var virtualPath = InitVirtualPath();
-            InitHole2(virtualPath);
+            //var virtualPath = InitVirtualPath();
+            //InitHole2(virtualPath);
         }
 
         public void InitMap()
@@ -168,6 +168,32 @@ namespace MythicEmpire.InGame
         public void SellTower(Vector2Int logicPos)
         {
             currentMap[logicPos.y][logicPos.x].GetComponent<Tile>().SellTower();
+        }
+
+        public bool IsGenMonsterValid(Vector2Int pos, bool isMyPlayer)
+        {
+            // it is invalid if the tile is barrier
+            if (currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier)
+            {
+                return false;
+            }
+            // it is valid if the monster is generated in owner field
+            // note: the middle column is valid
+            if (isMyPlayer)
+            {
+                return pos.x >= InGameService.columnIndexSplit ? true : false;
+            }
+            return pos.x <= InGameService.columnIndexSplit ? true : false;
+        }
+
+        public bool IsGenSpellValid(Vector3 displayPos, bool isMyPlayer)
+        {
+            Vector2Int logicPos = InGameService.Display2LogicPos(displayPos);
+            if (logicPos.x > 0 && logicPos.x < width - 1 && logicPos.y >= 0 && logicPos.y < height)
+            {
+                return true;
+            }
+            return false;
         }
 
         public GameObject[][] CurrentMap { get { return currentMap; } }

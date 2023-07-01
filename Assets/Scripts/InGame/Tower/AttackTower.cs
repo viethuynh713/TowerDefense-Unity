@@ -2,77 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MythicEmpire.Card;
+using static UnityEngine.GraphicsBuffer;
 
 namespace MythicEmpire.InGame
 {
     public class AttackTower : Tower
     {
-        private int level;
         [SerializeField] private GameObject bullet;
-        private bool canFire;
 
-        // Start is called before the first frame update
-        void Start()
+        public override void Fire()
         {
-            stats = new TowerStats();
-            stats.Damage = 4;
-            stats.FireRange = 2;
-            stats.ExploreRange = 0;
-            stats.AttackSpeed = 1.5f;
-            stats.BulletSpeed = 2;
-            canFire = true;
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            Fire();
-        }
-
-        public void Fire()
-        {
+            // if the tower can fire (by attack speed)
             if (canFire)
             {
+                // get all monsters in range
                 Collider[] colliders = Physics.OverlapSphere(transform.position, stats.FireRange, InGameService.monsterLayerMask);
 
                 if (colliders.Length > 0)
                 {
+                    // get monster nearest tower
                     GameObject target = null;
                     float minDistance = stats.FireRange;
                     foreach (Collider collider in colliders)
                     {
-                        float distance = (transform.position - collider.transform.position).magnitude;
-                        if (distance < minDistance)
+                        var monsterComponent = collider.gameObject.GetComponent<Monster>();
+                        if (!monsterComponent.IsDie)
                         {
-                            Monster monsterComponent = collider.gameObject.GetComponent<Monster>();
-                            if (isMyPlayer != monsterComponent.IsMyPlayer)
+                            float distance = (transform.position - collider.transform.position).magnitude;
+                            if (distance < minDistance)
                             {
-                                target = collider.gameObject;
-                                minDistance = distance;
+                                if (isMyPlayer != monsterComponent.IsMyPlayer)
+                                {
+                                    target = collider.gameObject;
+                                    minDistance = distance;
+                                }
                             }
                         }
                     }
+                    // fire to target
                     if (target != null)
                     {
+                        // play fire animation
+                        GetComponent<TowerAnimation>().PlayAnimation(id, "fire", target.transform);
+                        // look at monster
                         transform.LookAt(target.transform.position);
+                        // create bullet
                         GameObject b = Instantiate(bullet, transform.position, transform.rotation);
-                        b.GetComponent<Bullet>().Init(target.transform, stats);
+                        b.GetComponent<Bullet>().Init(target.transform, damage, exploreRange, bulletSpeed);
+                        // wait to load bullet (by attack speed)
                         StartCoroutine(LoadBullet());
+                        return;
                     }
                 }
             }
-        }
-
-        public void Upgrade()
-        {
-
-        }
-
-        private IEnumerator LoadBullet()
-        {
-            canFire = false;
-            yield return new WaitForSeconds(1 / stats.AttackSpeed);
-            canFire = true;
+            // play idle animation
+            GetComponent<TowerAnimation>().PlayAnimation(id, "idle");
         }
     }
 }

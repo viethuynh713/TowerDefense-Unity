@@ -18,7 +18,7 @@ namespace MythicEmpire.InGame
         public override NodeState Evaluate()
         {
             GameObject target = (GameObject)GetData("target");
-            if (target != null)
+            if (target != null && target.transform != null)
             {
                 transform.gameObject.GetComponent<Monster>().AttackMonster(target.transform);
             }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GatlingGun : MonoBehaviour
 {
     // target the gun will aim at
-    Transform go_target;
+    public Transform go_target;
 
     // Gameobjects need to control rotation and aiming
     public Transform go_baseRotation;
@@ -21,46 +21,15 @@ public class GatlingGun : MonoBehaviour
 
     // Particle system for the muzzel flash
     public ParticleSystem muzzelFlash;
-
-    // Used to start and stop the turret firing
-    bool canFire = false;
-
     
     void Start()
     {
-        // Set the firing range distance
-        this.GetComponent<SphereCollider>().radius = firingRange;
+        go_target = null;
     }
 
     void Update()
     {
         AimAndFire();
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        // Draw a red sphere at the transform's position to show the firing range
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, firingRange);
-    }
-
-    // Detect an Enemy, aim and fire
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Enemy")
-        {
-            go_target = other.transform;
-            canFire = true;
-        }
-
-    }
-    // Stop firing
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Enemy")
-        {
-            canFire = false;
-        }
     }
 
     void AimAndFire()
@@ -69,7 +38,7 @@ public class GatlingGun : MonoBehaviour
         go_barrel.transform.Rotate(0, 0, currentRotationSpeed * Time.deltaTime);
 
         // if can fire turret activates
-        if (canFire)
+        if (go_target != null)
         {
             // start rotation
             currentRotationSpeed = barrelRotationSpeed;
