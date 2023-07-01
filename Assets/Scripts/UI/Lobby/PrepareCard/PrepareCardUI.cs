@@ -11,6 +11,7 @@ using Newtonsoft.Json.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VContainer;
@@ -92,6 +93,10 @@ namespace MythicEmpire.UI.Lobby
                     _framePanel.SetActive(true);
                     _waitingPanel.SetActive(false);
                 }));
+            });
+            EventManager.Instance.RegisterListener(EventID.OnStartGame, (o) =>
+            {
+                mainAction.Add(()=> SceneManager.LoadSceneAsync("Game"));
             });
         }
 

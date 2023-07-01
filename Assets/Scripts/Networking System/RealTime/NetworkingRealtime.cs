@@ -19,10 +19,16 @@ using VContainer.Unity;
 
 namespace MythicEmpire.Networking
 {
-    public enum ActionID
+    public enum ActionId
     {
-        PlaceCardRequest,
-        CastleTakeDamageRequest
+        None,
+        CreateMonster,
+        BuildTower,
+        PlaceSpell,
+        CastleTakeDamage,
+        MonsterTakeDamage,
+        GetMyCard,
+        GetMap,
     }
     public class NetworkingRealtime : IStartable, IRealtimeCommunication
     {
@@ -45,7 +51,7 @@ namespace MythicEmpire.Networking
             // Process in Lobby
             _hubConnection.On<int>("OnReceiveMatchMakingSuccess", (data) =>
             {
-                Debug.Log("Waiting to find game ... : " + data);
+                // Debug.Log("Waiting to find game ... : " + data);
                 EventManager.Instance.PostEvent(EventID.ServerReceiveMatchMaking,data);
             });
             _hubConnection.On("CancelSuccess", () =>
@@ -56,21 +62,24 @@ namespace MythicEmpire.Networking
             _hubConnection.On<byte[]>("OnStartGame", (data) =>
             {
                 _gameId = Encoding.UTF8.GetString(data);
-                Debug.Log($"Start Game {_gameId}");
-                SceneManager.LoadSceneAsync("Game");
-                // EventManager.Instance.PostEvent(EventID.OnStartGame, _gameId);
+                // Debug.Log($"Start Game {_gameId}");
+                EventManager.Instance.PostEvent(EventID.OnStartGame, _gameId);
             });
             // Process in game
             _hubConnection.On<byte[]>("OnGetMap" ,(data)=>
             {
                 LogicTile[][] map = JsonConvert.DeserializeObject<LogicTile[][]>(Encoding.UTF8.GetString(data));
+                Debug.Log($"Get Map Success : {Encoding.UTF8.GetString(data)} ");
                 EventManager.Instance.PostEvent(EventID.OnGetMap, map);
 
             });
             _hubConnection.On<byte[]>("OnGetCards" ,(data)=>
             {
                 List<string> cards = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(data));
-                EventManager.Instance.PostEvent(EventID.OnGetCard, cards);
+                Debug.Log($"Get cards Success: {Encoding.UTF8.GetString(data)}");
+
+                EventManager.Instance.PostEvent(EventID.RenderListCard,cards);
+
 
             });
             _hubConnection.On<byte[]>("OnEndGame", (data) =>
@@ -78,13 +87,27 @@ namespace MythicEmpire.Networking
                 // Debug.Log("EndGame");
                 // EventManager.Instance.PostEvent(EventID.OnEndGame);
             });
-            _hubConnection.On<byte[]>("PlaceCard", (data) =>
+            _hubConnection.On<byte[]>("BuildTower", (data) =>
             {
-                Debug.Log("Place card networking");
-                string byteArray = Encoding.UTF8.GetString(data);
-                EventManager.Instance.PostEvent(EventID.PlaceCard,byteArray);
+                Debug.Log("BuildTower networking");
+                string jsonTowerModel = Encoding.UTF8.GetString(data);
+                TowerModel model = JsonConvert.DeserializeObject<TowerModel>(jsonTowerModel);
+                EventManager.Instance.PostEvent(EventID.BuildTower,model);
             });
-            
+            _hubConnection.On<byte[]>("CreateMonster", (data) =>
+            {
+                Debug.Log("CreateMonster networking");
+                string jsonMonsterModel = Encoding.UTF8.GetString(data);
+                MonsterModel model = JsonConvert.DeserializeObject<MonsterModel>(jsonMonsterModel);
+                EventManager.Instance.PostEvent(EventID.CreateMonster,model);
+            });
+            _hubConnection.On<byte[]>("PlaceSpell", (data) =>
+            {
+                Debug.Log("PlaceSpell networking");
+                string jsonSpellModel = Encoding.UTF8.GetString(data);
+                SpellModel model = JsonConvert.DeserializeObject<SpellModel>(jsonSpellModel);
+                EventManager.Instance.PostEvent(EventID.PlaceSpell,model);
+            });
             _hubConnection.StartAsync().ContinueWith(task =>
             {
                 if (task.IsFaulted)
@@ -108,35 +131,92 @@ namespace MythicEmpire.Networking
             
             await _hubConnection.SendAsync("OnCancelMatchMakingRequest");
         }
-    
-        public async Task PlaceCardRequest(PlaceCardData data)
+
+        public async Task CreateMonsterRequest(CreateMonsterData data)
         {
             JObject jsonString = new JObject(
-                    new JProperty("senderId", _userModel.userId),
-                    new JProperty("actionId",ActionID.PlaceCardRequest),
-                    new JProperty("gameId", _gameId),
-                    new JProperty("data", JsonConvert.SerializeObject(data))
-                );
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.CreateMonster),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            Debug.Log(jsonString.ToString());
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
+        public async Task BuildTowerRequest(BuildTowerData data)
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId", ActionId.BuildTower),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            
             Debug.Log(jsonString.ToString());
 
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
             await _hubConnection.SendAsync("OnListeningData", byteArray);
-
         }
-    
+
+        public async Task PlaceSpellRequest(PlaceSpellData data)
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.PlaceSpell),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
         public async Task CastleTakeDamage(SubHPData data)
         {
             JObject jsonString = new JObject(
                 new JProperty("senderId", _userModel.userId),
-                new JProperty("actionId",ActionID.PlaceCardRequest),
+                new JProperty("actionId",ActionId.CastleTakeDamage),
                 new JProperty("gameId", _gameId),
-                new JProperty("data", data)
+                new JProperty("data", JsonConvert.SerializeObject(data))
             );
+            Debug.Log(jsonString.ToString());
+
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
-            await _hubConnection.SendAsync("CastleHPLostRequest", _userModel.userId,byteArray);
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
     
         }
-     }
+
+        public async Task GetMap()
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.GetMap),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", "")
+            );
+            Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
+        public async Task GetCard()
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.GetMyCard),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", "")
+            );
+            Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+    }
 
 
 }

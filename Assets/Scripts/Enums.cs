@@ -17,7 +17,6 @@ namespace MythicEmpire.Enums
         OnEndGame,
         ServerReceiveMatchMaking,
         CancelMatchMakingSuccess,
-        PlaceCard,
         ResetPasswordSuccess,
         ConfirmOTPSuccess,
         SendOTPSuccess,
@@ -26,7 +25,10 @@ namespace MythicEmpire.Enums
         UpdateWaveTime,
         RenderListCard,
         OnGetMap,
-        OnGetCard
+        OnGetCard,
+        BuildTower,
+        CreateMonster,
+        PlaceSpell
     }
     public enum GachaType
     {

@@ -2,6 +2,7 @@
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.Model;
 using MythicEmpire.Networking;
 using MythicEmpire.Networking.Model;
 using UnityEngine;
@@ -14,7 +15,8 @@ namespace MythicEmpire.InGame
         public static PlayerController_v2 Instance;
         [SerializeField] private MapService_v2 _mapService;
         [Inject] private IRealtimeCommunication _realtimeCommunication;
-        
+        [Inject] private UserModel _userModel;
+
         public int energy = 100;
 
         public void Start()
@@ -27,29 +29,57 @@ namespace MythicEmpire.InGame
         {
             Instance = this;
         }
-        
+
         private void UpdateEnergy(object newEnergy)
         {
             energy = (int)newEnergy;
         }
+
         public void PlaceCard(CardInfo cardData, Vector2Int placePosition)
         {
-            if (cardData.CardStats.Energy > energy) return;
+            // if (cardData.CardStats.Energy > energy) return;
             if (cardData.TypeOfCard != CardType.SpellCard)
             {
-                // if (!_mapService.IsValidPosition(placePosition, _userModel.userId)) return;
-                if (!_mapService.IsValidPosition(placePosition, "1")) return;
+                if (!_mapService.IsValidPosition(placePosition, _userModel.userId)) return;
             }
 
-            PlaceCardData data = new PlaceCardData()
+            switch (cardData.TypeOfCard)
             {
-                cardId = cardData.CardId,
-                typeOfCard = cardData.TypeOfCard,
-                Xposition = placePosition.x,
-                Yposition = placePosition.y,
-                stats = cardData.CardStats
-            };
-            _realtimeCommunication.PlaceCardRequest(data);
+                case CardType.MonsterCard:
+                    MonsterStats monsterStats = (MonsterStats)cardData.CardStats;
+                    CreateMonsterData createMonsterData = new CreateMonsterData()
+                    {
+                        cardId = cardData.CardId,
+                        Xposition = placePosition.x,
+                        Yposition = placePosition.y,
+                        stats = monsterStats
+                    };
+                    _realtimeCommunication.CreateMonsterRequest(createMonsterData);
+                    break;
+                case CardType.TowerCard:
+                    TowerStats towerStats = (TowerStats)cardData.CardStats;
+                    BuildTowerData buildTowerData = new BuildTowerData()
+                    {
+                        cardId = cardData.CardId,
+                        Xposition = placePosition.x,
+                        Yposition = placePosition.y,
+                        stats = towerStats
+                    };
+                    _realtimeCommunication.BuildTowerRequest(buildTowerData);
+                    break;
+                case CardType.SpellCard:
+                    SpellStats spellStats = (SpellStats)cardData.CardStats;
+                    PlaceSpellData placeSpellData = new PlaceSpellData()
+                    {
+                        cardId = cardData.CardId,
+                        Xposition = placePosition.x,
+                        Yposition = placePosition.y,
+                        stats = spellStats
+                    };
+                    _realtimeCommunication.PlaceSpellRequest(placeSpellData);
+                    break;
+            }
         }
     }
+
 }

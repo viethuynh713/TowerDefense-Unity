@@ -25,13 +25,6 @@ namespace MythicEmpire.InGame
                 if (raycast.collider.TryGetComponent<Tile>(out tile))
                 {
                     PlayerController_v2.Instance.PlaceCard(CardData,tile.logicPosition);
-                    GameController_v2.Instance.CreateMonster(new MonsterModel()
-                    {
-                        cardId = CardData.CardId,
-                        monsterId = "1",
-                        XLogicPosition = tile.logicPosition.x,
-                        YLogicPosition = tile.logicPosition.y,
-                    });
                 }
             }
         }

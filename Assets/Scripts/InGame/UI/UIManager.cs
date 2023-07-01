@@ -27,49 +27,11 @@ namespace MythicEmpire.InGame.UI
             _endGameUI.gameObject.SetActive(false);
             EventManager.Instance.RegisterListener(EventID.UpdateEnergy,UpdateEnergy);
             EventManager.Instance.RegisterListener(EventID.UpdateWaveTime, UpdateWaveTime);
-            EventManager.Instance.RegisterListener(EventID.RenderListCard, RenderListCard);
+            EventManager.Instance.RegisterListener(EventID.RenderListCard, (o)=>GameController_v2.Instance.mainThreadAction.Add(()=>RenderListCard(o)));
             EventManager.Instance.RegisterListener(EventID.OnEndGame, HandleEndGame);
-            List<string> cards = new List<string>()
-            {
-                "02dc58b9-11b2-4094-aac7-a8f21b114790",
-                "acb777a0-4abc-45a9-90c7-15ea01ed3c7b",
-                "2b770545-adaf-4cc6-b5dc-60ada0a3c49c",
-                "38842417-c8ae-47d7-afdf-af5afd820677",
-                "01ab28d7-8362-4747-82db-df118b3bcd47",
-                "d4102b9f-4ccc-4754-8303-b78453bbf166",
-                "2bf570ee-a62d-4d59-9db4-1e97d519e7ce"
-            };
-            RenderListCard(cards);
-            
-            StartCoroutine(TestEndGame());
+
         }
 
-        private IEnumerator TestEndGame()
-        {
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(100);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(70);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(60);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(50);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(0);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(20);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(4);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(56);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(69);
-            yield return new WaitForSeconds(2);
-            UpdateEnergy(100);
-        
-        
-            
-        }
         private void HandleEndGame(object result)
         {
             _endGameUI.gameObject.SetActive(true);
@@ -79,8 +41,11 @@ namespace MythicEmpire.InGame.UI
         private void RenderListCard(object listCard)
         {
             var listMyCard = (List<string>)listCard;
+            Debug.Log("Count card: "+listMyCard.Count);
             foreach (var cardId in listMyCard)
             {
+                Debug.Log("card id: "+cardId);
+
                 var cardUI = Instantiate(_cardUIPrefab, _parentCards);
                 cardUI.SetUI(_cardManager.GetCardById(cardId));
             }
