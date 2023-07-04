@@ -62,7 +62,7 @@ namespace MythicEmpire.Networking
             _hubConnection.On<byte[]>("OnStartGame", (data) =>
             {
                 _gameId = Encoding.UTF8.GetString(data);
-                // Debug.Log($"Start Game {_gameId}");
+                // SceneManager.LoadSceneAsync("Game");
                 EventManager.Instance.PostEvent(EventID.OnStartGame, _gameId);
             });
             // Process in game
@@ -107,6 +107,37 @@ namespace MythicEmpire.Networking
                 string jsonSpellModel = Encoding.UTF8.GetString(data);
                 SpellModel model = JsonConvert.DeserializeObject<SpellModel>(jsonSpellModel);
                 EventManager.Instance.PostEvent(EventID.PlaceSpell,model);
+            });
+            _hubConnection.On<byte[]>("UpdateEnergy", (data) =>
+            {
+                var stringEnergy = Encoding.UTF8.GetString(data);
+                
+                bool success = int.TryParse(stringEnergy, out int intValue);
+                if (success)
+                {
+                    EventManager.Instance.PostEvent(EventID.UpdateEnergy,intValue);
+                }
+                else
+                {
+                    Debug.Log("Energy fail");
+                }
+            });
+            
+            _hubConnection.On<byte[]>("SpawnWave", (data) =>
+            {
+                var stringListCard = Encoding.UTF8.GetString(data);
+                
+                List<string> cards = JsonConvert.DeserializeObject<List<string>>(stringListCard);
+                
+                EventManager.Instance.PostEvent(EventID.SpawnWave,cards);
+                
+            });
+            _hubConnection.On<byte[]>("UpdateWaveTime", (data) =>
+            {
+                var jsonWave = Encoding.UTF8.GetString(data);
+                Wave currentWave = JsonConvert.DeserializeObject<Wave>(jsonWave);
+                EventManager.Instance.PostEvent(EventID.UpdateWaveTime,currentWave);
+
             });
             _hubConnection.StartAsync().ContinueWith(task =>
             {
@@ -216,6 +247,7 @@ namespace MythicEmpire.Networking
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
             await _hubConnection.SendAsync("OnListeningData", byteArray);
         }
+        
     }
 
 

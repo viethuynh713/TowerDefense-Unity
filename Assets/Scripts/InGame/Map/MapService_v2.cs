@@ -1,13 +1,11 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using InGame.Map;
 using MythicEmpire.Enums;
 using UnityEngine;
 using MythicEmpire.InGame;
 using MythicEmpire.Manager.MythicEmpire.Manager;
-using MythicEmpire.Model;
-using VContainer;
+using MythicEmpire.Map;
 
 
 public class MapService_v2 : MonoBehaviour
@@ -25,8 +23,6 @@ public class MapService_v2 : MonoBehaviour
 
     private void Start()
     {
-        // _service = new CreateLogicMapService(11,21);
-        // InitMap(_service.CreateLogicMap().Result);
         EventManager.Instance.RegisterListener(EventID.OnGetMap, (o)=>GameController_v2.Instance.mainThreadAction.Add(()=>InitMap(o)));
     }
     private void InitMap(object mapObject)
@@ -127,7 +123,11 @@ public class MapService_v2 : MonoBehaviour
 
         return false;
     }
-    public bool BuildTower(Vector2Int pos, string playerId, Tower tower)
+    public void BanPosition(int x, int y)
+    {
+        _currentMap[x][y].typeOfTile = TypeTile.Barrier;
+    }
+    public bool BuildTower(Vector2Int logicPosition, Tower tower)
     {
         
         return false;

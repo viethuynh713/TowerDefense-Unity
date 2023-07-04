@@ -37,7 +37,8 @@ namespace MythicEmpire.InGame
 
         public void PlaceCard(CardInfo cardData, Vector2Int placePosition)
         {
-            // if (cardData.CardStats.Energy > energy) return;
+            // Debug.Log(energy);
+            if (cardData.CardStats.Energy > energy) return;
             if (cardData.TypeOfCard != CardType.SpellCard)
             {
                 if (!_mapService.IsValidPosition(placePosition, _userModel.userId)) return;

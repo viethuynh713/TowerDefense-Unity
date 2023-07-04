@@ -25,10 +25,10 @@ namespace MythicEmpire.InGame.UI
         public void Start()
         {
             _endGameUI.gameObject.SetActive(false);
-            EventManager.Instance.RegisterListener(EventID.UpdateEnergy,UpdateEnergy);
-            EventManager.Instance.RegisterListener(EventID.UpdateWaveTime, UpdateWaveTime);
+            EventManager.Instance.RegisterListener(EventID.UpdateEnergy,(o)=>GameController_v2.Instance.mainThreadAction.Add(()=>UpdateEnergy(o)));
+            EventManager.Instance.RegisterListener(EventID.UpdateWaveTime, (o)=>GameController_v2.Instance.mainThreadAction.Add(()=>UpdateWaveTime(o)));
             EventManager.Instance.RegisterListener(EventID.RenderListCard, (o)=>GameController_v2.Instance.mainThreadAction.Add(()=>RenderListCard(o)));
-            EventManager.Instance.RegisterListener(EventID.OnEndGame, HandleEndGame);
+            EventManager.Instance.RegisterListener(EventID.OnEndGame,(o)=>GameController_v2.Instance.mainThreadAction.Add(()=>HandleEndGame(o)));
 
         }
 
@@ -53,11 +53,15 @@ namespace MythicEmpire.InGame.UI
 
         private void UpdateWaveTime(object obj)
         {
-            
+            var wave = (Wave)obj;
+            // Debug.Log($"WaveTime: {wave.maxTimeWaiting}/{wave.currentTime}");
+            _waveTimeSlider.maxValue = wave.maxTimeWaiting;
+            _waveTimeSlider.value = wave.currentTime;
         }
 
         private void UpdateEnergy(object newEnergy)
         {
+            // Debug.Log("set energy:"+newEnergy.ToString());
             _energySlider.value = _energySlider.maxValue - (int)newEnergy;
             _energyTxt.text = newEnergy.ToString();
         }

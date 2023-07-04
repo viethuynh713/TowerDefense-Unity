@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MythicEmpire.Card
 {
@@ -7,7 +8,7 @@ namespace MythicEmpire.Card
     {
         public float Time;
         public float Duration;
-        public float Value;
+        public float DamegePerDuration;
         public float Range;
         public string Detail;
     }

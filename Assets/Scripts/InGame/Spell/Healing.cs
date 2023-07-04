@@ -16,7 +16,7 @@ namespace MythicEmpire.InGame
                 {
                     if ((monster.transform.position - transform.position).magnitude < stats.Range)
                     {
-                        monster.Heal(Mathf.RoundToInt(stats.Value));
+                        monster.Heal(Mathf.RoundToInt(stats.DamegePerDuration));
                     }
                 }
             }

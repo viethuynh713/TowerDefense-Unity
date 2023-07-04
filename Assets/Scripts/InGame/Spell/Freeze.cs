@@ -16,7 +16,7 @@ namespace MythicEmpire.InGame
                 {
                     if ((monster.transform.position - transform.position).magnitude < stats.Range)
                     {
-                        monster.Freezed(stats.Value);
+                        monster.Freezed(stats.DamegePerDuration);
                     }
                 }
             }

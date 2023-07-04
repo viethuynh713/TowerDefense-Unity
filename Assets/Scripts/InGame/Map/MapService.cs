@@ -72,8 +72,8 @@ namespace MythicEmpire.InGame
             }
             // init hole
             InitHole1();
-            //var virtualPath = InitVirtualPath();
-            //InitHole2(virtualPath);
+            // var virtualPath = InitVirtualPath();
+            // InitHole2(virtualPath);
         }
 
         public void InitMap()

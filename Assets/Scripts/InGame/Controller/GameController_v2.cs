@@ -32,32 +32,15 @@ namespace MythicEmpire.InGame
 
         private void Start()
         {
-            // StartCoroutine(GetInfo());
+
             mainThreadAction = new List<Action>();
             _realtimeCommunication.GetCard();
             _realtimeCommunication.GetMap();
-            // EventManager.Instance.RegisterListener(EventID.PlaceCard, (o) =>
-            // {
-            //     JObject package = (JObject)o;
-            //     CardType type = (CardType)((int)package["cardType"]);
-            //     var data = (string)package["cardData"];
-            //     switch (type)
-            //     {
-            //         case CardType.MonsterCard:
-            //             mainThreadAction.Add(()=>CreateMonster(JsonConvert.DeserializeObject<MonsterModel>(data)));
-            //             break;
-            //         case CardType.TowerCard:
-            //             mainThreadAction.Add(()=>BuildTower(JsonConvert.DeserializeObject<TowerModel>(data)));
-            //             break;
-            //         case CardType.SpellCard:
-            //             mainThreadAction.Add(()=>PlaceSpell(JsonConvert.DeserializeObject<SpellModel>(data)));
-            //             break;
-            //
-            //     }
-            // });
+
             EventManager.Instance.RegisterListener(EventID.CreateMonster, o => mainThreadAction.Add(()=>CreateMonster((MonsterModel)o)));
             EventManager.Instance.RegisterListener(EventID.BuildTower, o => mainThreadAction.Add(()=>BuildTower((TowerModel)o)));
             EventManager.Instance.RegisterListener(EventID.PlaceSpell, o => mainThreadAction.Add(()=>PlaceSpell((SpellModel)o)));
+            EventManager.Instance.RegisterListener(EventID.SpawnWave, o => mainThreadAction.Add(()=>StartCoroutine(SpawnWave((List<string>)o))));
         }
 
         private void Update()
@@ -73,6 +56,8 @@ namespace MythicEmpire.InGame
             var cardInfo = _cardManager.GetCardById(data.cardId);
             Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
+            _mapService.BanPosition(data.XLogicPosition, data.YLogicPosition);
+            
         }
 
         public void CreateMonster(MonsterModel data)
@@ -87,6 +72,12 @@ namespace MythicEmpire.InGame
             var cardInfo = _cardManager.GetCardById(data.cardId);
             Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
+        }
+
+        public IEnumerator SpawnWave(List<string> cards)
+        {
+            Debug.Log(cards.Count);
+            yield return null;
         }
     }
 }

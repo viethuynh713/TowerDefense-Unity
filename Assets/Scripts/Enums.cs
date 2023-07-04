@@ -28,7 +28,8 @@ namespace MythicEmpire.Enums
         OnGetCard,
         BuildTower,
         CreateMonster,
-        PlaceSpell
+        PlaceSpell,
+        SpawnWave
     }
     public enum GachaType
     {

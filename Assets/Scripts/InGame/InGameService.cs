@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using static UnityEngine.Rendering.DebugUI.Table;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using Debug = UnityEngine.Debug;
 
 namespace MythicEmpire.InGame
 {
@@ -218,7 +220,7 @@ namespace MythicEmpire.InGame
             var visitedTiles = new List<FPTile>();
 
             //This is where we created the map from our previous step etc. 
-
+            // Debug.Log(JsonConvert.SerializeObject(map));
             while (activeTiles.Any())
             {
                 var checkTile = activeTiles.OrderBy(x => x.costDistance).First();
