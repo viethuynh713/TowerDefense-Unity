@@ -176,7 +176,9 @@ private void DeleteItem_OnClick()
     _cardManager.ListCards.Remove(_activeCard);
     _listCardRender.Remove(_activeCard);
     _itemListView.Rebuild();
-    
+    UnityEditor.EditorUtility.SetDirty(_cardManager);
+    UnityEditor.AssetDatabase.SaveAssets();
+    UnityEditor.AssetDatabase.Refresh();
     //Nothing is selected, so hide the details section
     _containerDetail.style.visibility = Visibility.Hidden;
     _monsterStats.style.display =  DisplayStyle.None;

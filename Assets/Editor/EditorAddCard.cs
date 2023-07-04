@@ -110,7 +110,7 @@ public class EditorAddCard : EditorWindow
     {
         if(_newCard.TypeOfCard== CardType.None)return;
         _newCard.CardStats = _statsCard;
-        var statsPath = $"Assets/Data/{_newCard.TypeOfCard}/{_newCard.CardName}/{_newCard.CardRarity}";
+        var statsPath = $"Assets/Data/{_newCard.TypeOfCard}/{_newCard.CardName}/{_newCard.CardRarity}/Stats";
         var dataPath = $"Assets/Data/{_newCard.TypeOfCard}/{_newCard.CardName}/{_newCard.CardRarity}";
          if (!Directory.Exists(dataPath))
          {
@@ -123,7 +123,10 @@ public class EditorAddCard : EditorWindow
          AssetDatabase.CreateAsset(_newCard, $"{dataPath}/{_newCard.CardId}.asset");
          AssetDatabase.CreateAsset(_statsCard, $"{statsPath}/{_newCard.CardId}.asset");
          _cardManager.ListCards.Add(_newCard);
-         
+        UnityEditor.EditorUtility.SetDirty(_newCard);
+         UnityEditor.EditorUtility.SetDirty(_cardManager);
+         UnityEditor.AssetDatabase.SaveAssets();
+         UnityEditor.AssetDatabase.Refresh();
          Close();
          EditorCardManager.ShowListCard();
          
