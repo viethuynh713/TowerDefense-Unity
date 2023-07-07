@@ -10,77 +10,91 @@ using MythicEmpire.Card;
 
 namespace MythicEmpire.InGame
 {
+    [RequireComponent(typeof(MonsterAnimation))]
+    [RequireComponent(typeof(MonsterBT))]
     public class Monster : MonoBehaviour
     {
-        [SerializeField] private string id;
-        private string ownerId;
-        private bool isMyPlayer;
-        [SerializeField] private MonsterStats stats;
-        private bool isSummonedByPlayer;
-        private bool canAttack;
-        private bool isDie;
-        private bool isOnPath;
-        private List<Vector2Int> path;
-        private float speedupRate;
+        private string _id;
+        private string _ownerId;
+        private bool _isSummonedByPlayer;
+        private bool _canAttack;
+        private bool _isDie;
+        private bool _isOnPath;
+        private List<Vector2Int> _path;
+        private float _speedupRate;
 
-        private bool canAction;
-        private float notActionTime;
+        private bool _canAction;
+        private float _notActionTime;
 
-        private int maxHp;
-        private int hp;
-        private float attackSpeed;
-        private float moveSpeed;
-        private float attackRange;
-        private int damage;
+        private int _maxHp;
+        private int _hp;
+        private float _attackSpeed;
+        private float _moveSpeed;
+        private float _attackRange;
+        private int _damage;
+        private MonsterStats _monsterStats;
+        private MonsterAnimation _monsterAnimation;
 
-        // Start is called before the first frame update
-        void Awake()
+        [SerializeField] private MonsterUI _monsterUI;
+
+        private void Awake()
         {
-            path = new List<Vector2Int>();
+            _path = new List<Vector2Int>();
+            _canAction = false;
+            _canAttack = false;
+            _isOnPath = false;
 
-            canAction = true;
-            canAttack = true;
-            isDie = false;
-            isOnPath = true;
-            speedupRate = 1f;
-            notActionTime = 0f;
-
-            maxHp = stats.Hp;
-            hp = maxHp;
-            attackSpeed = stats.AttackSpeed;
-            moveSpeed = stats.MoveSpeed;
-            attackRange = stats.AttackRange;
-            damage = stats.Damage;
         }
 
-        public void Init(string ownerId, bool isMyPlayer, bool isSummonedByPlayer)
+        private void Start()
         {
-            this.ownerId = ownerId;
-            this.isMyPlayer = isMyPlayer;
-            this.isSummonedByPlayer = isSummonedByPlayer;
+            _monsterAnimation = GetComponent<MonsterAnimation>();
+        }
+
+        public void Init(string monsterId, string ownerId, bool isSummonedByPlayer, MonsterStats stats, bool isMyMonster)
+        {
+            _monsterStats = stats;
+            _canAction = true;
+            _canAttack = true;
+            _isDie = false;
+            _isOnPath = true;
+            _speedupRate = 1f;
+            _notActionTime = 0f;
+
+            _maxHp = stats.Hp;
+            _hp = _maxHp;
+            _attackSpeed = stats.AttackSpeed;
+            _moveSpeed = stats.MoveSpeed;
+            _attackRange = stats.AttackRange;
+            _damage = stats.Damage;
+            
+            _ownerId = ownerId;
+            _id = monsterId;
+            _isSummonedByPlayer = isSummonedByPlayer;
+            _monsterUI.Init(_maxHp,isMyMonster);
             FindPath();
         }
 
         public void Move()
         {
-            if (canAction)
+            if (_canAction)
             {
-                if (path.Count > 0)
+                if (_path.Count > 0)
                 {
-                    GetComponent<MonsterAnimation>().PlayAnimation("move");
-                    if (!isOnPath)
+                    _monsterAnimation.PlayAnimation("move");
+                    if (!_isOnPath)
                     {
-                        isOnPath = true;
+                        _isOnPath = true;
                         FindPath();
                     }
-                    Vector3 displayPos = InGameService.Logic2DisplayPos(path[0]);
+                    Vector3 displayPos = InGameService.Logic2DisplayPos(_path[0]);
                     transform.LookAt(displayPos);
-                    transform.position = Vector3.MoveTowards(transform.position, displayPos, moveSpeed * speedupRate * Time.deltaTime);
-                    speedupRate = 1f;
+                    transform.position = Vector3.MoveTowards(transform.position, displayPos, _moveSpeed * _speedupRate * Time.deltaTime);
+                    _speedupRate = 1f;
                     if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
                     {
-                        path.RemoveAt(0);
-                        if (path.Count == 0)
+                        _path.RemoveAt(0);
+                        if (_path.Count == 0)
                         {
                             AttackHouse();
                         }
@@ -91,43 +105,44 @@ namespace MythicEmpire.InGame
 
         public void AttackMonster(Transform target)
         {
-            if (canAction && canAttack)
+            if (_canAction && _canAttack)
             {
-                GetComponent<MonsterAnimation>().PlayAnimation("attack");
-                isOnPath = false;
+                _monsterAnimation.PlayAnimation("attack");
+                _isOnPath = false;
                 transform.LookAt(target.transform.position);
-                target.gameObject.GetComponent<Monster>().TakeDmg(damage);
-                canAttack = false;
+                target.gameObject.GetComponent<Monster>().TakeDamage(_damage);
+                _canAttack = false;
                 StartCoroutine(AttackCD());
             }
         }
 
-        public void AttackHouse()
+        private void AttackHouse()
         {
-            GetComponent<MonsterAnimation>().PlayAnimation("attack");
-            isOnPath = true;
-            GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(damage);
+            _monsterAnimation.PlayAnimation("attack");
+            _isOnPath = true;
+            // GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(damage);
+            PlayerController_v2.Instance.CastleTakeDamage(_ownerId, _damage);
             Destroy(gameObject);
         }
 
         public void Heal(int hp)
         {
-            if (!isDie)
+            if (!_isDie)
             {
-                this.hp += hp;
-                if (this.hp > maxHp)
+                this._hp += hp;
+                if (this._hp > _maxHp)
                 {
-                    this.hp = maxHp;
+                    this._hp = _maxHp;
                 }
             }
         }
 
-        public void TakeDmg(int dmg)
+        public void TakeDamage(int dmg)
         {
-            if (!isDie)
+            if (!_isDie)
             {
-                hp -= dmg;
-                if (hp <= 0)
+                _hp -= dmg;
+                if (_hp <= 0)
                 {
                     Die();
                 }
@@ -136,70 +151,70 @@ namespace MythicEmpire.InGame
 
         public void Freezed(float freezeTime)
         {
-            if (!isDie)
+            if (!_isDie)
             {
-                if (notActionTime < freezeTime)
+                if (_notActionTime < freezeTime)
                 {
-                    notActionTime = freezeTime;
+                    _notActionTime = freezeTime;
                 }
-                if (canAction)
+                if (_canAction)
                 {
                     StartCoroutine(FreezeCD());
                 }
-                canAction = false;
+                _canAction = false;
             }
         }
 
         private IEnumerator FreezeCD()
         {
             yield return new WaitForSeconds(0.1f);
-            notActionTime -= 0.1f;
-            if (notActionTime > 0)
+            _notActionTime -= 0.1f;
+            if (_notActionTime > 0)
             {
                 StartCoroutine(FreezeCD());
             }
             else
             {
-                canAction = true;
+                _canAction = true;
             }
         }
 
         public void Speedup(float rateup)
         {
-            if (!isDie)
+            if (!_isDie)
             {
-                speedupRate *= rateup;
+                _speedupRate *= rateup;
             }
         }
 
         public void Die()
         {
-            isDie = true;
-            GameController.Instance.GainEnergy(stats.EnergyGainWhenDie, !isMyPlayer);
-            GetComponent<MonsterAnimation>().PlayAnimation("die");
+            _isDie = true;
+            // GameController.Instance.GainEnergy(stats.EnergyGainWhenDie, !isMyPlayer);
+            PlayerController_v2.Instance.GainEnergy(_ownerId, _monsterStats.EnergyGainWhenDie);
+            _monsterAnimation.PlayAnimation("die");
             StartCoroutine(DieModel());
         }
 
-        public void FindPath(Vector2Int? barrierPos = null)
+        private void FindPath(Vector2Int? barrierPos = null)
         {
-            if (!isDie)
+            if (!_isDie)
             {
-                if (barrierPos == null || path.Contains(barrierPos.Value))
+                if (barrierPos == null || _path.Contains(barrierPos.Value))
                 {
-                    path = InGameService.FindPathForMonster(
-                        GameController.Instance.Map.GetComponent<MapService>().CurrentMap,
+                    _path = InGameService.FindPathForMonster(
+                        GameController_v2.Instance.mapService.CurrentMap,
                         InGameService.Display2LogicPos(transform.position),
-                        InGameService.houseLogicPos[isMyPlayer ? TypePlayer.Opponent : TypePlayer.Player],
-                        !isMyPlayer
-                    );
+                        GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId));
+                    
                 }
             }
         }
 
         private IEnumerator AttackCD()
         {
-            yield return new WaitForSeconds(1 / attackSpeed);
-            canAttack = true;
+            yield return new WaitForSeconds(1 / _attackSpeed);
+            _canAttack = true;
         }
 
         private IEnumerator DieModel()
@@ -208,12 +223,12 @@ namespace MythicEmpire.InGame
             Destroy(gameObject);
         }
 
-        public string Id { get { return id; } }
-        public bool IsMyPlayer { get { return isMyPlayer; } }
-        public float AttackRange { get { return attackRange; } }
-        public bool IsSummonedByPlayer { get { return isSummonedByPlayer; } }
-        public bool IsDie { get { return isDie; } }
-        public int Cost { get { return stats.Energy; } }
-        public bool CanAction { get { return canAction; } set { canAction = value; } }
+        public string Id { get { return _id; } }
+        public string OwnerId { get { return _ownerId; } }
+        public float AttackRange { get { return _attackRange; } }
+        public bool IsSummonedByPlayer { get { return _isSummonedByPlayer; } }
+        public bool IsDie { get { return _isDie; } }
+        public int Cost { get { return _monsterStats.Energy; } }
+        public bool CanAction { get { return _canAction; } set { _canAction = value; } }
     }
 }

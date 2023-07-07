@@ -35,14 +35,14 @@ namespace MythicEmpire.InGame
                 {
                     if ((monster.transform.position - transform.position).magnitude < exploreRange)
                     {
-                        monster.TakeDmg(damage);
+                        monster.TakeDamage(damage);
                     }
                 }
             }
             // otherwise if target is still alive, deal dmg to target
             else if (target != null)
             {
-                target.gameObject.GetComponent<Monster>().TakeDmg(damage);
+                target.gameObject.GetComponent<Monster>().TakeDamage(damage);
             }
             Destroy(gameObject);
         }

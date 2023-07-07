@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using InGame.Map;
@@ -6,11 +7,13 @@ using UnityEngine;
 using MythicEmpire.InGame;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Map;
+using MythicEmpire.Model;
+using VContainer;
 
 
 public class MapService_v2 : MonoBehaviour
 {
-    private Tile[][] _currentMap;
+    public Tile[][] CurrentMap;
     private CreateLogicMapService _service;
     private int _height;
     private int _width;
@@ -20,9 +23,17 @@ public class MapService_v2 : MonoBehaviour
     [SerializeField] private Tile monsterGateTilePrefab;
     [SerializeField] private Tile bridgeTilePrefab;
     [SerializeField] private Tile houseTilePrefab;
+    
+    
+    [SerializeField] private CastleHpUI castleHpUI;
 
+    [Inject] private UserModel _userModel;
+    private Dictionary<string, Vector2Int> _castles;
+    private Vector2Int _monsterGate;
     private void Start()
     {
+        _castles = new Dictionary<string, Vector2Int>();
+        _monsterGate = new Vector2Int();
         EventManager.Instance.RegisterListener(EventID.OnGetMap, (o)=>GameController_v2.Instance.mainThreadAction.Add(()=>InitMap(o)));
     }
     private void InitMap(object mapObject)
@@ -32,13 +43,13 @@ public class MapService_v2 : MonoBehaviour
         _width = currentMapLogic[0].Length;
         
         // generate a null map
-        _currentMap = new Tile[_height][];
+        CurrentMap = new Tile[_height][];
         for (int i = 0; i < _height; i++)
         {
-            _currentMap[i] = new Tile[_width];
+            CurrentMap[i] = new Tile[_width];
             for (int j = 0; j < _width; j++)
             {
-                _currentMap[i][j] = null;
+                CurrentMap[i][j] = null;
             }
         }
 
@@ -46,60 +57,63 @@ public class MapService_v2 : MonoBehaviour
         {
             foreach (var logicTile in listTile)
             {
+                var logicPosition = new Vector2Int(logicTile.YLogicPosition, logicTile.XLogicPosition);
                 switch (logicTile.TypeOfType)
                 {
                     case TypeTile.Barrier:
                         var barrierTile = Instantiate(barrierTilePrefab,
-                            InGameService.Logic2DisplayPos(new Vector2Int(logicTile.XLogicPosition,logicTile.YLogicPosition)),
+                            InGameService.Logic2DisplayPos(logicPosition),
                             Quaternion.identity);
                         
-                        barrierTile.SetInfo(new Vector2Int(logicTile.XLogicPosition,logicTile.YLogicPosition),logicTile.TypeOfType,logicTile.OwnerId);
+                        barrierTile.SetInfo(logicPosition,logicTile.TypeOfType,logicTile.OwnerId);
+                        
                         barrierTile.transform.SetParent(transform);
-                        _currentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = barrierTile;
+                        
+                        CurrentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = barrierTile;
                         break;
 
                     case TypeTile.Castle:
                         var castleTile = Instantiate(houseTilePrefab,
-                            InGameService.Logic2DisplayPos(new Vector2Int(logicTile.XLogicPosition,
-                                logicTile.YLogicPosition)),
-                            Quaternion.Euler(0, logicTile.XLogicPosition == 0 ? -180 : 180, 0));
-                        castleTile.SetInfo(new Vector2Int(logicTile.XLogicPosition,logicTile.YLogicPosition),logicTile.TypeOfType,logicTile.OwnerId);
+                            InGameService.Logic2DisplayPos(logicPosition),
+                            Quaternion.Euler(0, logicTile.YLogicPosition == 0 ? 90 : -90, 0));
+                        
+                        castleTile.SetInfo(logicPosition,logicTile.TypeOfType,logicTile.OwnerId);
                         castleTile.transform.SetParent(transform);
-                        _currentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = castleTile;
+                        
+                        var castleUI = Instantiate(castleHpUI,castleTile.transform);
+                        castleUI.Init(logicTile.OwnerId,logicTile.OwnerId == _userModel.userId);
+                        CurrentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = castleTile;
+                        _castles.Add(logicTile.OwnerId, logicPosition);
                         break;
 
                     case TypeTile.Gate:
                         var monsterGateTile = Instantiate(monsterGateTilePrefab,
-                            InGameService.Logic2DisplayPos(new Vector2Int(logicTile.XLogicPosition,
-                                logicTile.YLogicPosition)),
+                            InGameService.Logic2DisplayPos(logicPosition),
                             Quaternion.Euler(0, 90, 0));
-                        monsterGateTile.SetInfo(new Vector2Int(logicTile.XLogicPosition,logicTile.YLogicPosition),logicTile.TypeOfType,logicTile.OwnerId);
+                        monsterGateTile.SetInfo(logicPosition,logicTile.TypeOfType,logicTile.OwnerId);
                         monsterGateTile.transform.SetParent(transform);
-
-                        _currentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = monsterGateTile;
+                        _monsterGate = logicPosition;
+                        CurrentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = monsterGateTile;
                         break;
 
                     case TypeTile.Normal:
                         var normalTile = Instantiate(normalTilePrefab,
-                            InGameService.Logic2DisplayPos(new Vector2Int(logicTile.XLogicPosition,
-                                logicTile.YLogicPosition)),
+                            InGameService.Logic2DisplayPos(logicPosition),
                             Quaternion.identity);
-                        normalTile.SetInfo(new Vector2Int(logicTile.XLogicPosition,logicTile.YLogicPosition),logicTile.TypeOfType,logicTile.OwnerId);
+                        normalTile.SetInfo(logicPosition,logicTile.TypeOfType,logicTile.OwnerId);
                         normalTile.transform.SetParent(transform);
 
-                        _currentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = normalTile;
+                        CurrentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = normalTile;
                         break;
                     case TypeTile.Bridge:
                         var bridgeTile = Instantiate(bridgeTilePrefab,
-                            InGameService.Logic2DisplayPos(new Vector2Int(logicTile.XLogicPosition,
-                                logicTile.YLogicPosition)),
+                            InGameService.Logic2DisplayPos(logicPosition),
                             Quaternion.Euler(0, 90, 0));
-                        bridgeTile.SetInfo(new Vector2Int(logicTile.XLogicPosition,logicTile.YLogicPosition),logicTile.TypeOfType,logicTile.OwnerId);
+                        bridgeTile.SetInfo(logicPosition,logicTile.TypeOfType,logicTile.OwnerId);
                         bridgeTile.transform.SetParent(transform);
 
-                        _currentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = bridgeTile;
-
-
+                        CurrentMap[logicTile.XLogicPosition][logicTile.YLogicPosition] = bridgeTile;
+                        
                         break;
 
 
@@ -112,8 +126,8 @@ public class MapService_v2 : MonoBehaviour
     {
         if (logicPos.y >= 0 && logicPos.y < _width)
         {
-            if (_currentMap[logicPos.x][logicPos.y].typeOfTile == TypeTile.Normal
-                && _currentMap[logicPos.x][logicPos.y].ownerId == playerId)
+            if (CurrentMap[logicPos.y][logicPos.x].typeOfTile == TypeTile.Normal
+                && CurrentMap[logicPos.y][logicPos.x].ownerId == playerId)
             {
                 Debug.Log("Valid position");
                 return true;
@@ -125,16 +139,21 @@ public class MapService_v2 : MonoBehaviour
     }
     public void BanPosition(int x, int y)
     {
-        _currentMap[x][y].typeOfTile = TypeTile.Barrier;
+        CurrentMap[y][x].typeOfTile = TypeTile.Barrier;
     }
-    public bool BuildTower(Vector2Int logicPosition, Tower tower)
+    public void ReleaseTile( int x, int y)
     {
-        
-        return false;
+        CurrentMap[y][x].typeOfTile = TypeTile.Normal;
+
     }
 
-    public void ReleaseTile(Vector2Int position)
+    public Vector2Int GetRivalCastlePosition(string ownerId)
     {
-        
+        foreach (var castle in _castles)
+        {
+            if (castle.Key != ownerId) return castle.Value;
+        }
+
+        return new Vector2Int();
     }
 }

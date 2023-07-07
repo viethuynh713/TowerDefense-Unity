@@ -29,7 +29,12 @@ namespace MythicEmpire.Enums
         BuildTower,
         CreateMonster,
         PlaceSpell,
-        SpawnWave
+        SpawnWave,
+        UpdateCastleHp,
+        KillMonster,
+        UpdateMonsterHp,
+        UpgradeTower,
+        SellTower
     }
     public enum GachaType
     {

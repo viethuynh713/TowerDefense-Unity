@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 026e7bb07795ab24a8e57d06edbff8ae
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - mySprite: {fileID: 21300000, guid: 61d59be816f5dce49a652917eab8b8f1, type: 3}
+  - myBackgroundSprite: {fileID: 21300000, guid: 3220a77fd1041f74494239e16ae857fd,
+      type: 3}
+  - rivalSprite: {fileID: 21300000, guid: 19b9e79d8f0837d47ab2d2a14711b00f, type: 3}
+  - rivalBackgroundSprite: {fileID: 21300000, guid: 5abb65537ce3753458445aea05760c79,
+      type: 3}
+  - background: {instanceID: 0}
+  - fill: {instanceID: 0}
+  - hpText: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -90,7 +90,7 @@ namespace MythicEmpire.InGame
                     energy -= cost;
                     SetEnergySlider();
                     GameObject t = Instantiate(tower, InGameService.Logic2DisplayPos(logicPos) + new Vector3(0, 0.16f, 0), Quaternion.identity);
-                    t.GetComponent<Tower>().Init(isMyPlayer, logicPos);
+                    // t.GetComponent<Tower>().Init(isMyPlayer, logicPos);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace MythicEmpire.InGame
                     energy -= cost;
                     SetEnergySlider();
                     GameObject monsterObj = Instantiate(monster, InGameService.Logic2DisplayPos(logicPos), Quaternion.identity);
-                    monsterObj.GetComponent<Monster>().Init(playerID, isMyPlayer, true);
+                    // monsterObj.GetComponent<Monster>().Init(playerID, isMyPlayer, true);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace MythicEmpire.InGame
                     energy -= cost;
                     SetEnergySlider();
                     GameObject spellObj = Instantiate(spell, displayPos, Quaternion.identity);
-                    spellObj.GetComponent<Spell>().Init(playerID, isMyPlayer);
+                    // spellObj.GetComponent<Spell>().Init(playerID, isMyPlayer);
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace MythicEmpire.InGame
         {
             GameObject monster = GameController.Instance.GetComponent<MonsterFactory>().GetMonster(id);
             GameObject monsterObj = Instantiate(monster, InGameService.Logic2DisplayPos(monsterGatePos), Quaternion.identity);
-            monsterObj.GetComponent<Monster>().Init(playerID, !isMyPlayer, false);
+            // monsterObj.GetComponent<Monster>().Init(playerID, !isMyPlayer, false);
             nRestMonster--;
             if (nRestMonster > 0)
             {

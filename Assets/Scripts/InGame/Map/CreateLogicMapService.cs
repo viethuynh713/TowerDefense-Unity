@@ -31,66 +31,66 @@ namespace InGame.Map
                 };
             _monsterGatePosition = new Vector2Int((width-1)/2, (height-1)/2);
         }
-        public async Task<LogicTile[][]> CreateLogicMap()
-        {
-            //Create new LogicTile
-            _mapLogicResult = new LogicTile[_height][];
-            
-            for (int i = 0; i < _height; i++)
-            {
-                _mapLogicResult[i] = new LogicTile[_width];
-            }
-            
-            
-            for (int i = 0; i < _height; i++)
-            {
-                for (int j = 0; j < _width ; j++)
-                {
-
-                    _mapLogicResult[i][j] = new LogicTile(i,j);
-                    // mark the tile is on player field or opponent field
-                    if (j < (_width -1)/2)
-                    {
-                        _mapLogicResult[i][j].OwnerId = "1";
-                        
-                    }
-                    else if (j > (_width - 1) / 2)
-                    {
-                        _mapLogicResult[i][j].OwnerId = "2";
-                    }
-                    // mark type of LogicTile
-                    if (j == 0 || j == _width - 1 || i == 0 || i == _height -1)
-                    {
-                        _mapLogicResult[i][j].TypeOfType = TypeTile.Barrier;
-                    }
-                    else if(j == (_width -1)/2)
-                    {
-                        if (i == (_height - 1) / 2)
-                        {
-                            _mapLogicResult[i][j].TypeOfType = TypeTile.Gate;
-                        }
-                        else
-                        {
-                            _mapLogicResult[i][j].TypeOfType = TypeTile.Bridge;
-                        }
-                    }
-                    else
-                    {
-                        _mapLogicResult[i][j].TypeOfType = TypeTile.Normal;
-                    }
-                }
-            }
-            foreach (var pos in _castleLogicPosition)
-            {
-                _mapLogicResult[pos.Value.y][pos.Value.x].TypeOfType = TypeTile.Castle;
-            }
-            InitHoleStep1((_width-1)/2-1,_height-2);
-            
-            var virtualPath = InitVirtualPath();
-            
-            InitHoleStep3(virtualPath);
-            return _mapLogicResult;
-        }
+        // public async Task<LogicTile[][]> CreateLogicMap()
+        // {
+        //     //Create new LogicTile
+        //     _mapLogicResult = new LogicTile[_height][];
+        //     
+        //     for (int i = 0; i < _height; i++)
+        //     {
+        //         _mapLogicResult[i] = new LogicTile[_width];
+        //     }
+        //     
+        //     
+        //     for (int i = 0; i < _height; i++)
+        //     {
+        //         for (int j = 0; j < _width ; j++)
+        //         {
+        //
+        //             _mapLogicResult[i][j] = new LogicTile(i,j);
+        //             // mark the tile is on player field or opponent field
+        //             if (j < (_width -1)/2)
+        //             {
+        //                 _mapLogicResult[i][j].OwnerId = "1";
+        //                 
+        //             }
+        //             else if (j > (_width - 1) / 2)
+        //             {
+        //                 _mapLogicResult[i][j].OwnerId = "2";
+        //             }
+        //             // mark type of LogicTile
+        //             if (j == 0 || j == _width - 1 || i == 0 || i == _height -1)
+        //             {
+        //                 _mapLogicResult[i][j].TypeOfType = TypeTile.Barrier;
+        //             }
+        //             else if(j == (_width -1)/2)
+        //             {
+        //                 if (i == (_height - 1) / 2)
+        //                 {
+        //                     _mapLogicResult[i][j].TypeOfType = TypeTile.Gate;
+        //                 }
+        //                 else
+        //                 {
+        //                     _mapLogicResult[i][j].TypeOfType = TypeTile.Bridge;
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 _mapLogicResult[i][j].TypeOfType = TypeTile.Normal;
+        //             }
+        //         }
+        //     }
+        //     foreach (var pos in _castleLogicPosition)
+        //     {
+        //         _mapLogicResult[pos.Value.y][pos.Value.x].TypeOfType = TypeTile.Castle;
+        //     }
+        //     InitHoleStep1((_width-1)/2-1,_height-2);
+        //     
+        //     var virtualPath = InitVirtualPath();
+        //     
+        //     InitHoleStep3(virtualPath);
+        //     return _mapLogicResult;
+        // }
 
         private void InitHoleStep3(List<Vector2Int> path)
         {

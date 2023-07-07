@@ -31,7 +31,7 @@ namespace MythicEmpire.InGame
                             float distance = (transform.position - collider.transform.position).magnitude;
                             if (distance < minDistance)
                             {
-                                if (isMyPlayer != monsterComponent.IsMyPlayer)
+                                if (OwnerId != monsterComponent.OwnerId)
                                 {
                                     target = collider.gameObject;
                                     minDistance = distance;

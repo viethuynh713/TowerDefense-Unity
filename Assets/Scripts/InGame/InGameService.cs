@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using static UnityEngine.Rendering.DebugUI.Table;
 using System.Diagnostics;
+using InGame.Map;
 using Newtonsoft.Json;
 using Debug = UnityEngine.Debug;
 
@@ -135,26 +136,32 @@ namespace MythicEmpire.InGame
         }
 
         // find path for monster
-        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile, bool isMyPlayer)
+        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile)
         {
             List<FPTile> possibleTiles;
 
             if (currentTile.x == columnIndexSplit)
             {
-                if (isMyPlayer)
+                possibleTiles = new List<FPTile>()
                 {
-                    possibleTiles = new List<FPTile>()
-                    {
-                        new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-                    };
-                }
-                else
-                {
-                    possibleTiles = new List<FPTile>()
-                    {
-                        new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-                    };
-                }
+                    new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 },
+                    new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+
+                };
+                // if (isMyPlayer)
+                // {
+                //     possibleTiles = new List<FPTile>()
+                //     {
+                //         new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+                //     };
+                // }
+                // else
+                // {
+                //     possibleTiles = new List<FPTile>()
+                //     {
+                //         new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+                //     };
+                // }
             }
             else
             {
@@ -178,7 +185,7 @@ namespace MythicEmpire.InGame
                     .ToList();
         }
 
-        public static List<Vector2Int> FindPathForMonster(GameObject[][] realMap, Vector2Int startPos, Vector2Int des, bool isMyPlayer)
+        public static List<Vector2Int> FindPathForMonster(Tile[][] realMap, Vector2Int startPos, Vector2Int des)
         {
             List<string> map = new List<string>();
             for (int i = 0; i < realMap.Length; i++)
@@ -194,7 +201,7 @@ namespace MythicEmpire.InGame
                     {
                         row += "B";
                     }
-                    else if (realMap[i][j].GetComponent<Tile>().IsBarrier)
+                    else if (realMap[i][j].typeOfTile == TypeTile.Barrier)
                     {
                         row += "#";
                     }
@@ -205,7 +212,9 @@ namespace MythicEmpire.InGame
                 }
                 map.Add(row);
             }
-
+            // Debug.Log($"startPos :{startPos}");
+            // Debug.Log( $"des : {des}");
+            // Debug.Log(JsonConvert.SerializeObject(map));
             var start = new FPTile();
             start.y = map.FindIndex(x => x.Contains("A"));
             start.x = map[start.y].IndexOf("A");
@@ -250,7 +259,7 @@ namespace MythicEmpire.InGame
                 visitedTiles.Add(checkTile);
                 activeTiles.Remove(checkTile);
 
-                var walkableTiles = GetWalkableTiles(map, checkTile, finish, isMyPlayer);
+                var walkableTiles = GetWalkableTiles(map, checkTile, finish);
 
                 foreach (var walkableTile in walkableTiles)
                 {

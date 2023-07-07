@@ -82,11 +82,6 @@ namespace MythicEmpire.Networking
 
 
             });
-            _hubConnection.On<byte[]>("OnEndGame", (data) =>
-            {
-                // Debug.Log("EndGame");
-                // EventManager.Instance.PostEvent(EventID.OnEndGame);
-            });
             _hubConnection.On<byte[]>("BuildTower", (data) =>
             {
                 Debug.Log("BuildTower networking");
@@ -122,7 +117,18 @@ namespace MythicEmpire.Networking
                     Debug.Log("Energy fail");
                 }
             });
-            
+            _hubConnection.On<byte[]>("UpdateCastleHp", (data) =>
+            {
+                var jsonData = Encoding.UTF8.GetString(data);
+                var castleData = JObject.Parse(jsonData);
+                var playerId = castleData["userid"].ToString();
+
+                var newHp = (int)castleData["newCastleHp"];
+                Debug.Log("CastleHp: " + newHp);
+                EventManager.Instance.PostEvent(EventID.UpdateCastleHp,castleData);
+
+
+            });
             _hubConnection.On<byte[]>("SpawnWave", (data) =>
             {
                 var stringListCard = Encoding.UTF8.GetString(data);
@@ -138,6 +144,37 @@ namespace MythicEmpire.Networking
                 Wave currentWave = JsonConvert.DeserializeObject<Wave>(jsonWave);
                 EventManager.Instance.PostEvent(EventID.UpdateWaveTime,currentWave);
 
+            });
+            _hubConnection.On<byte[]>("KillMonster", (data) =>
+            {
+                var monsterId = Encoding.UTF8.GetString(data);
+                Debug.Log($"Kill monster: {monsterId}");
+                EventManager.Instance.PostEvent(EventID.KillMonster, monsterId);
+            });
+            _hubConnection.On<byte[]>("UpdateMonsterHp", (data) =>
+            {
+                var jsonData = Encoding.UTF8.GetString(data);
+                var monsterData = JObject.Parse(jsonData);
+                Debug.Log($"Update monsterHp: {monsterData.ToString()}");
+                EventManager.Instance.PostEvent(EventID.UpdateMonsterHp, monsterData);
+            });
+            _hubConnection.On<byte[]>("UpgradeTower", (data) =>
+            {
+                var jsonData = Encoding.UTF8.GetString(data);
+                var towerData = JObject.Parse(jsonData);
+                Debug.Log($"Upgrade Tower {towerData}");
+                EventManager.Instance.PostEvent(EventID.UpgradeTower, towerData);
+            });
+            _hubConnection.On<byte[]>("SellTower", (data) =>
+            {
+                var towerId = Encoding.UTF8.GetString(data);
+                Debug.Log($"SellTower: {towerId}");
+                EventManager.Instance.PostEvent(EventID.SellTower, towerId);
+            });
+            _hubConnection.On<byte[]>("OnEndGame", (data) =>
+            {
+                Debug.Log("EndGame");
+                // EventManager.Instance.PostEvent(EventID.OnEndGame);
             });
             _hubConnection.StartAsync().ContinueWith(task =>
             {

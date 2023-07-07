@@ -12,7 +12,7 @@ namespace MythicEmpire.InGame
             Monster[] monsterList = FindObjectsOfType<Monster>();
             foreach (Monster monster in monsterList)
             {
-                if (isMyPlayer == monster.IsMyPlayer)
+                if (ownerId == monster.OwnerId)
                 {
                     if ((monster.transform.position - transform.position).magnitude < stats.Range)
                     {

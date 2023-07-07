@@ -149,17 +149,17 @@ namespace MythicEmpire.InGame
             {
                 currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier = true;
                 TypePlayer tp = isMyPlayer ? TypePlayer.Player : TypePlayer.Opponent;
-                if (InGameService.FindPathForMonster(currentMap, startPoint, endPoints[tp], isMyPlayer).Count > 0)
-                {
-                    currentMap[pos.y][pos.x].GetComponent<Tile>().BuildTower(tower.transform);
-
-                    Monster[] monsterList = FindObjectsOfType<Monster>();
-                    foreach (Monster monster in monsterList)
-                    {
-                        monster.FindPath(pos);
-                    }
-                    return true;
-                }
+                // if (InGameService.FindPathForMonster(currentMap, startPoint, endPoints[tp]).Count > 0)
+                // {
+                //     currentMap[pos.y][pos.x].GetComponent<Tile>().BuildTower(tower.transform);
+                //
+                //     Monster[] monsterList = FindObjectsOfType<Monster>();
+                //     foreach (Monster monster in monsterList)
+                //     {
+                //         monster.FindPath(pos);
+                //     }
+                //     return true;
+                // }
                 currentMap[pos.y][pos.x].GetComponent<Tile>().IsBarrier = false;
             }
             return false;

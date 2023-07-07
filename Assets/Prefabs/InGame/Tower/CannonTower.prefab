@@ -988,9 +988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b26df7890e084a498c56c3a7a5d3489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
-  stats: {fileID: 11400000, guid: 31706e06210c76248a269319eb8177fe, type: 2}
-  canvas: {fileID: 8125349138418496099}
+  canvas: {fileID: 6029994170811111718}
   bullet: {fileID: 8203199907653219295, guid: ef0f3c7781c1578429f9e7d4d9edb71c, type: 3}
 --- !u!114 &6198376791438635075
 MonoBehaviour:

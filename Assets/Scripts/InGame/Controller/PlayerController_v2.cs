@@ -81,6 +81,16 @@ namespace MythicEmpire.InGame
                     break;
             }
         }
+
+        public void CastleTakeDamage(string ownerId, int damage)
+        {
+            
+        }
+
+        public void GainEnergy(string ownerId, int monsterStatsEnergyGainWhenDie)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

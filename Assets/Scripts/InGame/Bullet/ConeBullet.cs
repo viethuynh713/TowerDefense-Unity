@@ -21,7 +21,7 @@ namespace MythicEmpire.InGame
                 {
                     if (Vector3.Angle(monster.transform.position - transform.position, target.position - transform.position) <= 60)
                     {
-                        monster.TakeDmg(damage);
+                        monster.TakeDamage(damage);
                     }
                 }
             }

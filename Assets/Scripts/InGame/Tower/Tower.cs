@@ -10,11 +10,10 @@ namespace MythicEmpire.InGame
 {
     public class Tower : MonoBehaviour
     {
-        [SerializeField] protected string id;
+        protected string id;
         protected string ownerId;
-        [SerializeField] protected TowerStats stats;
+        protected TowerStats stats;
         protected Vector2Int logicPos;
-        protected bool isMyPlayer;
         protected int damageLevel;
         protected int rangeLevel;
         protected int attackSpeedLevel;
@@ -26,10 +25,31 @@ namespace MythicEmpire.InGame
         protected float exploreRange;
         protected float bulletSpeed;
 
-        [SerializeField] protected Canvas canvas;
+        [SerializeField] protected TowerUI canvas;
+        
         // Start is called before the first frame update
         protected void Start()
         {
+            // damageLevel = 1;
+            // rangeLevel = 1;
+            // attackSpeedLevel = 1;
+            //
+            // damage = stats.Damage;
+            // attackSpeed = stats.AttackSpeed;
+            // fireRange = stats.FireRange;
+            // exploreRange = stats.ExploreRange;
+            // bulletSpeed = stats.BulletSpeed;
+            //
+            // canFire = true;
+        }
+
+        public void Init(string towerId, string ownerId, Vector2Int logicPos, TowerStats stats)
+        {
+            id = towerId;
+            this.ownerId = ownerId;
+            this.logicPos = logicPos;
+            this.stats = stats;
+            
             damageLevel = 1;
             rangeLevel = 1;
             attackSpeedLevel = 1;
@@ -41,13 +61,8 @@ namespace MythicEmpire.InGame
             bulletSpeed = stats.BulletSpeed;
 
             canFire = true;
-        }
-
-        public void Init(bool isMyPlayer, Vector2Int logicPos)
-        {
-            this.isMyPlayer = isMyPlayer;
-            this.logicPos = logicPos;
-            canvas.gameObject.GetComponent<TowerUI>().SetElementPosition(transform.position);
+            
+            canvas.SetElementPosition(transform.position);
             canvas.gameObject.SetActive(false);
         }
 
@@ -69,34 +84,34 @@ namespace MythicEmpire.InGame
         public void UpgradeDamage()
         {
             canvas.gameObject.SetActive(false);
-            if (damageLevel < InGameService.maxTowerLevel)
-            {
-                damage = Mathf.RoundToInt(damage * 1.5f);
-            }
+            // if (damageLevel < InGameService.maxTowerLevel)
+            // {
+            //     damage = Mathf.RoundToInt(damage * 1.5f);
+            // }
         }
 
         public void UpgradeRange()
         {
             canvas.gameObject.SetActive(false);
-            if (rangeLevel < InGameService.maxTowerLevel)
-            {
-                fireRange *= 1.1f;
-            }
+            // if (rangeLevel < InGameService.maxTowerLevel)
+            // {
+            //     fireRange *= 1.1f;
+            // }
         }
 
         public void UpgradeAttackSpeed()
         {
             canvas.gameObject.SetActive(false);
-            if (attackSpeedLevel < InGameService.maxTowerLevel)
-            {
-                attackSpeed *= 1.1f;
-            }
+            // if (attackSpeedLevel < InGameService.maxTowerLevel)
+            // {
+            //     attackSpeed *= 1.1f;
+            // }
         }
 
         public void Sell()
         {
             canvas.gameObject.SetActive(false);
-            GameController.Instance.SellTower(logicPos, isMyPlayer, stats.Energy / 2);
+            // GameController.Instance.SellTower(logicPos, isMyPlayer, stats.Energy / 2);
             Destroy(gameObject);
         }
 
@@ -114,5 +129,6 @@ namespace MythicEmpire.InGame
 
         public int Cost { get { return stats.Energy; } }
         public string Id { get { return id; } }
+        public string OwnerId { get { return ownerId; } }
     }
 }

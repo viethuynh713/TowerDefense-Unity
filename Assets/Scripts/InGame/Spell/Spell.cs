@@ -7,16 +7,16 @@ namespace MythicEmpire.InGame
 {
     public class Spell : MonoBehaviour
     {
-        [SerializeField] protected string id;
+        protected string id;
         protected string ownerId;
-        protected bool isMyPlayer;
-        [SerializeField] protected SpellStats stats;
-        protected Vector3 pos;
+        protected SpellStats stats;
 
-        public void Init(string playerID, bool isMyPlayer)
+        public void Init(string spellId, string playerID, SpellStats spellStats)
         {
+            id = spellId;
+            stats = spellStats;
+            
             ownerId = playerID;
-            this.isMyPlayer = isMyPlayer;
             StartCoroutine(AffectDuration());
             StartCoroutine(Destroy());
         }

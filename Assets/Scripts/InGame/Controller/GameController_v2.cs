@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using MythicEmpire.Networking;
 using MythicEmpire.Networking.Model;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using VContainer;
@@ -19,7 +16,7 @@ namespace MythicEmpire.InGame
     public class GameController_v2 : MonoBehaviour
     {
         public static GameController_v2 Instance;
-        [SerializeField]private MapService_v2 _mapService;
+        [SerializeField]public MapService_v2 mapService;
         [Inject] private IRealtimeCommunication _realtimeCommunication;
         [Inject] private UserModel _userModel;
         [Inject] private CardManager _cardManager;
@@ -54,24 +51,27 @@ namespace MythicEmpire.InGame
         public void BuildTower(TowerModel data)
         {
             var cardInfo = _cardManager.GetCardById(data.cardId);
-            Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
+            var tower = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
-            _mapService.BanPosition(data.XLogicPosition, data.YLogicPosition);
+            tower.GetComponent<Tower>().Init(data.towerId,data.ownerId, new Vector2Int(data.XLogicPosition,data.YLogicPosition),(TowerStats)cardInfo.CardStats);
+            mapService.BanPosition(data.XLogicPosition, data.YLogicPosition);
             
         }
 
         public void CreateMonster(MonsterModel data)
         {
             var cardInfo = _cardManager.GetCardById(data.cardId);
-            Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
+            var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
+            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,true,(MonsterStats)cardInfo.CardStats, _userModel.userId == data.ownerId);
         }
 
         public void PlaceSpell(SpellModel data)
         {
             var cardInfo = _cardManager.GetCardById(data.cardId);
-            Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
+            var spell = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
+            spell.GetComponent<Spell>().Init(data.spellId,data.ownerId,(SpellStats)cardInfo.CardStats);
         }
 
         public IEnumerator SpawnWave(List<string> cards)
