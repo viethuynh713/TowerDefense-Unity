@@ -24,8 +24,5 @@ namespace MythicEmpire.Networking.Model
         public int Yposition;
         public SpellStats stats;
     }
-    public class SubHPData
-    {
-        public int subHP;
-    }
+
 }

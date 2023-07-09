@@ -5,6 +5,7 @@ using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using MythicEmpire.Networking;
 using MythicEmpire.Networking.Model;
+using Networking_System.Model;
 using UnityEngine;
 using VContainer;
 
@@ -82,14 +83,27 @@ namespace MythicEmpire.InGame
             }
         }
 
-        public void CastleTakeDamage(string ownerId, int damage)
+        public void CastleTakeDamage(string ownerId, string monsterId, int damage)
         {
-            
+            if(ownerId == _userModel.userId) return;
+            var data = new CastleTakeDamageData()
+            {
+                monsterId = monsterId,
+                HpLose = damage,
+            };
+            _realtimeCommunication.CastleTakeDamage(data);
         }
-
-        public void GainEnergy(string ownerId, int monsterStatsEnergyGainWhenDie)
+        
+        public void UpdateMonsterHp(string ownerId, string monsterId, int hp)
         {
-            throw new NotImplementedException();
+            if(ownerId != _userModel.userId)return;
+            
+            MonsterTakeDamageData data = new MonsterTakeDamageData()
+            {
+                monsterId = monsterId,
+                damage = hp
+            };
+            _realtimeCommunication.UpdateMonsterHp(data);
         }
     }
 

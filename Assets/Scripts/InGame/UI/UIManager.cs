@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.Model;
 using MythicEmpire.UI;
+using Networking_System.Model.ReceiveData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +24,7 @@ namespace MythicEmpire.InGame.UI
 
         [SerializeField] private EndGameUI _endGameUI;
         [Inject] private CardManager _cardManager;
+        [Inject] private UserModel _userModel;
         public void Start()
         {
             _endGameUI.gameObject.SetActive(false);
@@ -35,7 +38,16 @@ namespace MythicEmpire.InGame.UI
         private void HandleEndGame(object result)
         {
             _endGameUI.gameObject.SetActive(true);
-            _endGameUI.ShowResult((GameResult)result, 145);
+            var data = (EndGameDataSender)result;
+            if (data.playerLose == _userModel.userId)
+            {
+                _endGameUI.ShowResult(GameResult.Loss, data.totalTime);
+            }
+            else
+            {
+                _endGameUI.ShowResult(GameResult.Win, data.totalTime);
+
+            }
         }
 
         private void RenderListCard(object listCard)

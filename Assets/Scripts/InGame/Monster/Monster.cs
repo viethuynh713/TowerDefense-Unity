@@ -7,11 +7,13 @@ using Unity.Burst.Intrinsics;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using MythicEmpire.Card;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using Networking_System.Model.ReceiveData;
+using Newtonsoft.Json.Linq;
 
 namespace MythicEmpire.InGame
 {
     [RequireComponent(typeof(MonsterAnimation))]
-    [RequireComponent(typeof(MonsterBT))]
     public class Monster : MonoBehaviour
     {
         private string _id;
@@ -49,6 +51,39 @@ namespace MythicEmpire.InGame
         private void Start()
         {
             _monsterAnimation = GetComponent<MonsterAnimation>();
+            EventManager.Instance.RegisterListener(EventID.UpdateMonsterHp, HandleUpdateHp);
+            EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
+            
+        }
+
+        public void HandleUpdateHp(object o)
+        {
+            GameController_v2.Instance.mainThreadAction.Add(() =>
+            {
+                var data = (UpdateMonsterHpDataSender)o;
+                if (data.monsterId == _id)
+                {
+                    _hp = data.currentHp;
+                    _monsterUI.UpdateMonsterHp(_maxHp, _hp);
+                }
+            });
+        }
+
+        public void HandleKilledMonster(object o)
+        {
+            GameController_v2.Instance.mainThreadAction.Add(()=>
+            {
+                if (_id == (string)o)
+                {
+                    Die();
+                }
+            });
+        }
+
+        private void OnDestroy()
+        {
+            EventManager.Instance.RemoveListener(EventID.UpdateMonsterHp,HandleUpdateHp);
+            EventManager.Instance.RemoveListener(EventID.KillMonster, HandleKilledMonster);
         }
 
         public void Init(string monsterId, string ownerId, bool isSummonedByPlayer, MonsterStats stats, bool isMyMonster)
@@ -120,33 +155,36 @@ namespace MythicEmpire.InGame
         {
             _monsterAnimation.PlayAnimation("attack");
             _isOnPath = true;
-            // GameController.Instance.GetPlayer(!isMyPlayer).GetComponent<PlayerController>().TakeDmg(damage);
-            PlayerController_v2.Instance.CastleTakeDamage(_ownerId, _damage);
-            Destroy(gameObject);
+            PlayerController_v2.Instance.CastleTakeDamage(_ownerId, _id, 1);
+            // gameObject.SetActive(false);
         }
 
         public void Heal(int hp)
         {
-            if (!_isDie)
-            {
-                this._hp += hp;
-                if (this._hp > _maxHp)
-                {
-                    this._hp = _maxHp;
-                }
-            }
+            // if (!_isDie)
+            // {
+            //     _hp += hp;
+            //     if (this._hp > _maxHp)
+            //     {
+            //         this._hp = _maxHp;
+            //     }
+            // }
+            PlayerController_v2.Instance.UpdateMonsterHp(_ownerId,_id,hp);
+
         }
 
         public void TakeDamage(int dmg)
         {
-            if (!_isDie)
-            {
-                _hp -= dmg;
-                if (_hp <= 0)
-                {
-                    Die();
-                }
-            }
+            // if (!_isDie)
+            // {
+            //     _hp -= dmg;
+            //     if (_hp <= 0)
+            //     {
+            //         Die();
+            //     }
+            // }
+            PlayerController_v2.Instance.UpdateMonsterHp(_ownerId,_id,-dmg);
+
         }
 
         public void Freezed(float freezeTime)
@@ -191,7 +229,7 @@ namespace MythicEmpire.InGame
         {
             _isDie = true;
             // GameController.Instance.GainEnergy(stats.EnergyGainWhenDie, !isMyPlayer);
-            PlayerController_v2.Instance.GainEnergy(_ownerId, _monsterStats.EnergyGainWhenDie);
+            // PlayerController_v2.Instance.GainEnergy(_ownerId, _monsterStats.EnergyGainWhenDie);
             _monsterAnimation.PlayAnimation("die");
             StartCoroutine(DieModel());
         }

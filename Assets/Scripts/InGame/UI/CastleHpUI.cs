@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MythicEmpire.Enums;
 using MythicEmpire.InGame;
 using MythicEmpire.Manager.MythicEmpire.Manager;
+using Networking_System.Model.ReceiveData;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,15 +31,12 @@ public class CastleHpUI : MonoBehaviour
 
     private void UpdateCastleHp(object data)
     {
-        var castleData = (JObject)data;
-        var id = castleData["userid"].ToString();
+        var castleData = (CastleTakeDamageSender)data;
 
-        var newHp = (int)castleData["newCastleHp"];
+        if (playerId != castleData.userId) return;
 
-        if (playerId != id) return;
-
-        fill.fillAmount = (newHp / 20);
-        hpText.text = newHp.ToString();
+        fill.fillAmount = (castleData.currentCastleHp / castleData.maxCastleHp);
+        hpText.text = castleData.currentCastleHp.ToString();
     }
 
     public void Init(string id, bool isMyCastle)

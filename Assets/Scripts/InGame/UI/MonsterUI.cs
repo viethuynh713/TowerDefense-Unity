@@ -25,7 +25,7 @@ public class MonsterUI : MonoBehaviour
         this.transform.LookAt(Camera.main.transform);
     }
 
-    private void UpdateMonsterHp(int maxHp,int currentHp)
+    public void UpdateMonsterHp(int maxHp,int currentHp)
     {
         fill.fillAmount = (currentHp / maxHp);
         hpText.text = currentHp.ToString();

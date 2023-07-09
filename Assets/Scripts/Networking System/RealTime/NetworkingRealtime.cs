@@ -9,12 +9,14 @@ using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using MythicEmpire.Networking.Model;
+using Networking_System.Model;
+using Networking_System.Model.ReceiveData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
+using Random = System.Random;
 
 
 namespace MythicEmpire.Networking
@@ -26,9 +28,11 @@ namespace MythicEmpire.Networking
         BuildTower,
         PlaceSpell,
         CastleTakeDamage,
-        MonsterTakeDamage,
+        UpdateMonsterHp,
         GetMyCard,
         GetMap,
+        UpgradeTower,
+        SellTower
     }
     public class NetworkingRealtime : IStartable, IRealtimeCommunication
     {
@@ -43,7 +47,11 @@ namespace MythicEmpire.Networking
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(_config.RealtimeURL)
                 .Build();
-            
+            _hubConnection.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0,5) * 1000);
+                await _hubConnection.StartAsync();
+            };
             _hubConnection.On<string, string>("ReceiveMessage", (user, msg) =>
             {
                 Debug.Log($"{user} send message: {msg}");
@@ -120,11 +128,8 @@ namespace MythicEmpire.Networking
             _hubConnection.On<byte[]>("UpdateCastleHp", (data) =>
             {
                 var jsonData = Encoding.UTF8.GetString(data);
-                var castleData = JObject.Parse(jsonData);
-                var playerId = castleData["userid"].ToString();
-
-                var newHp = (int)castleData["newCastleHp"];
-                Debug.Log("CastleHp: " + newHp);
+                var castleData = JsonConvert.DeserializeObject<CastleTakeDamageSender>(jsonData);
+                // Debug.Log("CastleHp: " + castleData.c);
                 EventManager.Instance.PostEvent(EventID.UpdateCastleHp,castleData);
 
 
@@ -154,8 +159,8 @@ namespace MythicEmpire.Networking
             _hubConnection.On<byte[]>("UpdateMonsterHp", (data) =>
             {
                 var jsonData = Encoding.UTF8.GetString(data);
-                var monsterData = JObject.Parse(jsonData);
-                Debug.Log($"Update monsterHp: {monsterData.ToString()}");
+                var monsterData = JsonConvert.DeserializeObject<UpdateMonsterHpDataSender>(jsonData);
+                // Debug.Log($"Update monsterHp: {monsterData.ToString()}");
                 EventManager.Instance.PostEvent(EventID.UpdateMonsterHp, monsterData);
             });
             _hubConnection.On<byte[]>("UpgradeTower", (data) =>
@@ -173,16 +178,19 @@ namespace MythicEmpire.Networking
             });
             _hubConnection.On<byte[]>("OnEndGame", (data) =>
             {
-                Debug.Log("EndGame");
-                // EventManager.Instance.PostEvent(EventID.OnEndGame);
+                Debug.Log("================ EndGame =================");
+                var endgameData = JsonConvert.DeserializeObject<EndGameDataSender>(Encoding.UTF8.GetString(data));
+                EventManager.Instance.PostEvent(EventID.OnEndGame, endgameData);
             });
             _hubConnection.StartAsync().ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
                     Debug.Log("Fail connect : " + task.Exception);
+                    
                 }
             });
+            
             
         }
     
@@ -242,7 +250,7 @@ namespace MythicEmpire.Networking
             await _hubConnection.SendAsync("OnListeningData", byteArray);
         }
 
-        public async Task CastleTakeDamage(SubHPData data)
+        public async Task CastleTakeDamage(CastleTakeDamageData data)
         {
             JObject jsonString = new JObject(
                 new JProperty("senderId", _userModel.userId),
@@ -284,7 +292,20 @@ namespace MythicEmpire.Networking
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
             await _hubConnection.SendAsync("OnListeningData", byteArray);
         }
-        
+
+        public async Task UpdateMonsterHp(MonsterTakeDamageData data)
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.UpdateMonsterHp),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
     }
 
 
