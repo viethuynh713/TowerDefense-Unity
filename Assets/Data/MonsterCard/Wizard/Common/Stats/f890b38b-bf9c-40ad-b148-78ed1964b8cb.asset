@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b576fef79ce0d241b694143d6f6510e, type: 3}
+  m_Name: f890b38b-bf9c-40ad-b148-78ed1964b8cb
+  m_EditorClassIdentifier: 
+  Energy: 13
+  Hp: 70
+  AttackSpeed: 1.15
+  MoveSpeed: 1
+  AttackRange: 1.64
+  Damage: 14
+  EnergyGainWhenDie: 4
