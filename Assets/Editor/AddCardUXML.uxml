@@ -11,27 +11,36 @@
                 <ui:DropdownField label="Type" index="-1" choices="None,Tower Card,Monster Card,Spell Card" name="TypeOfCard" binding-path="TypeOfCard" style="display: flex;" />
                 <ui:DropdownField label="Rarity" index="-1" choices="None,Common,Rare,Mythic,Legend" binding-path="CardRarity" name="CardRarity" />
                 <uie:ObjectField label="Sprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="CardImage" binding-path="CardImage" />
+                <uie:ObjectField label="Prefab" type="UnityEngine.GameObject, UnityEngine.CoreModule" name="GameObjectPrefab" binding-path="GameObjectPrefab" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="SpellStats" style="height: 82px; display: none; width: 342px; justify-content: space-between; visibility: visible; overflow: visible;">
+        <ui:VisualElement name="SpellStats" style="height: 174px; display: none; width: 488px; justify-content: space-between; visibility: visible; overflow: visible;">
             <ui:Label text="Spell Stats" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; height: 22px; font-size: 15px;" />
             <uie:IntegerField label="Energy" value="0" name="Energy" binding-path="Energy" />
+            <uie:FloatField label="Time" value="0" name="Time" binding-path="Time" />
             <uie:FloatField label="Duration" value="0" name="Duration" binding-path="Duration" />
+            <uie:FloatField label="Damege Per Duration" value="0" name="DamegePerDuration" binding-path="DamegePerDuration" />
+            <uie:FloatField label="Range" value="0" name="Range" binding-path="Range" />
+            <ui:TextField picking-mode="Ignore" label="Detail" value="filler text" name="Detail" />
         </ui:VisualElement>
-        <ui:VisualElement name="MonsterStats" style="height: 167px; display: none; width: 342px; justify-content: space-between; visibility: visible; opacity: 1;">
+        <ui:VisualElement name="MonsterStats" style="height: 167px; display: flex; width: 490px; justify-content: space-between; visibility: visible; opacity: 1;">
             <ui:Label text="Monster Stats" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; height: 22px; font-size: 15px;" />
             <uie:IntegerField label="Energy" value="0" name="Energy" binding-path="Energy" />
             <uie:IntegerField label="Hp" value="0" name="Hp" binding-path="Hp" />
             <uie:FloatField label="Attack Speed" value="0" name="AttackSpeed" binding-path="AttackSpeed" />
             <uie:FloatField label="Move Speed" value="0" name="MoveSpeed" binding-path="MoveSpeed" />
+            <uie:FloatField label="Attack Range" value="0" name="AttackRange" binding-path="AttackRange" />
             <uie:IntegerField label="Damage" value="0" name="Damage" binding-path="Damage" />
+            <uie:IntegerField label="Energy Gain When Die" value="0" name="EnergyGainWhenDie" binding-path="EnergyGainWhenDie" />
         </ui:VisualElement>
-        <ui:VisualElement name="TowerStats" style="height: 139px; width: 342px; flex-direction: column; align-items: stretch; justify-content: space-between; display: none; visibility: visible;">
+        <ui:VisualElement name="TowerStats" style="height: 178px; width: 483px; flex-direction: column; align-items: stretch; justify-content: space-between; display: none; visibility: visible;">
             <ui:Label text="Tower Stats" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; height: 22px; font-size: 15px;" />
             <uie:IntegerField label="Energy" value="0" name="Energy" binding-path="Energy" />
             <uie:IntegerField label="Damage" value="0" name="Damage" binding-path="Damage" />
-            <uie:FloatField label="Range" value="0" name="Range" binding-path="Range" />
             <uie:FloatField label="Attack Speed" value="0" name="AttackSpeed" readonly="false" binding-path="AttackSpeed" />
+            <uie:FloatField label="Fire Range" value="0" name="FireRange" binding-path="FireRange" />
+            <uie:FloatField label="Explore Range" value="0" name="ExploreRange" binding-path="ExploreRange" />
+            <uie:FloatField label="Bullet Speed" value="0" name="BulletSpeed" binding-path="BulletSpeed" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:Button text="Add" display-tooltip-when-elided="true" name="AddButton" style="display: flex; width: 100px; height: 30px; white-space: nowrap; -unity-text-align: middle-center; align-items: stretch; left: 40%; right: auto; font-size: 15px; -unity-font-style: bold; bottom: auto;" />

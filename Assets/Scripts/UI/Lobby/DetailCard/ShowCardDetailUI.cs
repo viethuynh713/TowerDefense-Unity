@@ -14,7 +14,7 @@ namespace MythicEmpire.UI.Lobby
 {
     public class ShowCardDetailUI : MonoBehaviour
     {
-        [FormerlySerializedAs("_monterStatsRender")] [SerializeField] private MonsterStatsRender monsterStatsRender;
+        [SerializeField] private MonsterStatsRender _monsterStatsRender;
         [SerializeField] private TowerStatsRender _towerStatsRender;
         [SerializeField] private SpellStatsRender _spellStatsRender;
         [SerializeField] private Image _mainImage;
@@ -30,7 +30,7 @@ namespace MythicEmpire.UI.Lobby
 
         private void SetActivityInfo(bool activity)
         {
-            monsterStatsRender.gameObject.SetActive(activity);
+            _monsterStatsRender.gameObject.SetActive(activity);
             _towerStatsRender.gameObject.SetActive(activity);
             _spellStatsRender.gameObject.SetActive(activity);
             _mainImage.gameObject.SetActive(activity);
@@ -83,7 +83,7 @@ namespace MythicEmpire.UI.Lobby
 
         private void SetStats(StatsCard statsCard)
         {
-            monsterStatsRender.gameObject.SetActive(false);
+            _monsterStatsRender.gameObject.SetActive(false);
             _towerStatsRender.gameObject.SetActive(false);
             _spellStatsRender.gameObject.SetActive(false);
             if (statsCard.GetType() == typeof(TowerStats))
@@ -100,9 +100,10 @@ namespace MythicEmpire.UI.Lobby
 
             if (statsCard.GetType() == typeof(MonsterStats))
             {
-                monsterStatsRender.gameObject.SetActive(true);
-                monsterStatsRender.Render((MonsterStats)statsCard);
+                _monsterStatsRender.gameObject.SetActive(true);
+                _monsterStatsRender.Render((MonsterStats)statsCard);
             }
+            // Debug.Log(statsCard.GetType());
         }
 
         public void BuyCardButtonClick()

@@ -13,7 +13,7 @@ namespace MythicEmpire.InGame
 
         public CheckAttackMonster(Transform transform) {
             this.transform = transform;
-            range = transform.gameObject.GetComponent<Monster>().Stats.AttackRange;
+            range = transform.gameObject.GetComponent<Monster>().AttackRange;
         }
 
         public override NodeState Evaluate()
@@ -32,7 +32,7 @@ namespace MythicEmpire.InGame
                         Monster component = transform.gameObject.GetComponent<Monster>();
                         Monster colliderComponent = collider.gameObject.GetComponent<Monster>();
                         if ((component.IsSummonedByPlayer || colliderComponent.IsSummonedByPlayer)
-                            && (component.IsMyPlayer != colliderComponent.IsMyPlayer)
+                            && (component.OwnerId != colliderComponent.OwnerId)
                             && !component.IsDie && !colliderComponent.IsDie)
                         {
                             target = collider.gameObject;

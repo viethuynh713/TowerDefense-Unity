@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using MythicEmpire.Enums;
 using MythicEmpire.Manager;
+using MythicEmpire.Manager.MythicEmpire.Manager;
 using TMPro;
 using UnityEngine;
 using VContainer;
@@ -20,6 +23,29 @@ namespace MythicEmpire.UI.Menu
         [SerializeField] private TranslateUI _ResetPasswordPanel;
         [SerializeField] private GameObject _InitPanel;
 
+        private void Start()
+        {
+            EventManager.Instance.RegisterListener(EventID.ResetPasswordSuccess, (o)=>
+            {
+                _ResetPasswordPanel.OnDisappear();
+                _InitPanel.SetActive(true);
+                gameObject.SetActive(false);
+                Notification.Instance.NotifyStatus("Reset password successfully");
+            });
+            
+            EventManager.Instance.RegisterListener(EventID.SendOTPSuccess, (o) =>
+            {
+                _emailPanel.OnDisappear();
+                _OTPPanel.gameObject.SetActive(true);
+            });            
+            
+            EventManager.Instance.RegisterListener(EventID.ConfirmOTPSuccess, (o) =>
+            {
+                _OTPPanel.OnDisappear();
+                _ResetPasswordPanel.gameObject.SetActive(true);
+            });
+        }
+
         private void OnEnable()
         {
             _emailPanel.gameObject.SetActive(true);
@@ -38,23 +64,23 @@ namespace MythicEmpire.UI.Menu
                 Notification.Instance.PopupNotifyWaring("Please fill your email");
                 return;
             }
-            _emailPanel.OnDisappear();
-            _OTPPanel.gameObject.SetActive(true);
-            // _forgotPasswordService.SenOtp(_emailInputField.text);
-        }
 
-        public void VerifyyOTPButtonClick()
+            _forgotPasswordService.SenOtp(_emailInputField.text);
+        }
+        
+
+        public void VerifyOTPButtonClick()
         {
             if (string.IsNullOrEmpty(_optInputField.text))
             {
                 Notification.Instance.PopupNotifyWaring("Please fill OTP");
                 return;
             }
-            _OTPPanel.OnDisappear();
-            _ResetPasswordPanel.gameObject.SetActive(true);
-            // _forgotPasswordService.SenOtp(_emailInputField.text);
-        }
 
+            _forgotPasswordService.IsValidOtp(_emailInputField.text,_optInputField.text);
+
+        }
+        
         public void ResetPasswordButtonClick()
         {
             if (string.IsNullOrEmpty(_newPasswordInputField.text) || string.IsNullOrEmpty(_confirmPasswordInputField.text) )
@@ -72,10 +98,15 @@ namespace MythicEmpire.UI.Menu
                 Notification.Instance.PopupNotifyWaring("Password and confirm password does not match");
                 return;
             }
-            _ResetPasswordPanel.OnDisappear();
-            _InitPanel.SetActive(true);
-            gameObject.SetActive(false);
-            // _forgotPasswordService.ResetPassword(_newPasswordInputField.text);
+
+            _forgotPasswordService.ResetPassword(_emailInputField.text,_newPasswordInputField.text);
+        }
+
+        public void ResendOtp()
+        {
+            Notification.Instance.NotifyStatus("Resend OTP successfully");
+            _forgotPasswordService.SenOtp(_emailInputField.text);
+
         }
     }
 }

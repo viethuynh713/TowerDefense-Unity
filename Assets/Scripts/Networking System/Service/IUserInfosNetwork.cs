@@ -10,7 +10,7 @@ namespace MythicEmpire.Networking
         Task UpdateInfosRequest(string newNickName);
         Task UpdateRankRequest(string rankAdded);
         Task UpdateGoldRequest(string goldAdded);
-        [ItemCanBeNull] Task<List<string>> GetListCardRequest();
+        Task<List<string>> GetListCardRequest();
     }
     
 }

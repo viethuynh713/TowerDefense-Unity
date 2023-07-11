@@ -682,7 +682,7 @@ GameObject:
   - component: {fileID: 1916127125403324640}
   - component: {fileID: 1916127125403324575}
   - component: {fileID: 8474512704388959682}
-  - component: {fileID: -9164814436572316920}
+  - component: {fileID: 907663165745030113}
   m_Layer: 5
   m_Name: CardFrameSelection
   m_TagString: Untagged
@@ -796,8 +796,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -9164814436572316920}
-        m_TargetAssemblyTypeName: CardUISelection, Assembly-CSharp
+      - m_Target: {fileID: 907663165745030113}
+        m_TargetAssemblyTypeName: MythicEmpire.UI.CardUISelection, Assembly-CSharp
         m_MethodName: OnPointerClick
         m_Mode: 1
         m_Arguments:
@@ -808,7 +808,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-9164814436572316920
+--- !u!114 &907663165745030113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

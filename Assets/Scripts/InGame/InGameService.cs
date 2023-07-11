@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using MythicEmpire.Enums;
+using MythicEmpire.Map;
 using System.Linq;
 using System;
 using Unity.Burst.Intrinsics;
 using System.Runtime.CompilerServices;
+using UnityEditor;
+using static UnityEngine.Rendering.DebugUI.Table;
+using System.Diagnostics;
+using InGame.Map;
+using Newtonsoft.Json;
+using Debug = UnityEngine.Debug;
 
 namespace MythicEmpire.InGame
 {
@@ -14,116 +21,79 @@ namespace MythicEmpire.InGame
     {
         public static readonly int nPlayer = 2;
 
-        public static readonly int columnIndexSplit = 11;
+        public static readonly int columnIndexSplit = 10;
         public static readonly Vector2Int mapLogicPos = Vector2Int.zero;
-        public static readonly Vector2Int monsterGateLogicPos = new Vector2Int(11, 4);
+        public static readonly Vector2Int monsterGateLogicPos = new Vector2Int(10, 4);
         public static readonly Dictionary<TypePlayer, Vector2Int> houseLogicPos = new Dictionary<TypePlayer, Vector2Int> {
-            { TypePlayer.Player, new Vector2Int(22, 4) }, { TypePlayer.Opponent, new Vector2Int(0, 4) }
+            { TypePlayer.Player, new Vector2Int(20, 4) },
+            { TypePlayer.Opponent, new Vector2Int(0, 4) }
         };
         public static readonly Vector3 rootVector = Vector3.forward;
         public static readonly float infinitesimal = 0.01f;
 
-        public static readonly int mapWidth = 23;
-        public static readonly int mapHeight = 10;
+        public static readonly int localMapWidth = 9;
+        public static readonly int mapWidth = 21;
+        public static readonly int mapHeight = 9;
 
-        public static readonly int playerHp = 20;
+        public static readonly int playerHp = 2000;
         public static readonly int maxEnergy = 100;
-        public static readonly int playerEnergy = 15;
-        public static readonly int nWave = 5;
-        public static readonly int waveTimeDelay = 10;
+        public static readonly int playerEnergy = 100;
+        public static readonly int waveTimeDelay = 20;
 
         public static readonly int monsterLayerMask = 1 << 3;
 
         public static readonly int maxTowerLevel = 3;
 
-        public static readonly Dictionary<Tuple<CardType, string>, int> cardCost = new Dictionary<Tuple<CardType, string>, int>()
-        {
-            { new Tuple<CardType, string>(CardType.TowerCard, "1"), 8 }
-        };
-
+        public static readonly int nWave = 7;
         public static readonly List<List<Tuple<string, int>>> monsterWave = new List<List<Tuple<string, int>>>
         {
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 1),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 2),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 3),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 4),
-            },
             new List<Tuple<string, int>>
             {
                 new Tuple<string, int>("1", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 6),
+                new Tuple<string, int>("2", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 7),
+                new Tuple<string, int>("3", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 8),
+                new Tuple<string, int>("4", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 9),
+                new Tuple<string, int>("5", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 10),
+                new Tuple<string, int>("6", 5),
             },
             new List<Tuple<string, int>>
             {
-                new Tuple<string, int>("1", 11),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 12),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 13),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 14),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 15),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 16),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 17),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 18),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 19),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 20),
+                new Tuple<string, int>("7", 5),
             },
         };
+
+        public static Vector2Int PrivateLogicPos2PublicLogicPos(Vector2Int logicPos, bool isMyPlayer)
+        {
+            if (isMyPlayer)
+            {
+                return new Vector2Int(logicPos.x + columnIndexSplit + 1, logicPos.y);
+            }
+            return new Vector2Int(columnIndexSplit - 1 - logicPos.x, mapHeight - logicPos.y - 1);
+        }
+
+        public static Vector2Int PublicLogicPos2PrivateLogicPos(Vector2Int logicPos, bool isMyPlayer)
+        {
+            if (isMyPlayer)
+            {
+                return new Vector2Int(logicPos.x - columnIndexSplit - 1, logicPos.y);
+            }
+            return new Vector2Int(columnIndexSplit - 1 - logicPos.x, mapHeight - 1 - logicPos.y);
+        }
 
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {
@@ -165,45 +135,33 @@ namespace MythicEmpire.InGame
             return false;
         }
 
-
-
-        class FPTile
-        {
-            public int x { get; set; }
-            public int y { get; set; }
-            public int cost { get; set; }
-            public int distance { get; set; }
-            public int costDistance => cost + distance;
-            public FPTile parent { get; set; }
-
-            //The distance is essentially the estimated distance, ignoring walls to our target. 
-            //So how many tiles left and right, up and down, ignoring walls, to get there. 
-            public void SetDistance(int targetX, int targetY)
-            {
-                distance = Mathf.Abs(targetX - x) + Mathf.Abs(targetY - y);
-            }
-        }
-
-        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile, bool isMyPlayer)
+        // find path for monster
+        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile)
         {
             List<FPTile> possibleTiles;
 
             if (currentTile.x == columnIndexSplit)
             {
-                if (isMyPlayer)
+                possibleTiles = new List<FPTile>()
                 {
-                    possibleTiles = new List<FPTile>()
-                    {
-                        new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-                    };
-                }
-                else
-                {
-                    possibleTiles = new List<FPTile>()
-                    {
-                        new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-                    };
-                }
+                    new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 },
+                    new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+
+                };
+                // if (isMyPlayer)
+                // {
+                //     possibleTiles = new List<FPTile>()
+                //     {
+                //         new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+                //     };
+                // }
+                // else
+                // {
+                //     possibleTiles = new List<FPTile>()
+                //     {
+                //         new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+                //     };
+                // }
             }
             else
             {
@@ -227,7 +185,7 @@ namespace MythicEmpire.InGame
                     .ToList();
         }
 
-        public static List<Vector2Int> FindPath(GameObject[][] realMap, Vector2Int startPos, Vector2Int des, bool isMyPlayer)
+        public static List<Vector2Int> FindPathForMonster(Tile[][] realMap, Vector2Int startPos, Vector2Int des)
         {
             List<string> map = new List<string>();
             for (int i = 0; i < realMap.Length; i++)
@@ -243,7 +201,7 @@ namespace MythicEmpire.InGame
                     {
                         row += "B";
                     }
-                    else if (realMap[i][j].GetComponent<Tile>().IsBarrier)
+                    else if (realMap[i][j].typeOfTile == TypeTile.Barrier)
                     {
                         row += "#";
                     }
@@ -254,7 +212,9 @@ namespace MythicEmpire.InGame
                 }
                 map.Add(row);
             }
-
+            // Debug.Log($"startPos :{startPos}");
+            // Debug.Log( $"des : {des}");
+            // Debug.Log(JsonConvert.SerializeObject(map));
             var start = new FPTile();
             start.y = map.FindIndex(x => x.Contains("A"));
             start.x = map[start.y].IndexOf("A");
@@ -269,7 +229,7 @@ namespace MythicEmpire.InGame
             var visitedTiles = new List<FPTile>();
 
             //This is where we created the map from our previous step etc. 
-
+            // Debug.Log(JsonConvert.SerializeObject(map));
             while (activeTiles.Any())
             {
                 var checkTile = activeTiles.OrderBy(x => x.costDistance).First();
@@ -299,7 +259,7 @@ namespace MythicEmpire.InGame
                 visitedTiles.Add(checkTile);
                 activeTiles.Remove(checkTile);
 
-                var walkableTiles = GetWalkableTiles(map, checkTile, finish, isMyPlayer);
+                var walkableTiles = GetWalkableTiles(map, checkTile, finish);
 
                 foreach (var walkableTile in walkableTiles)
                 {

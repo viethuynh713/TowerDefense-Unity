@@ -16,10 +16,12 @@ namespace MythicEmpire.InGame
         [SerializeField] private GameObject map;
         private GameState state;
         private int wave;
+        System.Diagnostics.Stopwatch gameTime = new System.Diagnostics.Stopwatch();
 
         [SerializeField] private GameObject playerController;
 
         [SerializeField] private Slider nextWaveTimeSlider;
+        [SerializeField] private GameObject endGameUI;
 
         private void Awake()
         {
@@ -46,6 +48,7 @@ namespace MythicEmpire.InGame
 
             nextWaveTimeSlider.maxValue = InGameService.waveTimeDelay;
             nextWaveTimeSlider.value = InGameService.waveTimeDelay;
+            state = GameState.Start;
 
             StartCoroutine(StartGame());
         }
@@ -53,7 +56,10 @@ namespace MythicEmpire.InGame
         // Update is called once per frame
         void Update()
         {
-
+            if (wave >= InGameService.nWave - 1 && FindObjectsOfType<Monster>().Length == 0 && state != GameState.EndGame)
+            {
+                EndGame();
+            }
         }
 
         public static GameController Instance { get { return instance; } }
@@ -84,7 +90,21 @@ namespace MythicEmpire.InGame
 
         public void EndGame()
         {
-
+            state = GameState.EndGame;
+            int playerHp = playerList[0].GetComponent<PlayerController>().Hp;
+            int opponentHp = playerList[1].GetComponent<PlayerController>().Hp;
+            if (playerHp > opponentHp)
+            {
+                GetComponent<EndGameUI>().ShowResult(GameResult.Win,1);
+            }
+            else if (playerHp == opponentHp)
+            {
+                GetComponent<EndGameUI>().ShowResult(GameResult.Draw,1);
+            }
+            else
+            {
+                GetComponent<EndGameUI>().ShowResult(GameResult.Loss,1);
+            }
         }
 
         public void BuildTower(string id, Vector3 displayPos, bool isMyPlayer)
@@ -107,9 +127,21 @@ namespace MythicEmpire.InGame
             {
                 foreach (var ele in InGameService.monsterWave[wave])
                 {
-                    StartCoroutine(player.GetComponent<PlayerController>().GenerateMonster(ele.Item1, ele.Item2));
+                    StartCoroutine(player.GetComponent<PlayerController>().GenerateMonsterAuto(ele.Item1, ele.Item2));
                 }
             }
+        }
+
+        public void GenerateMonsterByPlayer(string id, Vector3 displayPos, bool isMyPlayer)
+        {
+            int index = isMyPlayer ? 0 : 1;
+            playerList[index].GetComponent<PlayerController>().GenerateMonsterByPlayer(id, displayPos);
+        }
+
+        public void UseSpell(string id, Vector3 displayPos, bool isMyPlayer)
+        {
+            int index = isMyPlayer ? 0 : 1;
+            playerList[index].GetComponent<PlayerController>().UseSpell(id, displayPos);
         }
 
         public void GainEnergy(int energyGain, bool isMyPlayer)
@@ -133,7 +165,6 @@ namespace MythicEmpire.InGame
                 else
                 {
                     nextWaveTimeSlider.value = time;
-                    Debug.Log("End Game!");
                 }
             }
             else
@@ -145,6 +176,7 @@ namespace MythicEmpire.InGame
         private IEnumerator StartGame()
         {
             yield return new WaitForSeconds(3);
+            state = GameState.Playing;
             GenerateMonsterAuto();
         }
 

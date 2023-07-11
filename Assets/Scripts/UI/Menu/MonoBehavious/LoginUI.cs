@@ -37,7 +37,6 @@ namespace MythicEmpire.UI.Menu
         private void Start()
         {
             EventManager.Instance.RegisterListener(EventID.OnLoginSuccess, LoadScene);
-            EventManager.Instance.RegisterListener(EventID.OnRegisterSuccess, o => gameObject.SetActive(true));
         }
 
         private void LoadScene(object obj)

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Networking.Model;
+using Networking_System.Model;
 
 namespace MythicEmpire.Networking
 {
@@ -9,7 +11,12 @@ namespace MythicEmpire.Networking
     {
         Task MatchMakingRequest(List<string> cards, ModeGame mode);
         Task CancelMatchMakingRequest();
-        Task PlaceCardRequest(PlaceCardData data);
-        Task CastleTakeDamage(SubHPData data);
+        Task CreateMonsterRequest(CreateMonsterData data);
+        Task BuildTowerRequest(BuildTowerData data);
+        Task PlaceSpellRequest(PlaceSpellData data);
+        Task CastleTakeDamage(CastleTakeDamageData data);
+        Task GetMap();
+        Task GetCard();
+        Task UpdateMonsterHp(MonsterTakeDamageData data);
     }
 }

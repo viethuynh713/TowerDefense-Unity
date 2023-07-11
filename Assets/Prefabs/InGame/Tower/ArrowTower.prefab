@@ -770,8 +770,9 @@ GameObject:
   - component: {fileID: 7341624758057353884}
   - component: {fileID: 5930514226873879865}
   - component: {fileID: 8478479354461370867}
-  - component: {fileID: 4783309156931679894}
   - component: {fileID: 5648365280830253728}
+  - component: {fileID: 4783309156931679894}
+  - component: {fileID: 2531823313422297677}
   m_Layer: 0
   m_Name: ArrowTower
   m_TagString: Untagged
@@ -847,20 +848,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4783309156931679894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974010707245570086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b26df7890e084a498c56c3a7a5d3489, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 4469252079389789658}
-  bullet: {fileID: 6918885361370916446, guid: 4b28b3a58aed1f44788434e8ead327cb, type: 3}
 --- !u!65 &5648365280830253728
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -874,6 +861,32 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.22992359, y: 0.15748088, z: 0.22992359}
   m_Center: {x: 0, y: 0.07874044, z: 0}
+--- !u!114 &4783309156931679894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974010707245570086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b26df7890e084a498c56c3a7a5d3489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 695051422951582100}
+  bullet: {fileID: 6918885361370916446, guid: 4b28b3a58aed1f44788434e8ead327cb, type: 3}
+--- !u!114 &2531823313422297677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974010707245570086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170f5e69c7174194cb6a92b1ea59a9cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8009915616204926843
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,3 +1001,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41727f2c206fd2240ba311f441ab18dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI: {fileID: 1162230721558942393}

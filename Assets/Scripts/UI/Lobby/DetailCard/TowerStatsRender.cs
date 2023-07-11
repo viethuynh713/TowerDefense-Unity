@@ -17,7 +17,7 @@ namespace MythicEmpire.UI.Lobby
 
             damageText.text = stats.Damage.ToString();
             attackSpeedText.text = stats.AttackSpeed.ToString();
-            rangeText.text = stats.Range.ToString();
+            rangeText.text = stats.FireRange.ToString();
             energyText.text = stats.Energy.ToString();
         }
     }

@@ -13,6 +13,7 @@ public class Loading : MonoBehaviour
     void Start()
     {
         StartCoroutine(LoadingScene());
+        
     }
 
     IEnumerator LoadingScene()

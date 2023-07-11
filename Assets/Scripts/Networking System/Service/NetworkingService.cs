@@ -11,6 +11,7 @@ using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
@@ -50,29 +51,40 @@ namespace MythicEmpire.Networking
 
         public async Task LoginRequest(string email, string password)
         {
+            
             var url = $"{_config.ServiceURL}AuthenControl/login?email={email}&userPassword={HashPassword(password)}";
             CommonScript.Common.Log(url);
             var request = new HttpRequestMessage(HttpMethod.Get, url);
+            try
+            {
+                var response = await _httpClient.SendAsync(request);
+                // Debug.Log(response.StatusCode);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
 
-            var response  = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
-                
+                }
+                else
+                {
+                    var obj = JsonConvert.DeserializeObject<UserModel>(response.Content.ReadAsStringAsync().Result);
+                    _userModel.userId = obj.userId;
+                    _userModel.rank = obj.rank;
+                    _userModel.gold = obj.gold;
+                    _userModel.nickName = obj.nickName;
+                    _userModel.email = obj.email;
+                    _userModel.password = obj.password;
+                    _userModel.cardListID = obj.cardListID;
+                    _userModel.friendListID = obj.friendListID;
+
+                    _userDataLocal.UpdateUserId(_userModel.userId);
+
+                    EventManager.Instance.PostEvent(EventID.OnLoginSuccess);
+                }
             }
-            else
+            catch 
             {
-               var obj = JsonConvert.DeserializeObject<UserModel>(response.Content.ReadAsStringAsync().Result);
-               _userModel.userId = obj.userId;
-               _userModel.rank = obj.rank;
-               _userModel.gold = obj.gold;
-               _userModel.nickName = obj.nickName;
-               _userModel.email = obj.email;
-               _userModel.password = obj.password;
-               _userModel.cardListID = obj.cardListID;
-               _userModel.friendListID = obj.friendListID;
-               _userDataLocal.UpdateUserId(_userModel.userId);
-                EventManager.Instance.PostEvent(EventID.OnLoginSuccess);
+                Notification.Instance.PopupNotifyWaring("Error request");
+
             }
         }
 
@@ -103,19 +115,62 @@ namespace MythicEmpire.Networking
             }
         }
 
-        public Task SendOTPRequest(string email)
+        public async Task SendOTPRequest(string email)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}AuthenControl/send-otp?email={email}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                
+            }
+            else
+            {
+                EventManager.Instance.PostEvent(EventID.SendOTPSuccess);
+
+            }
         }
 
-        public Task ConfirmOTPRequest(string email, string otp)
+        public async Task ConfirmOTPRequest(string email, string otp)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}AuthenControl/valid-otp?email={email}&otp={otp}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                
+            }
+            else
+            {
+                EventManager.Instance.PostEvent(EventID.ConfirmOTPSuccess);
+
+            }
         }
 
-        public Task ResetPasswordRequest(string email, string newPassword)
+        public async Task ResetPasswordRequest(string email, string newPassword)
         {
-            throw new System.NotImplementedException();
+            var url = $"{_config.ServiceURL}AuthenControl/reset-password?email={email}&newPassword={HashPassword(newPassword)}";
+            CommonScript.Common.Log(url);
+            var request = new HttpRequestMessage(HttpMethod.Put, url);
+            
+            var response  = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notification.Instance.PopupNotifyWaring(await response.Content.ReadAsStringAsync());
+                Debug.Log("");
+            }
+            else
+            {
+                EventManager.Instance.PostEvent(EventID.ResetPasswordSuccess);
+            }
+
+            
         }
 
 
@@ -214,7 +269,7 @@ namespace MythicEmpire.Networking
                 var newCardInfo = _cardManager.GetCardById(_userModel.cardListID[^1]);
                 
                 Notification.Instance.PopupNotifyWaring(
-                    $"Give card : {newCardInfo.CardName} - {newCardInfo.CardRarity}");
+                    $"Give new card : {newCardInfo.CardName} - {newCardInfo.CardRarity}");
                 EventManager.Instance.PostEvent(EventID.OnBuyGachaSuccess);
             }
             else
@@ -226,7 +281,7 @@ namespace MythicEmpire.Networking
 
         public async Task UpdateInfosRequest(string newNickName)
         {
-            var url = $"{_config.ServiceURL}CardControl/update-nickname/{_userModel.userId}";
+            var url = $"{_config.ServiceURL}UserControl/update-nickname/{_userModel.userId}";
             CommonScript.Common.Log(url);
             var request = new HttpRequestMessage(HttpMethod.Post, url);
             var content = new MultipartFormDataContent();
@@ -234,7 +289,7 @@ namespace MythicEmpire.Networking
             request.Content = content;
             
             var response = await _httpClient.SendAsync(request);
-
+            
             if (response.IsSuccessStatusCode)
             {
                 _userModel.nickName = newNickName;

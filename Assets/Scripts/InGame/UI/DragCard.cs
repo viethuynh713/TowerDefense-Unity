@@ -4,14 +4,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using MythicEmpire.Enums;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.UI;
 
 namespace MythicEmpire.InGame
 {
-    public class DragCard : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+    public class DragCard : CardBaseUI, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         [SerializeField] private Image dragIcon;
 
-        [SerializeField] private CardType type;
+        [SerializeField] private CardType cardType;
         [SerializeField] private string id;
         private Vector2 originAnchoredPos;
         private CanvasGroup canvasGroup;
@@ -37,7 +39,6 @@ namespace MythicEmpire.InGame
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("here");
             // blur icon
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
@@ -48,8 +49,22 @@ namespace MythicEmpire.InGame
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycast))
             {
-                GameController.Instance.BuildTower(id, raycast.point, true);
+                switch (cardType)
+                {
+                    case CardType.TowerCard:
+                        GameController.Instance.BuildTower(id, raycast.point, true);
+                        break;
+                    case CardType.MonsterCard:
+                        GameController.Instance.GenerateMonsterByPlayer(id, raycast.point, true);
+                        break;
+                    case CardType.SpellCard:
+                        GameController.Instance.UseSpell(id, raycast.point, true);
+                        break;
+                }
             }
+
+            //
+            //EventManager.Instance.PostEvent(EventID.BuildTower, CardData);
         }
     }
 }

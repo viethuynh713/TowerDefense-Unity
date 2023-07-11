@@ -27,9 +27,9 @@ namespace MythicEmpire.UI.Lobby
             EventManager.Instance.RegisterListener(EventID.OnBuyCardSuccess, UpdateGoldText);
             EventManager.Instance.RegisterListener(EventID.OnBuyGachaSuccess, UpdateGoldText);
             gold.text = _userModel.gold.ToString();
-            rank.text = String.Concat("Rank: ", _userModel.rank.ToString());
+            rank.text = String.Concat("Rank: #", _userModel.rank.ToString());
             userName.text = _userModel.nickName;
-            Notification.Instance.NotifyStatus($"Welcome {_userModel.nickName} comeback");
+            Notification.Instance.NotifyStatus($"Welcome {_userModel.nickName}");
         }
 
         private void UpdateGoldText(object o)

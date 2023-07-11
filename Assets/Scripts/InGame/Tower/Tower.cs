@@ -10,76 +10,116 @@ namespace MythicEmpire.InGame
 {
     public class Tower : MonoBehaviour
     {
-        private string id;
-        private string ownerId;
+        protected string id;
+        protected string ownerId;
         protected TowerStats stats;
-        private Vector2Int logicPos;
-        protected bool isMyPlayer;
-        protected int cost;
+        protected Vector2Int logicPos;
         protected int damageLevel;
         protected int rangeLevel;
         protected int attackSpeedLevel;
+        protected bool canFire;
 
-        [SerializeField] protected Canvas canvas;
+        protected int damage;
+        protected float attackSpeed;
+        protected float fireRange;
+        protected float exploreRange;
+        protected float bulletSpeed;
+
+        [SerializeField] protected TowerUI canvas;
+        
         // Start is called before the first frame update
-        void Start()
+        protected void Start()
         {
+            // damageLevel = 1;
+            // rangeLevel = 1;
+            // attackSpeedLevel = 1;
+            //
+            // damage = stats.Damage;
+            // attackSpeed = stats.AttackSpeed;
+            // fireRange = stats.FireRange;
+            // exploreRange = stats.ExploreRange;
+            // bulletSpeed = stats.BulletSpeed;
+            //
+            // canFire = true;
+        }
+
+        public void Init(string towerId, string ownerId, Vector2Int logicPos, TowerStats stats)
+        {
+            id = towerId;
+            this.ownerId = ownerId;
+            this.logicPos = logicPos;
+            this.stats = stats;
+            
             damageLevel = 1;
             rangeLevel = 1;
             attackSpeedLevel = 1;
-        }
 
-        public void Init(string id, bool isMyPlayer, Vector2Int logicPos)
-        {
-            this.id = id;
-            this.isMyPlayer = isMyPlayer;
-            this.logicPos = logicPos;
-            cost = InGameService.cardCost[new Tuple<CardType, string>(CardType.TowerCard, id)];
-            canvas.gameObject.GetComponent<TowerUI>().SetElementPosition(transform.position);
+            damage = stats.Damage;
+            attackSpeed = stats.AttackSpeed;
+            fireRange = stats.FireRange;
+            exploreRange = stats.ExploreRange;
+            bulletSpeed = stats.BulletSpeed;
+
+            canFire = true;
+            
+            canvas.SetElementPosition(transform.position);
             canvas.gameObject.SetActive(false);
         }
 
         // Update is called once per frame
         void Update()
         {
+            Fire();
             if (Input.GetMouseButtonDown(0))
             {
                 canvas.gameObject.SetActive(false);
             }
         }
 
+        public virtual void Fire()
+        {
+
+        }
+
         public void UpgradeDamage()
         {
             canvas.gameObject.SetActive(false);
-            if (damageLevel < InGameService.maxTowerLevel)
-            {
-                stats.Damage = (stats.Damage + 1 >= stats.Damage * 1.1f) ? stats.Damage + 1 : Mathf.RoundToInt(stats.Damage * 1.1f);
-            }
+            // if (damageLevel < InGameService.maxTowerLevel)
+            // {
+            //     damage = Mathf.RoundToInt(damage * 1.5f);
+            // }
         }
 
         public void UpgradeRange()
         {
             canvas.gameObject.SetActive(false);
-            if (rangeLevel < InGameService.maxTowerLevel)
-            {
-                stats.Range *= 1.1f;
-            }
+            // if (rangeLevel < InGameService.maxTowerLevel)
+            // {
+            //     fireRange *= 1.1f;
+            // }
         }
 
         public void UpgradeAttackSpeed()
         {
             canvas.gameObject.SetActive(false);
-            if (attackSpeedLevel < InGameService.maxTowerLevel)
-            {
-                stats.AttackSpeed *= 1.1f;
-            }
+            // if (attackSpeedLevel < InGameService.maxTowerLevel)
+            // {
+            //     attackSpeed *= 1.1f;
+            // }
         }
 
         public void Sell()
         {
             canvas.gameObject.SetActive(false);
-            GameController.Instance.SellTower(logicPos, isMyPlayer, cost / 2);
+            // GameController.Instance.SellTower(logicPos, isMyPlayer, stats.Energy / 2);
             Destroy(gameObject);
+        }
+
+        protected IEnumerator LoadBullet()
+        {
+            canFire = false;
+            yield return new WaitForSeconds(1 / stats.AttackSpeed);
+            canFire = true;
         }
 
         public void OnMouseUp()
@@ -87,6 +127,8 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(!canvas.gameObject.activeInHierarchy);
         }
 
-        public int Cost { get { return cost; } }
+        public int Cost { get { return stats.Energy; } }
+        public string Id { get { return id; } }
+        public string OwnerId { get { return ownerId; } }
     }
 }

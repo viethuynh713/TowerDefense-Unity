@@ -15,9 +15,26 @@ namespace MythicEmpire.Enums
         PrepareListCard,
         OnStartGame,
         OnEndGame,
-        ServeReceiveMatchMaking,
+        ServerReceiveMatchMaking,
         CancelMatchMakingSuccess,
-        PlaceCard
+        ResetPasswordSuccess,
+        ConfirmOTPSuccess,
+        SendOTPSuccess,
+        DeselectCardPrepare,
+        UpdateEnergy,
+        UpdateWaveTime,
+        RenderListCard,
+        OnGetMap,
+        OnGetCard,
+        BuildTower,
+        CreateMonster,
+        PlaceSpell,
+        SpawnWave,
+        UpdateCastleHp,
+        KillMonster,
+        UpdateMonsterHp,
+        UpgradeTower,
+        SellTower
     }
     public enum GachaType
     {
@@ -57,7 +74,7 @@ namespace MythicEmpire.Enums
         Legend
 
     }
-    public enum TypeTile
+    public enum OwnerType
     {
         None,
         Player,
@@ -67,5 +84,18 @@ namespace MythicEmpire.Enums
     {
         Player,
         Opponent
+    }
+    public enum GameResult
+    {
+        Win,
+        Draw,
+        Loss
+    }
+    public enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
     }
 }

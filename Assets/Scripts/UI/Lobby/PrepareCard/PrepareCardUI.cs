@@ -6,8 +6,12 @@ using MythicEmpire.Enums;
 using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
+using MythicEmpire.Networking;
 using Newtonsoft.Json.Serialization;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VContainer;
@@ -18,6 +22,7 @@ namespace MythicEmpire.UI.Lobby
     {
         [Header("UI")] [Inject] private CardManager _cardManager;
         [Inject] private UserModel _userModel;
+        [Inject] private IRealtimeCommunication _realtimeCommunication;
         [SerializeField] private CardBaseUI prefabs;
         [SerializeField] private Transform parents;
         [SerializeField] private ModeGame mode;
@@ -27,7 +32,10 @@ namespace MythicEmpire.UI.Lobby
         [FormerlySerializedAs("_listSlot")] [Header("Handle action")] [SerializeField]
         private List<CardSlot> _listCardSlot;
 
+        [SerializeField] private GameObject _framePanel;
+        [SerializeField] private GameObject _waitingPanel;
 
+        public TMP_Text timeTxt;
         private void HandleListCardSelected(object card)
         {
             var cardSelected = (CardUIDrag)card;
@@ -35,6 +43,7 @@ namespace MythicEmpire.UI.Lobby
             {
                 if (slot.transform.childCount == 0)
                 {
+                    _listItems.Remove(cardSelected);
                     slot.SetParentFor(cardSelected);
                     return;
                 }
@@ -44,15 +53,71 @@ namespace MythicEmpire.UI.Lobby
         private void Awake()
         {
             _listItems = new List<CardBaseUI>();
+            mainAction = new List<Action>();
         }
 
+        private List<Action> mainAction;
+        private void Update()
+        {
+            if (mainAction.Count > 0)
+            {
+                mainAction[0].Invoke();
+                mainAction.RemoveAt(0);
+            }
+        }
         private void Start()
         {
             EventManager.Instance.RegisterListener(EventID.PrepareListCard, HandleListCardSelected);
+            EventManager.Instance.RegisterListener(EventID.DeselectCardPrepare, HandleDeselected);
+            EventManager.Instance.RegisterListener(EventID.ServerReceiveMatchMaking, time =>
+            {
+                if ((int)time == 0)
+                {
+                    mainAction.Add((() =>
+                    {
+                        _framePanel.SetActive(false);
+                        _waitingPanel.SetActive(true);
+                    }));
+                }
+                mainAction.Add(()=>
+                {
+                    TimeSpan timeSpan = TimeSpan.FromMinutes((int)time);
+                    string formattedTime = timeSpan.ToString(@"hh\:mm");
+                    timeTxt.text = formattedTime;
+                });
+            });
+            EventManager.Instance.RegisterListener(EventID.CancelMatchMakingSuccess, o =>
+            {
+                mainAction.Add((() =>
+                {
+                    _framePanel.SetActive(true);
+                    _waitingPanel.SetActive(false);
+                }));
+            });
+            EventManager.Instance.RegisterListener(EventID.OnStartGame, (o) =>
+            {
+                mainAction.Add(()=> SceneManager.LoadSceneAsync("Game"));
+            });
+        }
+
+        IEnumerator EnableWaitingPanel(bool active)
+        {
+            yield return null;
+            _framePanel.SetActive(!active);
+            _waitingPanel.SetActive(active);
+        }
+
+        private void HandleDeselected(object card)
+        {
+            var cardDeselected = (CardUIDrag)card;
+            cardDeselected.transform.SetParent(parents);
+            _listItems.Add(cardDeselected);
         }
 
         private void OnEnable()
         {
+            _framePanel.SetActive(true);
+            _waitingPanel.SetActive(false);
             _listRender = _userModel.cardListID;
             if (_listItems != null)
             {
@@ -124,11 +189,18 @@ namespace MythicEmpire.UI.Lobby
         public void ButtonReadyClick()
         {
 
-            foreach (var card in GetListCard())
-            {
-                Debug.Log(card);
-            }
-            // Debug.Log(  GetListCard().ToString());
+            // foreach (var card in GetListCard())
+            // {
+            //     Debug.Log(card);
+            // }
+
+            _realtimeCommunication.MatchMakingRequest(GetListCard(), mode);
+            
+        }
+
+        public void ButtonCancelClick()
+        {
+            _realtimeCommunication.CancelMatchMakingRequest();
         }
     }
 }

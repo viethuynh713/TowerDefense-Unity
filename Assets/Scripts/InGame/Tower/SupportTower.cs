@@ -4,24 +4,15 @@ using UnityEngine;
 
 namespace MythicEmpire.InGame
 {
-    public class SupportTower : MonoBehaviour
+    public class SupportTower : Tower
     {
-        private int energyGain;
-        // Start is called before the first frame update
-        void Start()
+        public override void Fire()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        public void GenEnergy()
-        {
-
+            if (canFire)
+            {
+                GameController.Instance.GainEnergy(damage, true);
+                StartCoroutine(LoadBullet());
+            }
         }
     }
 }

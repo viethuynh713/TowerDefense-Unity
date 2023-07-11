@@ -17,22 +17,10 @@ namespace MythicEmpire.UI.Menu
              _verifyUserNetwork.LoginRequest(email, password);
 
         }
-
-       
-
-        public void PostInitialize()
-        {
-            // var id = _userDataLocal.GetOldUserId();
-            // if (id != null)
-            // {
-            //     _verifyUserNetwork.LoginRequest(id);
-            // }
-            // else
-            // {
-            //     SceneManager.LoadScene("Menu");
-            // }
-        }
-
         
+        // public void Start()
+        // {
+        //     throw new System.NotImplementedException();
+        // }
     }
 }
