@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3152610844455097209}
   - component: {fileID: 8743513686217033833}
   m_Layer: 0
-  m_Name: Burning
+  m_Name: Toxic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
