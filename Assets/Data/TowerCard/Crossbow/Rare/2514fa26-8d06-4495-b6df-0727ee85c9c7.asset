@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: 2514fa26-8d06-4495-b6df-0727ee85c9c7
+  m_EditorClassIdentifier: 
+  CardId: 2514fa26-8d06-4495-b6df-0727ee85c9c7
+  CardName: Crossbow
+  CardStar: 5
+  CardImage: {fileID: 21300000, guid: 7332a604c2e138943bdfac14c868a0e1, type: 3}
+  TypeOfCard: 1
+  CardRarity: 2
+  CardStats: {fileID: 11400000, guid: 5d1d4b342ee463b46865f213bcdf46ab, type: 2}
+  GameObjectPrefab: {fileID: 7974010707245570086, guid: 9e77f9c1607c427409368c1bbb13a200,
+    type: 3}

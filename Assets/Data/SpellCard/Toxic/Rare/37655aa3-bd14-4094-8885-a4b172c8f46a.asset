@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: 37655aa3-bd14-4094-8885-a4b172c8f46a
+  m_EditorClassIdentifier: 
+  CardId: 37655aa3-bd14-4094-8885-a4b172c8f46a
+  CardName: Toxic
+  CardStar: 5
+  CardImage: {fileID: 21300000, guid: 0233c574e21eeca41897e3a81d46c98e, type: 3}
+  TypeOfCard: 3
+  CardRarity: 2
+  CardStats: {fileID: 11400000, guid: 7269110f2a130784495b73686240a5e6, type: 2}
+  GameObjectPrefab: {fileID: 5454022167283825771, guid: 2d5c68b855939ce4897a0689c22b8c86,
+    type: 3}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: 25cba7ea-045c-4c3c-9b97-f491124aa2f3
+  m_EditorClassIdentifier: 
+  CardId: 25cba7ea-045c-4c3c-9b97-f491124aa2f3
+  CardName: Slime
+  CardStar: 4
+  CardImage: {fileID: 21300000, guid: 99a720186150e1b46934816b05a08b52, type: 3}
+  TypeOfCard: 2
+  CardRarity: 3
+  CardStats: {fileID: 11400000, guid: ec9d3f5c9f187c74588a7dc0375a7917, type: 2}
+  GameObjectPrefab: {fileID: 4726796188570413458, guid: c061428b791435d4d98d1c0790c90c8e,
+    type: 3}

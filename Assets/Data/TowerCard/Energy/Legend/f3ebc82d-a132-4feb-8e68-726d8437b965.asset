@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: f3ebc82d-a132-4feb-8e68-726d8437b965
+  m_EditorClassIdentifier: 
+  CardId: f3ebc82d-a132-4feb-8e68-726d8437b965
+  CardName: Energy
+  CardStar: 0
+  CardImage: {fileID: 21300000, guid: b586f1edcfcedf946b80caff6d75ba42, type: 3}
+  TypeOfCard: 1
+  CardRarity: 4
+  CardStats: {fileID: 11400000, guid: bb6bcbefa15d398478a47d7812494e33, type: 2}
+  GameObjectPrefab: {fileID: 8947637126132632962, guid: 01cc931655d992e4ab6bc66fc3caa0a8,
+    type: 3}

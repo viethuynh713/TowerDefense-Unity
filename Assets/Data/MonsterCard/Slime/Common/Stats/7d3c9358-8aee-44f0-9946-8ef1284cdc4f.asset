@@ -17,5 +17,5 @@ MonoBehaviour:
   AttackSpeed: 1.1
   MoveSpeed: 1.1
   AttackRange: 1.1
-  Damage: 11
-  EnergyGainWhenDie: 10
+  Damage: 10
+  EnergyGainWhenDie: 5

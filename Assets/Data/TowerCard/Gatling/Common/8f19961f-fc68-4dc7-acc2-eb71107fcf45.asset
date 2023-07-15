@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: 8f19961f-fc68-4dc7-acc2-eb71107fcf45
+  m_EditorClassIdentifier: 
+  CardId: 8f19961f-fc68-4dc7-acc2-eb71107fcf45
+  CardName: Gatling
+  CardStar: 2
+  CardImage: {fileID: 21300000, guid: 9f9cb6e2ae4c26841adca1aafc92d2c1, type: 3}
+  TypeOfCard: 1
+  CardRarity: 1
+  CardStats: {fileID: 11400000, guid: 030e2ac3b8e556244bf61dad33130292, type: 2}
+  GameObjectPrefab: {fileID: 1603723563434780671, guid: 9b0ac41b8aff84c4990881fb7557acc1,
+    type: 3}
