@@ -1389,7 +1389,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapService: {fileID: 594905404}
-  energy: 0
 --- !u!1 &824900245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,7 +1859,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1794869099}
   m_Direction: 1
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -3012,7 +3011,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -14.690979, y: 33}
+  m_AnchoredPosition: {x: -14.6909485, y: 33}
   m_SizeDelta: {x: 59, y: 52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1794869100

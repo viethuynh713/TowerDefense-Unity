@@ -18,7 +18,9 @@ namespace MythicEmpire.InGame
         [Inject] private IRealtimeCommunication _realtimeCommunication;
         [Inject] private UserModel _userModel;
 
-        public int energy = 100;
+        private int energy = 100;
+
+        private ModeGame _modeGame;
 
         public void Start()
         {
@@ -83,26 +85,26 @@ namespace MythicEmpire.InGame
             }
         }
 
-        public void CastleTakeDamage(string ownerId, string monsterId, int damage)
+        public void CastleTakeDamage(CastleTakeDamageData data)
         {
-            if(ownerId == _userModel.userId) return;
-            var data = new CastleTakeDamageData()
-            {
-                monsterId = monsterId,
-                HpLose = damage,
-            };
+            // if(ownerId == _userModel.userId) return;
+            // var data = new CastleTakeDamageData()
+            // {
+            //     monsterId = monsterId,
+            //     HpLose = damage,
+            // };
             _realtimeCommunication.CastleTakeDamage(data);
         }
         
-        public void UpdateMonsterHp(string ownerId, string monsterId, int hp)
+        public void UpdateMonsterHp(MonsterTakeDamageData data)
         {
-            if(ownerId != _userModel.userId)return;
-            
-            MonsterTakeDamageData data = new MonsterTakeDamageData()
-            {
-                monsterId = monsterId,
-                damage = hp
-            };
+            // if(ownerId != _userModel.userId)return;
+            //
+            // MonsterTakeDamageData data = new MonsterTakeDamageData()
+            // {
+            //     monsterId = monsterId,
+            //     damage = hp
+            // };
             _realtimeCommunication.UpdateMonsterHp(data);
         }
     }

@@ -34,7 +34,8 @@ namespace MythicEmpire.Enums
         KillMonster,
         UpdateMonsterHp,
         UpgradeTower,
-        SellTower
+        SellTower,
+        SetMode
     }
     public enum GachaType
     {

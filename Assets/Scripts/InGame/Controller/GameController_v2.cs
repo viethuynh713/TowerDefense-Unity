@@ -31,13 +31,12 @@ namespace MythicEmpire.InGame
         {
 
             mainThreadAction = new List<Action>();
-            _realtimeCommunication.GetCard();
-            _realtimeCommunication.GetMap();
+            _realtimeCommunication.GetGameInfo();
 
             EventManager.Instance.RegisterListener(EventID.CreateMonster, o => mainThreadAction.Add(()=>CreateMonster((MonsterModel)o)));
             EventManager.Instance.RegisterListener(EventID.BuildTower, o => mainThreadAction.Add(()=>BuildTower((TowerModel)o)));
             EventManager.Instance.RegisterListener(EventID.PlaceSpell, o => mainThreadAction.Add(()=>PlaceSpell((SpellModel)o)));
-            EventManager.Instance.RegisterListener(EventID.SpawnWave, o => mainThreadAction.Add(()=>StartCoroutine(SpawnWave((List<string>)o))));
+            EventManager.Instance.RegisterListener(EventID.SpawnWave, o => mainThreadAction.Add(()=>SpawnWave((MonsterModel)o)));
         }
 
         private void Update()
@@ -63,6 +62,7 @@ namespace MythicEmpire.InGame
             var cardInfo = _cardManager.GetCardById(data.cardId);
             var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
+            // TODO: create new stats.
             monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,true,(MonsterStats)cardInfo.CardStats, _userModel.userId == data.ownerId);
         }
 
@@ -74,10 +74,13 @@ namespace MythicEmpire.InGame
             spell.GetComponent<Spell>().Init(data.spellId,data.ownerId,(SpellStats)cardInfo.CardStats);
         }
 
-        public IEnumerator SpawnWave(List<string> cards)
+        public void SpawnWave(MonsterModel data)
         {
-            Debug.Log(cards.Count);
-            yield return null;
+            // Debug.Log(data.monsterId);
+            var cardInfo = _cardManager.GetCardById(data.cardId);
+            var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
+                quaternion.identity);
+            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,false,(MonsterStats)cardInfo.CardStats, _userModel.userId == data.ownerId);
         }
     }
 }

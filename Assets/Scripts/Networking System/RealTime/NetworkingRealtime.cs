@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using InGame.Map;
 using Microsoft.AspNetCore.SignalR.Client;
 using MythicEmpire.Enums;
+using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using MythicEmpire.Networking.Model;
@@ -29,8 +30,7 @@ namespace MythicEmpire.Networking
         PlaceSpell,
         CastleTakeDamage,
         UpdateMonsterHp,
-        GetMyCard,
-        GetMap,
+        GetGameInfo,
         UpgradeTower,
         SellTower
     }
@@ -52,9 +52,9 @@ namespace MythicEmpire.Networking
                 await Task.Delay(new Random().Next(0,5) * 1000);
                 await _hubConnection.StartAsync();
             };
-            _hubConnection.On<string, string>("ReceiveMessage", (user, msg) =>
+            _hubConnection.On<string>("NotifyStatus", ( msg) =>
             {
-                Debug.Log($"{user} send message: {msg}");
+                Notification.Instance.NotifyStatus(msg);
             });
             // Process in Lobby
             _hubConnection.On<int>("OnReceiveMatchMakingSuccess", (data) =>
@@ -71,23 +71,17 @@ namespace MythicEmpire.Networking
             {
                 _gameId = Encoding.UTF8.GetString(data);
                 // SceneManager.LoadSceneAsync("Game");
-                EventManager.Instance.PostEvent(EventID.OnStartGame, _gameId);
+                EventManager.Instance.PostEvent(EventID.OnStartGame);
             });
             // Process in game
-            _hubConnection.On<byte[]>("OnGetMap" ,(data)=>
+            _hubConnection.On<byte[]>("OnGameInfo" ,(data)=>
             {
-                LogicTile[][] map = JsonConvert.DeserializeObject<LogicTile[][]>(Encoding.UTF8.GetString(data));
-                Debug.Log($"Get Map Success : {Encoding.UTF8.GetString(data)} ");
-                EventManager.Instance.PostEvent(EventID.OnGetMap, map);
-
-            });
-            _hubConnection.On<byte[]>("OnGetCards" ,(data)=>
-            {
-                List<string> cards = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(data));
-                Debug.Log($"Get cards Success: {Encoding.UTF8.GetString(data)}");
-
-                EventManager.Instance.PostEvent(EventID.RenderListCard,cards);
-
+                var gameInfoSenderData = JsonConvert.DeserializeObject<GameInfoSenderData>(Encoding.UTF8.GetString(data));
+                Debug.Log($"Get game data Success : {Encoding.UTF8.GetString(data)} ");
+                // _gameId = gameInfoSenderData.gameId;
+                EventManager.Instance.PostEvent(EventID.OnGetMap, gameInfoSenderData.map);
+                EventManager.Instance.PostEvent(EventID.RenderListCard,gameInfoSenderData.myListCard);
+                EventManager.Instance.PostEvent(EventID.SetMode,gameInfoSenderData.mode);
 
             });
             _hubConnection.On<byte[]>("BuildTower", (data) =>
@@ -129,18 +123,17 @@ namespace MythicEmpire.Networking
             {
                 var jsonData = Encoding.UTF8.GetString(data);
                 var castleData = JsonConvert.DeserializeObject<CastleTakeDamageSender>(jsonData);
-                // Debug.Log("CastleHp: " + castleData.c);
+                Debug.Log("CastleHp: " + castleData.indexPackage);
                 EventManager.Instance.PostEvent(EventID.UpdateCastleHp,castleData);
 
 
             });
-            _hubConnection.On<byte[]>("SpawnWave", (data) =>
+            _hubConnection.On<byte[]>("SpawnMonsterWave", (data) =>
             {
-                var stringListCard = Encoding.UTF8.GetString(data);
-                
-                List<string> cards = JsonConvert.DeserializeObject<List<string>>(stringListCard);
-                
-                EventManager.Instance.PostEvent(EventID.SpawnWave,cards);
+                string jsonMonsterModel = Encoding.UTF8.GetString(data);
+                MonsterModel model = JsonConvert.DeserializeObject<MonsterModel>(jsonMonsterModel);
+                Debug.Log("Spawn");
+                EventManager.Instance.PostEvent(EventID.SpawnWave,model);
                 
             });
             _hubConnection.On<byte[]>("UpdateWaveTime", (data) =>
@@ -265,25 +258,11 @@ namespace MythicEmpire.Networking
     
         }
 
-        public async Task GetMap()
+        public async Task GetGameInfo()
         {
             JObject jsonString = new JObject(
                 new JProperty("senderId", _userModel.userId),
-                new JProperty("actionId",ActionId.GetMap),
-                new JProperty("gameId", _gameId),
-                new JProperty("data", "")
-            );
-            Debug.Log(jsonString.ToString());
-
-            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
-            await _hubConnection.SendAsync("OnListeningData", byteArray);
-        }
-
-        public async Task GetCard()
-        {
-            JObject jsonString = new JObject(
-                new JProperty("senderId", _userModel.userId),
-                new JProperty("actionId",ActionId.GetMyCard),
+                new JProperty("actionId",ActionId.GetGameInfo),
                 new JProperty("gameId", _gameId),
                 new JProperty("data", "")
             );
@@ -301,7 +280,7 @@ namespace MythicEmpire.Networking
                 new JProperty("gameId", _gameId),
                 new JProperty("data", JsonConvert.SerializeObject(data))
             );
-            Debug.Log(jsonString.ToString());
+            // Debug.Log(jsonString.ToString());
 
             byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
             await _hubConnection.SendAsync("OnListeningData", byteArray);

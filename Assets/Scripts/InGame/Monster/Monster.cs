@@ -8,6 +8,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using MythicEmpire.Card;
 using MythicEmpire.Manager.MythicEmpire.Manager;
+using Networking_System.Model;
 using Networking_System.Model.ReceiveData;
 using Newtonsoft.Json.Linq;
 
@@ -36,7 +37,8 @@ namespace MythicEmpire.InGame
         private int _damage;
         private MonsterStats _monsterStats;
         private MonsterAnimation _monsterAnimation;
-
+        private int indexPackageUpdateHp;
+        private int indexPackageUpdateCastle;
         [SerializeField] private MonsterUI _monsterUI;
 
         private void Awake()
@@ -53,8 +55,22 @@ namespace MythicEmpire.InGame
             _monsterAnimation = GetComponent<MonsterAnimation>();
             EventManager.Instance.RegisterListener(EventID.UpdateMonsterHp, HandleUpdateHp);
             EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
+            // EventManager.Instance.RegisterListener(EventID.UpdateCastleHp, HandleUpdateCastleHp);
             
         }
+
+        // private void HandleUpdateCastleHp(object data)
+        // {
+        //     GameController_v2.Instance.mainThreadAction.Add(() =>
+        //     {
+        //         var castleData = (CastleTakeDamageSender)data;
+        //         if (castleData.userId == _ownerId)
+        //         {
+        //             indexPackageUpdateCastle = castleData.indexPackage;
+        //             Debug.Log($"... {indexPackageUpdateCastle}=>{castleData.indexPackage}");
+        //         }
+        //     });
+        // }
 
         public void HandleUpdateHp(object o)
         {
@@ -63,6 +79,8 @@ namespace MythicEmpire.InGame
                 var data = (UpdateMonsterHpDataSender)o;
                 if (data.monsterId == _id)
                 {
+                    if(data.indexPackage <= indexPackageUpdateHp)return;
+                    indexPackageUpdateHp = data.indexPackage;
                     _hp = data.currentHp;
                     _monsterUI.UpdateMonsterHp(_maxHp, _hp);
                 }
@@ -107,6 +125,8 @@ namespace MythicEmpire.InGame
             _id = monsterId;
             _isSummonedByPlayer = isSummonedByPlayer;
             _monsterUI.Init(_maxHp,isMyMonster);
+            indexPackageUpdateHp = 0;
+            indexPackageUpdateCastle = 0;
             FindPath();
         }
 
@@ -155,7 +175,14 @@ namespace MythicEmpire.InGame
         {
             _monsterAnimation.PlayAnimation("attack");
             _isOnPath = true;
-            PlayerController_v2.Instance.CastleTakeDamage(_ownerId, _id, 1);
+            CastleTakeDamageData data = new CastleTakeDamageData()
+            {
+                HpLose = 1,
+                indexPackage = indexPackageUpdateCastle,
+                monsterId = _id,
+                ownerId = _ownerId,
+            };
+            PlayerController_v2.Instance.CastleTakeDamage(data);
             // gameObject.SetActive(false);
         }
 
@@ -169,7 +196,14 @@ namespace MythicEmpire.InGame
             //         this._hp = _maxHp;
             //     }
             // }
-            PlayerController_v2.Instance.UpdateMonsterHp(_ownerId,_id,hp);
+            MonsterTakeDamageData data = new MonsterTakeDamageData()
+            {
+                damage = hp,
+                indexPackage = indexPackageUpdateHp,
+                monsterId = _id,
+                ownerId = _ownerId,
+            };
+            PlayerController_v2.Instance.UpdateMonsterHp(data);
 
         }
 
@@ -183,7 +217,14 @@ namespace MythicEmpire.InGame
             //         Die();
             //     }
             // }
-            PlayerController_v2.Instance.UpdateMonsterHp(_ownerId,_id,-dmg);
+            MonsterTakeDamageData data = new MonsterTakeDamageData()
+            {
+                damage = -dmg,
+                indexPackage = indexPackageUpdateHp,
+                monsterId = _id,
+                ownerId = _ownerId,
+            };
+            PlayerController_v2.Instance.UpdateMonsterHp(data);
 
         }
 

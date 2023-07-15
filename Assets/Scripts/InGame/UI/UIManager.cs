@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
@@ -66,9 +67,9 @@ namespace MythicEmpire.InGame.UI
         private void UpdateWaveTime(object obj)
         {
             var wave = (Wave)obj;
-            // Debug.Log($"WaveTime: {wave.maxTimeWaiting}/{wave.currentTime}");
+            // Debug.Log($"WaveTime: {wave.currentTime}/{wave.maxTimeWaiting}");
             _waveTimeSlider.maxValue = wave.maxTimeWaiting;
-            _waveTimeSlider.value = wave.currentTime;
+            _waveTimeSlider.DOValue(wave.maxTimeWaiting - wave.currentTime, 1);
         }
 
         private void UpdateEnergy(object newEnergy)
