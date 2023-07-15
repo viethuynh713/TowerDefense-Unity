@@ -8,17 +8,14 @@ using UnityEngine.Networking;
 public class PushAllCardToDatabase : MonoBehaviour
 {
     public CardManager Manager;
-    public string url = "https://localhost:7097/api/CardControl/addcard";
+    public string url;
     private string test;
     public void Start()
     {
         foreach (var card in Manager.GetMultiCard())
         {
             StartCoroutine(Push(card));
-            // Debug.Log(JsonConvert.SerializeObject(card));
         }
-        // var data = Manager.GetCardById("0e47c4ae-ff6d-4785-b98f-002a537055f2");
-        // Debug.Log(data);
     }
 
     IEnumerator Push(CardInfo data)
@@ -49,7 +46,8 @@ public class PushAllCardToDatabase : MonoBehaviour
             new JProperty("CardName", data.CardName),
             new JProperty("CardStar", data.CardStar),
             new JProperty("TypeOfCard", (int)data.TypeOfCard),
-            new JProperty("CardRarity", (int)data.CardRarity)
+            new JProperty("CardRarity", (int)data.CardRarity),
+            new JProperty("Energy", data.CardStats.Energy)
             
         );
         Debug.Log(jsonObj.ToString());
