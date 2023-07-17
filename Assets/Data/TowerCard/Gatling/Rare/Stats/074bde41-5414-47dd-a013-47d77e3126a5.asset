@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b12d977f80448c6861aba1bdb62c652, type: 3}
   m_Name: 074bde41-5414-47dd-a013-47d77e3126a5
   m_EditorClassIdentifier: 
-  Energy: 0
+  Energy: 32
   Damage: 0
   AttackSpeed: 0
   FireRange: 0
