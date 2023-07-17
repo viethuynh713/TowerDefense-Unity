@@ -32,7 +32,8 @@ namespace MythicEmpire.Networking
         UpdateMonsterHp,
         GetGameInfo,
         UpgradeTower,
-        SellTower
+        SellTower,
+        UpdateMonsterPosition
     }
     public class NetworkingRealtime : IStartable, IRealtimeCommunication
     {
@@ -86,22 +87,22 @@ namespace MythicEmpire.Networking
             });
             _hubConnection.On<byte[]>("BuildTower", (data) =>
             {
-                Debug.Log("BuildTower networking");
                 string jsonTowerModel = Encoding.UTF8.GetString(data);
+                Debug.Log("BuildTower networking : " + jsonTowerModel);
                 TowerModel model = JsonConvert.DeserializeObject<TowerModel>(jsonTowerModel);
                 EventManager.Instance.PostEvent(EventID.BuildTower,model);
             });
             _hubConnection.On<byte[]>("CreateMonster", (data) =>
             {
-                Debug.Log("CreateMonster networking");
                 string jsonMonsterModel = Encoding.UTF8.GetString(data);
+                Debug.Log("CreateMonster networking: " + jsonMonsterModel);
                 MonsterModel model = JsonConvert.DeserializeObject<MonsterModel>(jsonMonsterModel);
                 EventManager.Instance.PostEvent(EventID.CreateMonster,model);
             });
             _hubConnection.On<byte[]>("PlaceSpell", (data) =>
             {
-                Debug.Log("PlaceSpell networking");
                 string jsonSpellModel = Encoding.UTF8.GetString(data);
+                Debug.Log("PlaceSpell networking: " + jsonSpellModel);
                 SpellModel model = JsonConvert.DeserializeObject<SpellModel>(jsonSpellModel);
                 EventManager.Instance.PostEvent(EventID.PlaceSpell,model);
             });
@@ -165,9 +166,10 @@ namespace MythicEmpire.Networking
             });
             _hubConnection.On<byte[]>("SellTower", (data) =>
             {
-                var towerId = Encoding.UTF8.GetString(data);
-                Debug.Log($"SellTower: {towerId}");
-                EventManager.Instance.PostEvent(EventID.SellTower, towerId);
+                var jsonData = Encoding.UTF8.GetString(data);
+                var towerModel = JsonConvert.DeserializeObject<TowerModel>(jsonData);
+                Debug.Log($"SellTower: {jsonData}");
+                EventManager.Instance.PostEvent(EventID.SellTower, towerModel);
             });
             _hubConnection.On<byte[]>("OnEndGame", (data) =>
             {
@@ -277,6 +279,48 @@ namespace MythicEmpire.Networking
             JObject jsonString = new JObject(
                 new JProperty("senderId", _userModel.userId),
                 new JProperty("actionId",ActionId.UpdateMonsterHp),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            // Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
+        public async Task UpdatePosition(UpdateMonsterPositionData data)
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.UpdateMonsterPosition),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            // Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
+        public async Task SellTowerRequest(SellTowerData data)
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.SellTower),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            // Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
+        public async Task UpgradeTower(UpgradeTowerData data)
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.UpgradeTower),
                 new JProperty("gameId", _gameId),
                 new JProperty("data", JsonConvert.SerializeObject(data))
             );

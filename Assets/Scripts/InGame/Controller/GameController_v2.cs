@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
@@ -22,6 +23,8 @@ namespace MythicEmpire.InGame
         [Inject] private CardManager _cardManager;
 
         public List<Action> mainThreadAction;
+
+        private List<Tower> _towers;
         public void Awake()
         {
             Instance = this;
@@ -29,7 +32,7 @@ namespace MythicEmpire.InGame
 
         private void Start()
         {
-
+            _towers = new List<Tower>();
             mainThreadAction = new List<Action>();
             _realtimeCommunication.GetGameInfo();
 
@@ -37,6 +40,18 @@ namespace MythicEmpire.InGame
             EventManager.Instance.RegisterListener(EventID.BuildTower, o => mainThreadAction.Add(()=>BuildTower((TowerModel)o)));
             EventManager.Instance.RegisterListener(EventID.PlaceSpell, o => mainThreadAction.Add(()=>PlaceSpell((SpellModel)o)));
             EventManager.Instance.RegisterListener(EventID.SpawnWave, o => mainThreadAction.Add(()=>SpawnWave((MonsterModel)o)));
+            EventManager.Instance.RegisterListener(EventID.SellTower, o => mainThreadAction.Add(()=>SellTower((TowerModel)o)));
+        }
+
+        private void SellTower(TowerModel towerModel)
+        {
+            var tower = _towers.FirstOrDefault(tower => tower.Id == towerModel.towerId);
+            if (tower != null)
+            {
+                tower.Sell();
+                mapService.ReleaseTile(towerModel.XLogicPosition, towerModel.YLogicPosition);
+            }
+            
         }
 
         private void Update()
@@ -53,6 +68,9 @@ namespace MythicEmpire.InGame
             var tower = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
             tower.GetComponent<Tower>().Init(data.towerId,data.ownerId, new Vector2Int(data.XLogicPosition,data.YLogicPosition),(TowerStats)cardInfo.CardStats);
+            
+            _towers.Add(tower.GetComponent<Tower>());
+            
             mapService.BanPosition(data.XLogicPosition, data.YLogicPosition);
             
         }
@@ -72,6 +90,8 @@ namespace MythicEmpire.InGame
             var spell = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
             spell.GetComponent<Spell>().Init(data.spellId,data.ownerId,(SpellStats)cardInfo.CardStats);
+            Debug.Log(spell.name);
+
         }
 
         public void SpawnWave(MonsterModel data)

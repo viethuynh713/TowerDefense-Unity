@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
+using MythicEmpire.Manager.MythicEmpire.Manager;
 
 namespace MythicEmpire.InGame
 {
@@ -26,21 +27,9 @@ namespace MythicEmpire.InGame
         protected float bulletSpeed;
 
         [SerializeField] protected TowerUI canvas;
-        
-        // Start is called before the first frame update
-        protected void Start()
+
+        public void Start()
         {
-            // damageLevel = 1;
-            // rangeLevel = 1;
-            // attackSpeedLevel = 1;
-            //
-            // damage = stats.Damage;
-            // attackSpeed = stats.AttackSpeed;
-            // fireRange = stats.FireRange;
-            // exploreRange = stats.ExploreRange;
-            // bulletSpeed = stats.BulletSpeed;
-            //
-            // canFire = true;
         }
 
         public void Init(string towerId, string ownerId, Vector2Int logicPos, TowerStats stats)
@@ -62,7 +51,7 @@ namespace MythicEmpire.InGame
 
             canFire = true;
             
-            canvas.SetElementPosition(transform.position);
+            canvas.SetElementPosition(id, transform.position);
             canvas.gameObject.SetActive(false);
         }
 
@@ -70,7 +59,7 @@ namespace MythicEmpire.InGame
         void Update()
         {
             Fire();
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(2))
             {
                 canvas.gameObject.SetActive(false);
             }
@@ -111,7 +100,6 @@ namespace MythicEmpire.InGame
         public void Sell()
         {
             canvas.gameObject.SetActive(false);
-            // GameController.Instance.SellTower(logicPos, isMyPlayer, stats.Energy / 2);
             Destroy(gameObject);
         }
 
@@ -122,7 +110,7 @@ namespace MythicEmpire.InGame
             canFire = true;
         }
 
-        public void OnMouseUp()
+        public void ActiveUI()
         {
             canvas.gameObject.SetActive(!canvas.gameObject.activeInHierarchy);
         }

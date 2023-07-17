@@ -57,7 +57,7 @@ namespace MythicEmpire.InGame.UI
             Debug.Log("Count card: "+listMyCard.Count);
             foreach (var cardId in listMyCard)
             {
-                Debug.Log("card id: "+cardId);
+                // Debug.Log("card id: "+cardId);
 
                 var cardUI = Instantiate(_cardUIPrefab, _parentCards);
                 cardUI.SetUI(_cardManager.GetCardById(cardId));

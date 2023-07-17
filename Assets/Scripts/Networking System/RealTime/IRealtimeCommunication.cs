@@ -17,5 +17,8 @@ namespace MythicEmpire.Networking
         Task CastleTakeDamage(CastleTakeDamageData data);
         Task GetGameInfo();
         Task UpdateMonsterHp(MonsterTakeDamageData data);
+        Task UpdatePosition(UpdateMonsterPositionData data);
+        Task SellTowerRequest(SellTowerData data);
+        Task UpgradeTower(UpgradeTowerData data);
     }
 }

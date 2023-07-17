@@ -6,8 +6,10 @@
         public string cardId;
         public string ownerId;
         public int monsterHp;
-        public int XLogicPosition;
-        public int YLogicPosition;
+        public int maxHp;
+        public float XLogicPosition;
+        public float YLogicPosition;
+        public int EnergyGainWhenDie;
 
     }
     public class TowerModel

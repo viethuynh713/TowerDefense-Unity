@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
@@ -17,6 +18,7 @@ namespace MythicEmpire.InGame
         [SerializeField] private MapService_v2 _mapService;
         [Inject] private IRealtimeCommunication _realtimeCommunication;
         [Inject] private UserModel _userModel;
+        
 
         private int energy = 100;
 
@@ -31,6 +33,23 @@ namespace MythicEmpire.InGame
         private void Awake()
         {
             Instance = this;
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit raycast))
+                {
+                    Tower tower;
+                    if (raycast.collider.TryGetComponent<Tower>(out tower))
+                    {
+                        if (tower.OwnerId == _userModel.userId)
+                            tower.ActiveUI();
+                    }
+                }
+            }
         }
 
         private void UpdateEnergy(object newEnergy)
@@ -87,25 +106,27 @@ namespace MythicEmpire.InGame
 
         public void CastleTakeDamage(CastleTakeDamageData data)
         {
-            // if(ownerId == _userModel.userId) return;
-            // var data = new CastleTakeDamageData()
-            // {
-            //     monsterId = monsterId,
-            //     HpLose = damage,
-            // };
             _realtimeCommunication.CastleTakeDamage(data);
         }
         
         public void UpdateMonsterHp(MonsterTakeDamageData data)
         {
-            // if(ownerId != _userModel.userId)return;
-            //
-            // MonsterTakeDamageData data = new MonsterTakeDamageData()
-            // {
-            //     monsterId = monsterId,
-            //     damage = hp
-            // };
             _realtimeCommunication.UpdateMonsterHp(data);
+        }
+
+        public void UpdateMonsterPosition(UpdateMonsterPositionData data)
+        {
+            _realtimeCommunication.UpdatePosition(data);
+        }
+
+        public void SellTower(SellTowerData data)
+        {
+            _realtimeCommunication.SellTowerRequest(data);
+        }
+
+        public  void UpgradeTower(UpgradeTowerData data)
+        {
+            _realtimeCommunication.UpgradeTower(data);
         }
     }
 

@@ -8,6 +8,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using MythicEmpire.Card;
 using MythicEmpire.Manager.MythicEmpire.Manager;
+using MythicEmpire.Networking.Model;
 using Networking_System.Model;
 using Networking_System.Model.ReceiveData;
 using Newtonsoft.Json.Linq;
@@ -55,23 +56,37 @@ namespace MythicEmpire.InGame
             _monsterAnimation = GetComponent<MonsterAnimation>();
             EventManager.Instance.RegisterListener(EventID.UpdateMonsterHp, HandleUpdateHp);
             EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
-            // EventManager.Instance.RegisterListener(EventID.UpdateCastleHp, HandleUpdateCastleHp);
-            
+            EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPath);
+            EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPath);
+            StartCoroutine(UpdatePosition());
+
         }
 
-        // private void HandleUpdateCastleHp(object data)
-        // {
-        //     GameController_v2.Instance.mainThreadAction.Add(() =>
-        //     {
-        //         var castleData = (CastleTakeDamageSender)data;
-        //         if (castleData.userId == _ownerId)
-        //         {
-        //             indexPackageUpdateCastle = castleData.indexPackage;
-        //             Debug.Log($"... {indexPackageUpdateCastle}=>{castleData.indexPackage}");
-        //         }
-        //     });
-        // }
+        private UpdateMonsterPositionData _positionData = new UpdateMonsterPositionData();
+        IEnumerator UpdatePosition()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.5f);
+                _positionData.monsterId = _id;
+                _positionData.ownerId = _ownerId;
+                _positionData.Xposition = transform.position.x;
+                _positionData.YPosition = transform.position.z;
+                PlayerController_v2.Instance.UpdateMonsterPosition(_positionData);
+            }
 
+        }
+        private void FindNewPath(object obj)
+        {
+            var data = (TowerModel)obj;
+            GameController_v2.Instance.mainThreadAction.Add(() =>
+            {
+                FindPath(new Vector2Int(data.XLogicPosition,data.YLogicPosition));
+                // Debug.Log("Find new path");
+                
+            });
+        }
+        
         public void HandleUpdateHp(object o)
         {
             GameController_v2.Instance.mainThreadAction.Add(() =>
@@ -100,8 +115,18 @@ namespace MythicEmpire.InGame
 
         private void OnDestroy()
         {
-            EventManager.Instance.RemoveListener(EventID.UpdateMonsterHp,HandleUpdateHp);
-            EventManager.Instance.RemoveListener(EventID.KillMonster, HandleKilledMonster);
+            try
+            {
+                EventManager.Instance.RemoveListener(EventID.UpdateMonsterHp,HandleUpdateHp);
+                EventManager.Instance.RemoveListener(EventID.KillMonster, HandleKilledMonster);
+                EventManager.Instance.RemoveListener(EventID.BuildTower,FindNewPath);
+                EventManager.Instance.RemoveListener(EventID.SellTower,FindNewPath);
+
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public void Init(string monsterId, string ownerId, bool isSummonedByPlayer, MonsterStats stats, bool isMyMonster)
