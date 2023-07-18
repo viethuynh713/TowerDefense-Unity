@@ -7,7 +7,6 @@ using MythicEmpire.Enums;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
 using MythicEmpire.UI;
-using Networking_System.Model.ReceiveData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,13 +39,13 @@ namespace MythicEmpire.InGame.UI
         {
             _endGameUI.gameObject.SetActive(true);
             var data = (EndGameDataSender)result;
-            if (data.playerLose == _userModel.userId)
+            if (data.playerWin == _userModel.userId)
             {
-                _endGameUI.ShowResult(GameResult.Loss, data.totalTime);
+                _endGameUI.ShowResult(GameResult.Win, data.totalTime);
             }
             else
             {
-                _endGameUI.ShowResult(GameResult.Win, data.totalTime);
+                _endGameUI.ShowResult(GameResult.Loss, data.totalTime);
 
             }
         }

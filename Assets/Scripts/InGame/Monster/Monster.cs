@@ -10,7 +10,6 @@ using MythicEmpire.Card;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Networking.Model;
 using Networking_System.Model;
-using Networking_System.Model.ReceiveData;
 using Newtonsoft.Json.Linq;
 
 namespace MythicEmpire.InGame
@@ -291,13 +290,14 @@ namespace MythicEmpire.InGame
             }
         }
 
-        public void Die()
+        private void Die()
         {
-            _isDie = true;
-            // GameController.Instance.GainEnergy(stats.EnergyGainWhenDie, !isMyPlayer);
-            // PlayerController_v2.Instance.GainEnergy(_ownerId, _monsterStats.EnergyGainWhenDie);
-            _monsterAnimation.PlayAnimation("die");
-            StartCoroutine(DieModel());
+            if (!IsDie)
+            {
+                _monsterAnimation.PlayAnimation("die");
+                _isDie = true;
+                Destroy(gameObject, 3);
+            }
         }
 
         private void FindPath(Vector2Int? barrierPos = null)
@@ -319,12 +319,6 @@ namespace MythicEmpire.InGame
         {
             yield return new WaitForSeconds(1 / _attackSpeed);
             _canAttack = true;
-        }
-
-        private IEnumerator DieModel()
-        {
-            yield return new WaitForSeconds(3);
-            Destroy(gameObject);
         }
 
         public string Id { get { return _id; } }

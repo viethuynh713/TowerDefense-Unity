@@ -17,6 +17,7 @@ namespace MythicEmpire.InGame
         }
         public void PlayAnimation(string state)
         {
+            if(anim == null)return;
             switch (state)
             {
                 case "move":

@@ -18,16 +18,22 @@ public class MonsterUI : MonoBehaviour
     public Image background;
     public Image fill;
     public TMPro.TMP_Text hpText;
+    private Camera _camera;
 
+
+    private void Start()
+    {
+        _camera = Camera.main;
+    }
 
     private void Update()
     {
-        this.transform.LookAt(Camera.main.transform);
+        this.transform.LookAt(_camera.transform);
     }
 
     public void UpdateMonsterHp(int maxHp,int currentHp)
     {
-        fill.fillAmount = (currentHp / maxHp);
+        fill.fillAmount = ((float)currentHp /maxHp);
         hpText.text = currentHp.ToString();
     }
 

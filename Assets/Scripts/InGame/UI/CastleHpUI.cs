@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using MythicEmpire.Enums;
 using MythicEmpire.InGame;
 using MythicEmpire.Manager.MythicEmpire.Manager;
-using Networking_System.Model.ReceiveData;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,7 +34,7 @@ public class CastleHpUI : MonoBehaviour
 
         if (playerId != castleData.userId) return;
 
-        fill.fillAmount = (castleData.currentCastleHp / castleData.maxCastleHp);
+        fill.fillAmount = ((float)castleData.currentCastleHp / castleData.maxCastleHp);
         hpText.text = castleData.currentCastleHp.ToString();
     }
 

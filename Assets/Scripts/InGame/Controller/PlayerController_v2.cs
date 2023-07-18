@@ -7,6 +7,7 @@ using MythicEmpire.Model;
 using MythicEmpire.Networking;
 using MythicEmpire.Networking.Model;
 using Networking_System.Model;
+using Networking_System.Model.Data.DataReceive;
 using UnityEngine;
 using VContainer;
 
@@ -127,6 +128,11 @@ namespace MythicEmpire.InGame
         public  void UpgradeTower(UpgradeTowerData data)
         {
             _realtimeCommunication.UpgradeTower(data);
+        }
+
+        public void GainEnergy(AddEnergyData data)
+        {
+            _realtimeCommunication.AddEnergy(data);
         }
     }
 

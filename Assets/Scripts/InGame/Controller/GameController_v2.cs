@@ -41,6 +41,14 @@ namespace MythicEmpire.InGame
             EventManager.Instance.RegisterListener(EventID.PlaceSpell, o => mainThreadAction.Add(()=>PlaceSpell((SpellModel)o)));
             EventManager.Instance.RegisterListener(EventID.SpawnWave, o => mainThreadAction.Add(()=>SpawnWave((MonsterModel)o)));
             EventManager.Instance.RegisterListener(EventID.SellTower, o => mainThreadAction.Add(()=>SellTower((TowerModel)o)));
+            EventManager.Instance.RegisterListener(EventID.UpgradeTower, o => mainThreadAction.Add(()=>UpgradeTower((UpgradeTowerDataSender)o)));
+        }
+
+        private void UpgradeTower(UpgradeTowerDataSender upgradeTowerDataSender)
+        {
+            var tower = _towers.FirstOrDefault(t => t.Id == upgradeTowerDataSender.towerId);
+
+            if (tower != null) tower.Upgrade(upgradeTowerDataSender);
         }
 
         private void SellTower(TowerModel towerModel)

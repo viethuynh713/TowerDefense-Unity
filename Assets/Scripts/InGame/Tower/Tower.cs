@@ -70,32 +70,32 @@ namespace MythicEmpire.InGame
 
         }
 
-        public void UpgradeDamage()
-        {
-            canvas.gameObject.SetActive(false);
-            // if (damageLevel < InGameService.maxTowerLevel)
-            // {
-            //     damage = Mathf.RoundToInt(damage * 1.5f);
-            // }
-        }
-
-        public void UpgradeRange()
-        {
-            canvas.gameObject.SetActive(false);
-            // if (rangeLevel < InGameService.maxTowerLevel)
-            // {
-            //     fireRange *= 1.1f;
-            // }
-        }
-
-        public void UpgradeAttackSpeed()
-        {
-            canvas.gameObject.SetActive(false);
-            // if (attackSpeedLevel < InGameService.maxTowerLevel)
-            // {
-            //     attackSpeed *= 1.1f;
-            // }
-        }
+        // public void UpgradeDamage()
+        // {
+        //     canvas.gameObject.SetActive(false);
+        //     // if (damageLevel < InGameService.maxTowerLevel)
+        //     // {
+        //     //     damage = Mathf.RoundToInt(damage * 1.5f);
+        //     // }
+        // }
+        //
+        // public void UpgradeRange()
+        // {
+        //     canvas.gameObject.SetActive(false);
+        //     // if (rangeLevel < InGameService.maxTowerLevel)
+        //     // {
+        //     //     fireRange *= 1.1f;
+        //     // }
+        // }
+        //
+        // public void UpgradeAttackSpeed()
+        // {
+        //     canvas.gameObject.SetActive(false);
+        //     // if (attackSpeedLevel < InGameService.maxTowerLevel)
+        //     // {
+        //     //     attackSpeed *= 1.1f;
+        //     // }
+        // }
 
         public void Sell()
         {
@@ -118,5 +118,15 @@ namespace MythicEmpire.InGame
         public int Cost { get { return stats.Energy; } }
         public string Id { get { return id; } }
         public string OwnerId { get { return ownerId; } }
+
+        public void Upgrade(UpgradeTowerDataSender upgradeTowerDataSender)
+        {
+            damage = upgradeTowerDataSender.damage;
+            attackSpeed = upgradeTowerDataSender.attackSpeed;
+            fireRange = upgradeTowerDataSender.range;
+            canvas.gameObject.SetActive(false);
+
+
+        }
     }
 }

@@ -4,6 +4,7 @@ using MythicEmpire.Card;
 using MythicEmpire.Enums;
 using MythicEmpire.Networking.Model;
 using Networking_System.Model;
+using Networking_System.Model.Data.DataReceive;
 
 namespace MythicEmpire.Networking
 {
@@ -20,5 +21,6 @@ namespace MythicEmpire.Networking
         Task UpdatePosition(UpdateMonsterPositionData data);
         Task SellTowerRequest(SellTowerData data);
         Task UpgradeTower(UpgradeTowerData data);
+        Task AddEnergy(AddEnergyData data);
     }
 }
