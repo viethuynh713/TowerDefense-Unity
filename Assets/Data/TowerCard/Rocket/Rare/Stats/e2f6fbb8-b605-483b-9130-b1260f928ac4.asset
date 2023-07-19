@@ -15,6 +15,6 @@ MonoBehaviour:
   Energy: 30
   Damage: 0
   AttackSpeed: 0
-  FireRange: 0
-  ExploreRange: 0
-  BulletSpeed: 0
+  FireRange: 2.5
+  ExploreRange: 1
+  BulletSpeed: 1
