@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 713117fe-c12a-4533-8804-25f50c061824
   m_EditorClassIdentifier: 
   Energy: 21
-  Damage: 0
-  AttackSpeed: 0
-  FireRange: 0
-  ExploreRange: 0
-  BulletSpeed: 0
+  Damage: 19
+  AttackSpeed: 1.27
+  FireRange: 2.4
+  ExploreRange: 1
+  BulletSpeed: 1
