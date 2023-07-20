@@ -18,6 +18,6 @@ MonoBehaviour:
   CardImage: {fileID: 21300000, guid: 76ef645e844d4214190288897af9ae06, type: 3}
   TypeOfCard: 1
   CardRarity: 2
-  CardStats: {fileID: 11400000, guid: a1c4561e22312cf49867af3bf2b80129, type: 2}
+  CardStats: {fileID: 11400000, guid: 5056a1b1794a1db4d8ab0fdb80123690, type: 2}
   GameObjectPrefab: {fileID: 2134609463445313423, guid: d0f5ec6083c622a4d9073d2e18b6321d,
     type: 3}
