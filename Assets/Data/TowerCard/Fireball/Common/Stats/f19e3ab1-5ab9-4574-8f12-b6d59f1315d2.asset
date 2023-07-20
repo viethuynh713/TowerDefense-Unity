@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b12d977f80448c6861aba1bdb62c652, type: 3}
+  m_Name: f19e3ab1-5ab9-4574-8f12-b6d59f1315d2
+  m_EditorClassIdentifier: 
+  Energy: 23
+  Damage: 29
+  AttackSpeed: 0.9
+  FireRange: 2.8
+  ExploreRange: 1
+  BulletSpeed: 1
