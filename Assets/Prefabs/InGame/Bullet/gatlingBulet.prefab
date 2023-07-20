@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8203199907653219294}
   - component: {fileID: 2626555281927465514}
   m_Layer: 0
-  m_Name: CannonBullet
+  m_Name: gatlingBulet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8203199907653219295}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.003}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.07, y: 0.07, z: 0.07}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5449003756439595003}
@@ -177,14 +177,6 @@ PrefabInstance:
     - target: {fileID: 400002, guid: 21f6aea0c9b788c4b9b6275efc33d0f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 21f6aea0c9b788c4b9b6275efc33d0f9, type: 3}
-      propertyPath: InitialModule.startSizeY.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 21f6aea0c9b788c4b9b6275efc33d0f9, type: 3}
-      propertyPath: InitialModule.startSizeZ.minMaxState
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19900000, guid: 21f6aea0c9b788c4b9b6275efc33d0f9, type: 3}
       propertyPath: m_Materials.Array.size

@@ -29373,7 +29373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 7494791590168293528}
   animation: {fileID: 6198376791438635075}
-  bullet: {fileID: 2626555281927465514, guid: ef0f3c7781c1578429f9e7d4d9edb71c, type: 3}
+  bullet: {fileID: 711653471034831545, guid: 7fef4685aab925d49817c0351c6c205e, type: 3}
   firePosition: {fileID: 4844184060139997301}
 --- !u!114 &6198376791438635075
 MonoBehaviour:

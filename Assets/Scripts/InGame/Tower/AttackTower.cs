@@ -38,6 +38,8 @@ namespace MythicEmpire.InGame
                         b.Init(_target, damage, exploreRange, bulletSpeed);
                         // wait to load bullet (by attack speed)
                         StartCoroutine(LoadBullet());
+                        CheckTargetRange();
+
                     }
 
             } 

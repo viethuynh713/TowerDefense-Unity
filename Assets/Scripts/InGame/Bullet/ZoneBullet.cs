@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,45 +7,51 @@ namespace MythicEmpire.InGame
 {
     public class ZoneBullet : Bullet
     {
+        [SerializeField]private ParticleSystem exploreVfx;
         public override void Move()
         {
             // if target is die, explore bullet
             if (target == null)
             {
-                DealDamage(damage);
+                Explore();
             }
             // otherwise move to target and explore if colliding target
             else
             {
                 transform.LookAt(target.transform.position);
-                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, bulletSpeed * Time.deltaTime);
-                if ((target.transform.position - transform.position).magnitude < InGameService.infinitesimal)
+                
+                transform.position = Vector3.MoveTowards(transform.position, 
+                    new Vector3(target.transform.position.x, transform.position.y,target.transform.position.z), 
+                    bulletSpeed * Time.deltaTime);
+                
+                if (Vector3.Distance(transform.position,
+                        new Vector3(transform.position.x, transform.position.y,target.transform.position.z)) < InGameService.infinitesimal)
                 {
-                    DealDamage(damage);
+                    Explore();
                 }
             }
         }
-
-        private void DealDamage(int damage)
+        
+        public override void Explore()
         {
-            // if bullet is explore, deal dmg in a zone
-            if (exploreRange > 0)
+            Collider[] results = new Collider[20];
+            var numColliders = Physics.OverlapSphereNonAlloc(transform.position, exploreRange, results);
+
+            for (int i = 0; i < numColliders; i++)
             {
-                Monster[] monsterList = FindObjectsOfType<Monster>();
-                foreach (Monster monster in monsterList)
+                
+                if (results[i].TryGetComponent <Monster>(out var monster))
                 {
-                    if ((monster.transform.position - transform.position).magnitude < exploreRange)
-                    {
-                        monster.TakeDamage(damage);
-                    }
+                    monster.TakeDamage(damage);
                 }
             }
-            // otherwise if target is still alive, deal dmg to target
-            else if (target != null)
-            {
-                target.gameObject.GetComponent<Monster>().TakeDamage(damage);
-            }
             Destroy(gameObject);
+
+        }
+
+        private void OnDestroy()
+        {
+            Instantiate(exploreVfx, transform.position, transform.rotation);
         }
     }
 }

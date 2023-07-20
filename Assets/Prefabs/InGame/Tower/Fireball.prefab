@@ -115,7 +115,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 5037209582369627714}
-  bullet: {fileID: 8203199907653219295, guid: 7fef4685aab925d49817c0351c6c205e, type: 3}
+  animation: {fileID: 0}
+  bullet: {fileID: 711653471034831545, guid: 7fef4685aab925d49817c0351c6c205e, type: 3}
+  firePosition: {fileID: 0}
 --- !u!114 &1082446700742295596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170f5e69c7174194cb6a92b1ea59a9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireVfx: {fileID: 0}
 --- !u!1 &2172393825936218427
 GameObject:
   m_ObjectHideFlags: 0
