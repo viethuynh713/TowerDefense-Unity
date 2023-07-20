@@ -7,6 +7,7 @@ namespace MythicEmpire.InGame
 {
     public class TowerAnimation : MonoBehaviour
     {
+        public ParticleSystem fireVfx;
         public void PlayAnimation(string id, string state, Transform target = null)
         {
             switch (id)
@@ -21,6 +22,17 @@ namespace MythicEmpire.InGame
                             GetComponent<GatlingGun>().go_target = target;
                             break;
                     }
+
+                    break;
+            }
+        }
+
+        public void PlayAnimation(string state)
+        {
+            switch (state)
+            {
+                case "fire":
+                    fireVfx.Play();
                     break;
             }
         }

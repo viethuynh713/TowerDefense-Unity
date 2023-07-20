@@ -128,7 +128,7 @@ namespace MythicEmpire.InGame
             }
         }
 
-        public void Init(string monsterId, string ownerId, bool isSummonedByPlayer, MonsterStats stats, bool isMyMonster)
+        public void Init(string monsterId, string ownerId, bool isSummonedByPlayer, MonsterStats stats, int hp, bool isMyMonster)
         {
             _monsterStats = stats;
             _canAction = true;
@@ -138,7 +138,7 @@ namespace MythicEmpire.InGame
             _speedupRate = 1f;
             _notActionTime = 0f;
 
-            _maxHp = stats.Hp;
+            _maxHp = hp;
             _hp = _maxHp;
             _attackSpeed = stats.AttackSpeed;
             _moveSpeed = stats.MoveSpeed;

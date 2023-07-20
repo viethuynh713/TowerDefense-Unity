@@ -9,13 +9,13 @@ namespace MythicEmpire.InGame
     {
         protected int id;
         protected int ownerId;
-        protected Transform target;
+        protected Monster target;
 
         protected int damage;
         protected float exploreRange;
         protected float bulletSpeed;
 
-        public void Init(Transform target, int damage, float exploreRange, float bulletSpeed)
+        public void Init(Monster target, int damage, float exploreRange, float bulletSpeed)
         {
             this.target = target;
             this.damage = damage;

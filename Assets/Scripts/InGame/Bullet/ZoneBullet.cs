@@ -16,9 +16,9 @@ namespace MythicEmpire.InGame
             // otherwise move to target and explore if colliding target
             else
             {
-                transform.LookAt(target.position);
-                transform.position = Vector3.MoveTowards(transform.position, target.position, bulletSpeed * Time.deltaTime);
-                if ((target.position - transform.position).magnitude < InGameService.infinitesimal)
+                transform.LookAt(target.transform.position);
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, bulletSpeed * Time.deltaTime);
+                if ((target.transform.position - transform.position).magnitude < InGameService.infinitesimal)
                 {
                     DealDamage(damage);
                 }

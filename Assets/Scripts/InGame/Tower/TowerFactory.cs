@@ -13,7 +13,7 @@ namespace MythicEmpire.InGame
         {
             foreach (GameObject tower in towerList)
             {
-                if (tower.GetComponent<Tower>().Id == id)
+                if (tower.GetComponent<Tower>().TowerID == id)
                 {
                     return tower;
                 }

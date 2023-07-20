@@ -46,14 +46,14 @@ namespace MythicEmpire.InGame
 
         private void UpgradeTower(UpgradeTowerDataSender upgradeTowerDataSender)
         {
-            var tower = _towers.FirstOrDefault(t => t.Id == upgradeTowerDataSender.towerId);
+            var tower = _towers.FirstOrDefault(t => t.TowerID == upgradeTowerDataSender.towerId);
 
             if (tower != null) tower.Upgrade(upgradeTowerDataSender);
         }
 
         private void SellTower(TowerModel towerModel)
         {
-            var tower = _towers.FirstOrDefault(tower => tower.Id == towerModel.towerId);
+            var tower = _towers.FirstOrDefault(tower => tower.TowerID == towerModel.towerId);
             if (tower != null)
             {
                 tower.Sell();
@@ -73,9 +73,9 @@ namespace MythicEmpire.InGame
         public void BuildTower(TowerModel data)
         {
             var cardInfo = _cardManager.GetCardById(data.cardId);
-            var tower = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
+            var tower = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0.1f, data.YLogicPosition),
                 quaternion.identity);
-            tower.GetComponent<Tower>().Init(data.towerId,data.ownerId, new Vector2Int(data.XLogicPosition,data.YLogicPosition),(TowerStats)cardInfo.CardStats);
+            tower.GetComponent<Tower>().Init(data.towerId,data.ownerId,(TowerStats)cardInfo.CardStats);
             
             _towers.Add(tower.GetComponent<Tower>());
             
@@ -88,8 +88,8 @@ namespace MythicEmpire.InGame
             var cardInfo = _cardManager.GetCardById(data.cardId);
             var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
-            // TODO: create new stats.
-            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,true,(MonsterStats)cardInfo.CardStats, _userModel.userId == data.ownerId);
+            // TODO: create new stats. -> Done
+            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,true,(MonsterStats)cardInfo.CardStats,data.maxHp, _userModel.userId == data.ownerId);
         }
 
         public void PlaceSpell(SpellModel data)
@@ -108,7 +108,7 @@ namespace MythicEmpire.InGame
             var cardInfo = _cardManager.GetCardById(data.cardId);
             var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
-            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,false,(MonsterStats)cardInfo.CardStats, _userModel.userId == data.ownerId);
+            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,false,(MonsterStats)cardInfo.CardStats, data.maxHp,_userModel.userId == data.ownerId);
         }
     }
 }

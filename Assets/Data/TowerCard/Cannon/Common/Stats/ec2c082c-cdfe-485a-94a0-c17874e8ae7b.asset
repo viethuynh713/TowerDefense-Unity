@@ -17,4 +17,4 @@ MonoBehaviour:
   AttackSpeed: 1.26
   FireRange: 2.4
   ExploreRange: 1
-  BulletSpeed: 1
+  BulletSpeed: 6

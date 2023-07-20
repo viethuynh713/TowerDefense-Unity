@@ -19,7 +19,7 @@ namespace MythicEmpire.InGame
                 // check if monster is in explore range and in degree of explore
                 if ((monster.transform.position - transform.position).magnitude < exploreRange)
                 {
-                    if (Vector3.Angle(monster.transform.position - transform.position, target.position - transform.position) <= 60)
+                    if (Vector3.Angle(monster.transform.position - transform.position, target.transform.position - transform.position) <= 60)
                     {
                         monster.TakeDamage(damage);
                     }

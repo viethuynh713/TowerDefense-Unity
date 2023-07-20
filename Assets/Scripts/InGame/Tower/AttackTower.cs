@@ -8,55 +8,72 @@ namespace MythicEmpire.InGame
 {
     public class AttackTower : Tower
     {
-        [SerializeField] private GameObject bullet;
-
-        public override void Fire()
+        [SerializeField] private Bullet bullet;
+        [SerializeField] private Transform firePosition;
+        private Monster _target = null;
+        
+        protected override void Fire()
         {
-            // if the tower can fire (by attack speed)
+
+            if (_target != null)
+            {
+                transform.LookAt(_target.transform.position);
+                CheckTargetRange();
+            }
+
             if (canFire)
             {
-                // get all monsters in range
-                Collider[] colliders = Physics.OverlapSphere(transform.position, stats.FireRange, InGameService.monsterLayerMask);
 
-                if (colliders.Length > 0)
-                {
-                    // get monster nearest tower
-                    GameObject target = null;
-                    float minDistance = stats.FireRange;
-                    foreach (Collider collider in colliders)
+                    if (_target == null || _target.IsDie)
                     {
-                        var monsterComponent = collider.gameObject.GetComponent<Monster>();
-                        if (!monsterComponent.IsDie)
-                        {
-                            float distance = (transform.position - collider.transform.position).magnitude;
-                            if (distance < minDistance)
-                            {
-                                if (OwnerId != monsterComponent.OwnerId)
-                                {
-                                    target = collider.gameObject;
-                                    minDistance = distance;
-                                }
-                            }
-                        }
+                        _target = null;
+                        FindMonsterTarget();
                     }
-                    // fire to target
-                    if (target != null)
+                    if (_target != null)
                     {
                         // play fire animation
-                        GetComponent<TowerAnimation>().PlayAnimation(id, "fire", target.transform);
-                        // look at monster
-                        transform.LookAt(target.transform.position);
+                        animation.PlayAnimation("fire");
                         // create bullet
-                        GameObject b = Instantiate(bullet, transform.position, transform.rotation);
-                        b.GetComponent<Bullet>().Init(target.transform, damage, exploreRange, bulletSpeed);
+                        Bullet b = Instantiate(bullet, firePosition.position, firePosition.rotation);
+                        b.Init(_target, damage, exploreRange, bulletSpeed);
                         // wait to load bullet (by attack speed)
                         StartCoroutine(LoadBullet());
-                        return;
+                    }
+
+            } 
+        }
+        
+
+        private void FindMonsterTarget()
+        {
+            // get all monsters in range
+            Collider[] colliders = Physics.OverlapSphere(transform.position, fireRange, InGameService.monsterLayerMask);
+
+            if (colliders.Length > 0)
+            {
+
+                // float minDistance = stats.FireRange;
+                foreach (Collider collider in colliders)
+                {
+                    if (!collider.gameObject.TryGetComponent<Monster>(out var monsterComponent)) return;
+                    if (monsterComponent.OwnerId == _ownerId) return;
+                    if (!monsterComponent.IsDie)
+                    {
+
+                        _target = monsterComponent;
+                        
                     }
                 }
+
             }
-            // play idle animation
-            GetComponent<TowerAnimation>().PlayAnimation(id, "idle");
+        }
+
+        private void CheckTargetRange()
+        {
+            if (Vector3.Distance(transform.position, new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z)) < fireRange)
+            {
+                _target = null;
+            }
         }
     }
 }

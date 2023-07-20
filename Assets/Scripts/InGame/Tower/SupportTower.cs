@@ -8,15 +8,16 @@ namespace MythicEmpire.InGame
     public class SupportTower : Tower
     {
         private AddEnergyData data = new AddEnergyData();
-        
-        public override void Fire()
+
+        protected override void Fire()
         {
             if (canFire)
             {
                 data.energy = damage;
-                data.ownerId = ownerId;
-                data.towerId = id;
+                data.ownerId = _ownerId;
+                data.towerId = _towerID;
                 PlayerController_v2.Instance.GainEnergy(data);
+                animation.PlayAnimation("fire");
                 StartCoroutine(LoadBullet());
             }
         }

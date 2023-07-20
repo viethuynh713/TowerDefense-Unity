@@ -6,54 +6,40 @@ namespace MythicEmpire.InGame
 {
     public class DirectionalBullet : Bullet
     {
+        
         public override void Move()
         {
             // if target is die, explore bullet
-            if (target == null)
+            if (target == null || target.IsDie)
             {
-                DealDamage(damage);
+                Destroy(gameObject);
+
             }
             // otherwise move to target and explore if colliding target
             else
             {
-                transform.LookAt(target.position);
-                transform.position = Vector3.MoveTowards(transform.position, target.position, bulletSpeed * Time.deltaTime);
-                if ((target.position - transform.position).magnitude < InGameService.infinitesimal)
+                transform.LookAt(target.transform);
+                
+                transform.position = Vector3.MoveTowards(transform.position, 
+                    new Vector3(target.transform.position.x, transform.position.y,target.transform.position.z), 
+                    bulletSpeed * Time.deltaTime);
+                
+                if (Vector3.Distance(transform.position,
+                        new Vector3(transform.position.x, transform.position.y,target.transform.position.z)) < InGameService.infinitesimal)
                 {
-                    DealDamage(damage);
+                    Explore();
                 }
             }
         }
 
-        private void DealDamage(int damage)
+        public override void Explore()
         {
-            // if bullet is explore, deal dmg in a zone
-            if (exploreRange > 0)
+            if (target != null && !target.IsDie)
             {
-                Monster[] monsterList = FindObjectsOfType<Monster>();
-                foreach (Monster monster in monsterList)
-                {
-                    if ((monster.transform.position - transform.position).magnitude < exploreRange)
-                    {
-                        monster.TakeDamage(damage);
-                    }
-                }
-            }
-            // otherwise if target is still alive, deal dmg to target
-            else if (target != null)
-            {
-                target.gameObject.GetComponent<Monster>().TakeDamage(damage);
+                target.TakeDamage(damage);
             }
             Destroy(gameObject);
         }
 
-        public void OnCollisionEnter(Collision other)
-        {
-            // if colliding other monster when moving, explore
-            if (other.gameObject.GetComponent<Monster>() != null)
-            {
-                DealDamage(damage);
-            }
-        }
     }
 }

@@ -11,13 +11,9 @@ namespace MythicEmpire.InGame
 {
     public class Tower : MonoBehaviour
     {
-        protected string id;
-        protected string ownerId;
-        protected TowerStats stats;
-        protected Vector2Int logicPos;
-        protected int damageLevel;
-        protected int rangeLevel;
-        protected int attackSpeedLevel;
+        protected string _towerID;
+        protected string _ownerId;
+        // protected TowerStats stats;
         protected bool canFire;
 
         protected int damage;
@@ -27,22 +23,14 @@ namespace MythicEmpire.InGame
         protected float bulletSpeed;
 
         [SerializeField] protected TowerUI canvas;
-
-        public void Start()
+        [SerializeField] protected TowerAnimation animation;
+        
+        public void Init(string towerId, string ownerId, TowerStats stats)
         {
-        }
-
-        public void Init(string towerId, string ownerId, Vector2Int logicPos, TowerStats stats)
-        {
-            id = towerId;
-            this.ownerId = ownerId;
-            this.logicPos = logicPos;
-            this.stats = stats;
+            _towerID = towerId;
+            this._ownerId = ownerId;
+            // this.stats = stats;
             
-            damageLevel = 1;
-            rangeLevel = 1;
-            attackSpeedLevel = 1;
-
             damage = stats.Damage;
             attackSpeed = stats.AttackSpeed;
             fireRange = stats.FireRange;
@@ -51,7 +39,7 @@ namespace MythicEmpire.InGame
 
             canFire = true;
             
-            canvas.SetElementPosition(id, transform.position);
+            canvas.SetElementPosition(_towerID, transform.position);
             canvas.gameObject.SetActive(false);
         }
 
@@ -59,44 +47,17 @@ namespace MythicEmpire.InGame
         void Update()
         {
             Fire();
-            if (Input.GetMouseButtonDown(2))
+            if (Input.GetMouseButtonDown(1))
             {
                 canvas.gameObject.SetActive(false);
             }
         }
 
-        public virtual void Fire()
+        protected virtual void Fire()
         {
 
         }
-
-        // public void UpgradeDamage()
-        // {
-        //     canvas.gameObject.SetActive(false);
-        //     // if (damageLevel < InGameService.maxTowerLevel)
-        //     // {
-        //     //     damage = Mathf.RoundToInt(damage * 1.5f);
-        //     // }
-        // }
-        //
-        // public void UpgradeRange()
-        // {
-        //     canvas.gameObject.SetActive(false);
-        //     // if (rangeLevel < InGameService.maxTowerLevel)
-        //     // {
-        //     //     fireRange *= 1.1f;
-        //     // }
-        // }
-        //
-        // public void UpgradeAttackSpeed()
-        // {
-        //     canvas.gameObject.SetActive(false);
-        //     // if (attackSpeedLevel < InGameService.maxTowerLevel)
-        //     // {
-        //     //     attackSpeed *= 1.1f;
-        //     // }
-        // }
-
+        
         public void Sell()
         {
             canvas.gameObject.SetActive(false);
@@ -106,7 +67,7 @@ namespace MythicEmpire.InGame
         protected IEnumerator LoadBullet()
         {
             canFire = false;
-            yield return new WaitForSeconds(1 / stats.AttackSpeed);
+            yield return new WaitForSeconds(1 / attackSpeed);
             canFire = true;
         }
 
@@ -115,9 +76,8 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(!canvas.gameObject.activeInHierarchy);
         }
 
-        public int Cost { get { return stats.Energy; } }
-        public string Id { get { return id; } }
-        public string OwnerId { get { return ownerId; } }
+        public string TowerID => _towerID;
+        public string OwnerId => _ownerId;
 
         public void Upgrade(UpgradeTowerDataSender upgradeTowerDataSender)
         {
@@ -125,7 +85,6 @@ namespace MythicEmpire.InGame
             attackSpeed = upgradeTowerDataSender.attackSpeed;
             fireRange = upgradeTowerDataSender.range;
             canvas.gameObject.SetActive(false);
-
 
         }
     }
