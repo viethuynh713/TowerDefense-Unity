@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfcdde477a8be4cbafd4aa640cfa70, type: 3}
+  m_Name: 6afbb2d6-6929-42e6-a4b1-c22f136612e6
+  m_EditorClassIdentifier: 
+  CardId: 6afbb2d6-6929-42e6-a4b1-c22f136612e6
+  CardName: Cyber
+  CardStar: 0
+  CardImage: {fileID: 21300000, guid: f3bb9d3f78e60f34e9c520239b684022, type: 3}
+  TypeOfCard: 2
+  CardRarity: 4
+  CardStats: {fileID: 11400000, guid: 1e5e501917f413249b4c5cdd03523b7f, type: 2}
+  GameObjectPrefab: {fileID: 1567810901247961860, guid: d2b9cf079d8744644b553159497f1cd9,
+    type: 3}
