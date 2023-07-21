@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using InGame.Map;
 using Microsoft.AspNetCore.SignalR.Client;
 using MythicEmpire.Enums;
+using MythicEmpire.InGame;
 using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Model;
@@ -14,6 +15,7 @@ using Networking_System.Model.Data.DataReceive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 using Random = System.Random;
@@ -33,7 +35,8 @@ namespace MythicEmpire.Networking
         UpgradeTower,
         SellTower,
         UpdateMonsterPosition,
-        AddEnergy
+        AddEnergy,
+        QuitGame
     }
     public class NetworkingRealtime : IStartable, IRealtimeCommunication
     {
@@ -73,6 +76,10 @@ namespace MythicEmpire.Networking
                 _gameId = Encoding.UTF8.GetString(data);
                 // SceneManager.LoadSceneAsync("Game");
                 EventManager.Instance.PostEvent(EventID.OnStartGame);
+            });
+            _hubConnection.On("QuitGame", () =>
+            {
+                GameController_v2.Instance.mainThreadAction.Add(()=>SceneManager.LoadSceneAsync("Lobby"));
             });
             // Process in game
             _hubConnection.On<byte[]>("OnGameInfo" ,(data)=>
@@ -337,6 +344,20 @@ namespace MythicEmpire.Networking
                 new JProperty("actionId",ActionId.AddEnergy),
                 new JProperty("gameId", _gameId),
                 new JProperty("data", JsonConvert.SerializeObject(data))
+            );
+            // Debug.Log(jsonString.ToString());
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(jsonString.ToString());
+            await _hubConnection.SendAsync("OnListeningData", byteArray);
+        }
+
+        public async Task QuitGame()
+        {
+            JObject jsonString = new JObject(
+                new JProperty("senderId", _userModel.userId),
+                new JProperty("actionId",ActionId.QuitGame),
+                new JProperty("gameId", _gameId),
+                new JProperty("data", "")
             );
             // Debug.Log(jsonString.ToString());
 

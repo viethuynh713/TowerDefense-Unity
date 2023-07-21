@@ -134,6 +134,11 @@ namespace MythicEmpire.InGame
         {
             _realtimeCommunication.AddEnergy(data);
         }
+
+        public void QuitGame()
+        {
+            _realtimeCommunication.QuitGame();
+        }
     }
 
 }

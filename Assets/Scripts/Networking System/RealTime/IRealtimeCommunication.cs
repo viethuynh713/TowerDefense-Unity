@@ -22,5 +22,6 @@ namespace MythicEmpire.Networking
         Task SellTowerRequest(SellTowerData data);
         Task UpgradeTower(UpgradeTowerData data);
         Task AddEnergy(AddEnergyData data);
+        Task QuitGame();
     }
 }

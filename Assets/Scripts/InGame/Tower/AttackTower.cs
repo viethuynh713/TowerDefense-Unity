@@ -31,12 +31,13 @@ namespace MythicEmpire.InGame
                     }
                     if (_target != null)
                     {
-                        // play fire animation
+                        transform.LookAt(_target.transform.position);
+
                         animation.PlayAnimation("fire");
                         // create bullet
                         Bullet b = Instantiate(bullet, firePosition.position, firePosition.rotation);
                         b.Init(_target, damage, exploreRange, bulletSpeed);
-                        // wait to load bullet (by attack speed)
+                        
                         StartCoroutine(LoadBullet());
                         CheckTargetRange();
 
@@ -61,7 +62,6 @@ namespace MythicEmpire.InGame
                     if (monsterComponent.OwnerId == _ownerId) return;
                     if (!monsterComponent.IsDie)
                     {
-
                         _target = monsterComponent;
                         
                     }
@@ -72,7 +72,7 @@ namespace MythicEmpire.InGame
 
         private void CheckTargetRange()
         {
-            if (Vector3.Distance(transform.position, new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z)) < fireRange)
+            if (Vector3.Distance(transform.position, new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z)) > fireRange)
             {
                 _target = null;
             }
