@@ -27,7 +27,6 @@ namespace MythicEmpire.InGame
         private float _speedupRate;
 
         private bool _canAction;
-        private float _notActionTime;
 
         private int _maxHp;
         private int _hp;
@@ -136,7 +135,6 @@ namespace MythicEmpire.InGame
             _isDie = false;
             _isOnPath = true;
             _speedupRate = 1f;
-            _notActionTime = 0f;
 
             _maxHp = hp;
             _hp = _maxHp;
@@ -169,7 +167,6 @@ namespace MythicEmpire.InGame
                     Vector3 displayPos = InGameService.Logic2DisplayPos(_path[0]);
                     transform.LookAt(displayPos);
                     transform.position = Vector3.MoveTowards(transform.position, displayPos, _moveSpeed * _speedupRate * Time.deltaTime);
-                    _speedupRate = 1f;
                     if ((displayPos - transform.position).magnitude < InGameService.infinitesimal)
                     {
                         _path.RemoveAt(0);
@@ -207,19 +204,10 @@ namespace MythicEmpire.InGame
                 ownerId = _ownerId,
             };
             PlayerController_v2.Instance.CastleTakeDamage(data);
-            // gameObject.SetActive(false);
         }
 
         public void Heal(int hp)
         {
-            // if (!_isDie)
-            // {
-            //     _hp += hp;
-            //     if (this._hp > _maxHp)
-            //     {
-            //         this._hp = _maxHp;
-            //     }
-            // }
             MonsterTakeDamageData data = new MonsterTakeDamageData()
             {
                 damage = hp,
@@ -233,14 +221,6 @@ namespace MythicEmpire.InGame
 
         public void TakeDamage(int dmg)
         {
-            // if (!_isDie)
-            // {
-            //     _hp -= dmg;
-            //     if (_hp <= 0)
-            //     {
-            //         Die();
-            //     }
-            // }
             MonsterTakeDamageData data = new MonsterTakeDamageData()
             {
                 damage = -dmg,
@@ -251,43 +231,19 @@ namespace MythicEmpire.InGame
             PlayerController_v2.Instance.UpdateMonsterHp(data);
 
         }
-
-        public void Freezed(float freezeTime)
-        {
-            if (!_isDie)
-            {
-                if (_notActionTime < freezeTime)
-                {
-                    _notActionTime = freezeTime;
-                }
-                if (_canAction)
-                {
-                    StartCoroutine(FreezeCD());
-                }
-                _canAction = false;
-            }
-        }
-
-        private IEnumerator FreezeCD()
-        {
-            yield return new WaitForSeconds(0.1f);
-            _notActionTime -= 0.1f;
-            if (_notActionTime > 0)
-            {
-                StartCoroutine(FreezeCD());
-            }
-            else
-            {
-                _canAction = true;
-            }
-        }
-
+        
         public void Speedup(float rateup)
         {
             if (!_isDie)
             {
-                _speedupRate *= rateup;
+                _speedupRate = 1 + rateup/100;
+                StartCoroutine(ResetSpeedupRate());
             }
+        }
+        IEnumerator  ResetSpeedupRate()
+        {
+            yield return new WaitForSeconds(0.49f);
+            _speedupRate = 1;
         }
 
         private void Die()
@@ -317,7 +273,7 @@ namespace MythicEmpire.InGame
 
         private IEnumerator AttackCD()
         {
-            yield return new WaitForSeconds(1 / _attackSpeed);
+            yield return new WaitForSeconds(1 / (_attackSpeed*_speedupRate));
             _canAttack = true;
         }
 

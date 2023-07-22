@@ -20,6 +20,17 @@ namespace MythicEmpire.InGame
                     }
                 }
             }
+            Tower[] towers = FindObjectsOfType<Tower>();
+            foreach (Tower tower in towers)
+            {
+                if (ownerId == tower.OwnerId)
+                {
+                    if ((tower.transform.position - transform.position).magnitude < stats.Range)
+                    {
+                        tower.Speedup(stats.DamegePerDuration);
+                    }
+                }
+            }
         }
     }
 }

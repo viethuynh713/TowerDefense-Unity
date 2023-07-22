@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1029056537079860645}
   - component: {fileID: 4537000847863174549}
   - component: {fileID: 1394096778826134895}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EmptyTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,6 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d82924fe1ccfe49b663abaced1c3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logicPosition: {x: 0, y: 0}
+  typeOfTile: 0
+  ownerId: 
   isBarrier: 0
 --- !u!65 &1394096778826134895
 BoxCollider:

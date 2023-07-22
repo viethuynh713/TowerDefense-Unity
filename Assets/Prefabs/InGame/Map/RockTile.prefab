@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 941534329923530685}
   - component: {fileID: 8920250292218381121}
   - component: {fileID: 4788634373965881387}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RockTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,6 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d82924fe1ccfe49b663abaced1c3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logicPosition: {x: 0, y: 0}
+  typeOfTile: 0
+  ownerId: 
   isBarrier: 1
 --- !u!1 &8205578878981271058
 GameObject:
@@ -124,7 +127,7 @@ GameObject:
   - component: {fileID: 6209479279841661188}
   - component: {fileID: 911977318422501229}
   - component: {fileID: 6368633172587019790}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: rocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

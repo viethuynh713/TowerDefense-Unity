@@ -110,7 +110,9 @@ namespace MythicEmpire.Networking
             {
                 string jsonSpellModel = Encoding.UTF8.GetString(data);
                 Debug.Log("PlaceSpell networking: " + jsonSpellModel);
+
                 SpellModel model = JsonConvert.DeserializeObject<SpellModel>(jsonSpellModel);
+                // Debug.Log("PlaceSpell networking: " + model.cardId);
                 EventManager.Instance.PostEvent(EventID.PlaceSpell,model);
             });
             _hubConnection.On<byte[]>("UpdateEnergy", (data) =>

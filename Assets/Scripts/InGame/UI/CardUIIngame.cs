@@ -19,7 +19,7 @@ namespace MythicEmpire.InGame
         {
             
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycast))
+            if (Physics.Raycast(ray, out RaycastHit raycast,1000,LayerMask.GetMask("Map")))
             {
                 Tile tile;
                 if (raycast.collider.TryGetComponent<Tile>(out tile))

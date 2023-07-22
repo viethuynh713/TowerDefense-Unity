@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 616102786106068013}
   - component: {fileID: 8124276380827287982}
   - component: {fileID: 8843595990805686693}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MonsterGateTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,4 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d82924fe1ccfe49b663abaced1c3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logicPosition: {x: 0, y: 0}
+  typeOfTile: 0
+  ownerId: 
   isBarrier: 0

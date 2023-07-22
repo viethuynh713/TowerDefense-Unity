@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: fed9e56a-b32d-4c5b-92b8-2fc7daaafacf
   m_EditorClassIdentifier: 
   Energy: 18
-  Time: 1
+  Time: 3
   Duration: 1
   DamegePerDuration: 24
   Range: 2

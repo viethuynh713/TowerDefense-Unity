@@ -1,11 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 using MythicEmpire.Card;
-using MythicEmpire.Enums;
-using MythicEmpire.Manager.MythicEmpire.Manager;
 
 namespace MythicEmpire.InGame
 {
@@ -22,6 +17,7 @@ namespace MythicEmpire.InGame
         protected float exploreRange;
         protected float bulletSpeed;
 
+        protected float _speedRate =1;
         [SerializeField] protected TowerUI canvas;
         [SerializeField] protected TowerAnimation animation;
         [SerializeField]private Transform rangeUI;
@@ -42,7 +38,8 @@ namespace MythicEmpire.InGame
             
             canvas.SetElementPosition(_towerID, transform.position);
             canvas.gameObject.SetActive(false);
-            rangeUI.localScale = new Vector3(fireRange+1, rangeUI.localScale.y, fireRange+1);
+            var scale = ((fireRange + 1) * 3.5f) / transform.localScale.x;
+            rangeUI.localScale = new Vector3(scale, rangeUI.localScale.y, scale);
             rangeUI.gameObject.SetActive(false);
 
         }
@@ -51,6 +48,7 @@ namespace MythicEmpire.InGame
         void Update()
         {
             Fire();
+            
             if (Input.GetMouseButtonDown(1))
             {
                 canvas.gameObject.SetActive(false);
@@ -73,7 +71,7 @@ namespace MythicEmpire.InGame
         protected IEnumerator LoadBullet()
         {
             canFire = false;
-            yield return new WaitForSeconds(1 / attackSpeed);
+            yield return new WaitForSeconds(1 / (attackSpeed*_speedRate));
             canFire = true;
         }
 
@@ -92,11 +90,39 @@ namespace MythicEmpire.InGame
             damage = upgradeTowerDataSender.damage;
             attackSpeed = upgradeTowerDataSender.attackSpeed;
             fireRange = upgradeTowerDataSender.range;
-            rangeUI.localScale = new Vector3(fireRange+1, rangeUI.localScale.y, fireRange+1);
+            var scale = ((fireRange + 1) * 3.5f) / transform.localScale.x;
+            rangeUI.localScale = new Vector3(scale, rangeUI.localScale.y, scale);
             canvas.gameObject.SetActive(false);
             rangeUI.gameObject.SetActive(false);
 
 
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position,fireRange);
+        }
+
+        public void Speedup(float rate)
+        {
+            if ((rate > 0 && _speedRate >1)||(rate < 0 && _speedRate <1))
+            {
+                _speedRate = 1 + rate / 100;
+
+            }
+            else
+            {
+                _speedRate += rate / 100;
+
+            }
+            _speedRate = 1 + rate / 100;
+            StartCoroutine(ResetSpeedupRate());
+        }
+        IEnumerator  ResetSpeedupRate()
+        {
+            yield return new WaitForSeconds(0.99f);
+            _speedRate = 1;
         }
     }
 }

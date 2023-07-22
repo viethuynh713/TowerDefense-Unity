@@ -16,7 +16,18 @@ namespace MythicEmpire.InGame
                 {
                     if ((monster.transform.position - transform.position).magnitude < stats.Range)
                     {
-                        monster.Freezed(stats.DamegePerDuration);
+                        monster.Speedup(-stats.DamegePerDuration);
+                    }
+                }
+            }
+            Tower[] towers = FindObjectsOfType<Tower>();
+            foreach (Tower tower in towers)
+            {
+                if (ownerId != tower.OwnerId)
+                {
+                    if ((tower.transform.position - transform.position).magnitude < stats.Range)
+                    {
+                        tower.Speedup(-stats.DamegePerDuration);
                     }
                 }
             }

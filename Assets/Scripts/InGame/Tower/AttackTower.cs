@@ -17,7 +17,7 @@ namespace MythicEmpire.InGame
 
             if (_target != null)
             {
-                transform.LookAt(_target.transform.position);
+                transform.LookAt(new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z));
                 CheckTargetRange();
             }
 
@@ -31,7 +31,7 @@ namespace MythicEmpire.InGame
                     }
                     if (_target != null)
                     {
-                        transform.LookAt(_target.transform.position);
+                        transform.LookAt(new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z));
 
                         animation.PlayAnimation("fire");
                         // create bullet

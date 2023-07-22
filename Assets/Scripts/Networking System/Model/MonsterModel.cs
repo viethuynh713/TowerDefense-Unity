@@ -21,13 +21,13 @@
         public int YLogicPosition;
 
     }
+
     public class SpellModel
     {
         public string spellId;
         public string cardId;
         public string ownerId;
-        public int XLogicPosition;
-        public int YLogicPosition;
-
+        public float XLogicPosition;
+        public float YLogicPosition;
     }
 }
