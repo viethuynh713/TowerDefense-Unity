@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 45f2094e-437e-480d-80eb-a3a7875d2693
   m_EditorClassIdentifier: 
   Energy: 14
-  Hp: 0
-  AttackSpeed: 0
-  MoveSpeed: 0
-  AttackRange: 0
-  Damage: 0
-  EnergyGainWhenDie: 0
+  Hp: 100
+  AttackSpeed: 1
+  MoveSpeed: 1.2
+  AttackRange: 1.39
+  Damage: 15
+  EnergyGainWhenDie: 3
