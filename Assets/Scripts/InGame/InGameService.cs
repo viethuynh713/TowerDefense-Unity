@@ -181,6 +181,10 @@ namespace MythicEmpire.InGame
 
         public static List<Vector2Int> FindPathForMonster(Tile[][] realMap, Vector2Int startPos, Vector2Int des, bool isMyPlayer)
         {
+            if (startPos == des)
+            {
+                return new List<Vector2Int>();
+            }
             List<string> map = new List<string>();
             for (int i = 0; i < realMap.Length; i++)
             {

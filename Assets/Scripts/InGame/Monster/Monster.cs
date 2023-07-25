@@ -197,6 +197,7 @@ namespace MythicEmpire.InGame
         private void AttackHouse()
         {
             _monsterAnimation.PlayAnimation("attack");
+            _canAction = false;
             _isOnPath = true;
             CastleTakeDamageData data = new CastleTakeDamageData()
             {
