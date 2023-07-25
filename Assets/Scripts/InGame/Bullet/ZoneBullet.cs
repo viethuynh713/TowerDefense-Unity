@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 namespace MythicEmpire.InGame
 {
@@ -35,7 +36,7 @@ namespace MythicEmpire.InGame
         public override void Explore()
         {
             Collider[] results = new Collider[20];
-            var numColliders = Physics.OverlapSphereNonAlloc(transform.position, exploreRange, results);
+            var numColliders = Physics.OverlapSphereNonAlloc(transform.position, exploreRange, results,LayerMask.GetMask("Monster"));
 
             for (int i = 0; i < numColliders; i++)
             {

@@ -89,7 +89,8 @@ namespace MythicEmpire.InGame
             var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
                 quaternion.identity);
             // TODO: create new stats. -> Done
-            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,true,(MonsterStats)cardInfo.CardStats,data.maxHp, _userModel.userId == data.ownerId);
+
+            monster.GetComponent<Monster>().Init(data.monsterId,data.ownerId,true,(MonsterStats)cardInfo.CardStats,((MonsterStats)(cardInfo.CardStats)).Hp, _userModel.userId == data.ownerId);
         }
 
         public void PlaceSpell(SpellModel data)

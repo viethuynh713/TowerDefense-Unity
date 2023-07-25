@@ -19,10 +19,10 @@ namespace MythicEmpire.InGame
             {
                 transform.position + Vector3.forward,
             };
-            for (int i = 1; i < numOfPoint; i++)
-            {
-                waypoints.Add(waypoints[0]+direction*Random.Range(0,0.2f));
-            }
+            // for (int i = 1; i < numOfPoint; i++)
+            // {
+            //     waypoints.Add(waypoints[0]+direction*Random.Range(0,0.2f));
+            // }
         }
 
         public override void Move()

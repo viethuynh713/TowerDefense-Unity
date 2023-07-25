@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170f5e69c7174194cb6a92b1ea59a9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireVfx: {fileID: 0}
+  fireVfx: {fileID: 198755127273645396, guid: e243632bb3aff9549abdcfcc2ef0c4f0, type: 3}
   animator: {fileID: 0}
 --- !u!1 &4650144300124928866
 GameObject:
