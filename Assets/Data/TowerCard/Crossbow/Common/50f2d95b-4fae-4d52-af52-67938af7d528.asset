@@ -15,7 +15,7 @@ MonoBehaviour:
   CardId: 50f2d95b-4fae-4d52-af52-67938af7d528
   CardName: Crossbow
   CardStar: 4
-  CardImage: {fileID: 21300000, guid: 7332a604c2e138943bdfac14c868a0e1, type: 3}
+  CardImage: {fileID: 21300000, guid: ed3fdbbd95f8fef4981888371a4a81de, type: 3}
   TypeOfCard: 1
   CardRarity: 1
   CardStats: {fileID: 11400000, guid: c6ab9e0ed31a9ca4997c05dae96ed049, type: 2}

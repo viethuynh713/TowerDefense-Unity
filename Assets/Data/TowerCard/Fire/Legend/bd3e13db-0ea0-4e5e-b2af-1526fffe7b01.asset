@@ -15,7 +15,7 @@ MonoBehaviour:
   CardId: bd3e13db-0ea0-4e5e-b2af-1526fffe7b01
   CardName: Fire
   CardStar: 4
-  CardImage: {fileID: 21300000, guid: bf0d5174753e50347b54c06f1af978b0, type: 3}
+  CardImage: {fileID: 21300000, guid: 99a90ae3babc82647bf90c69ff926dd9, type: 3}
   TypeOfCard: 1
   CardRarity: 4
   CardStats: {fileID: 11400000, guid: 86f5e751811cfa4478e54290772ecd33, type: 2}

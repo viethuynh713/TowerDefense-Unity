@@ -191,7 +191,10 @@ namespace MythicEmpire.Networking
                 if (task.IsFaulted)
                 {
                     Debug.Log("Fail connect : " + task.Exception);
-                    
+                }
+                else
+                {
+                    Debug.Log($"Connect to {_config.RealtimeURL} success");
                 }
             });
             

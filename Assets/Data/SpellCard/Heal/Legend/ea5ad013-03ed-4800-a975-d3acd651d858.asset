@@ -15,7 +15,7 @@ MonoBehaviour:
   CardId: ea5ad013-03ed-4800-a975-d3acd651d858
   CardName: Heal
   CardStar: 1
-  CardImage: {fileID: 21300000, guid: ce4cfece27369674889d9a05c5f9a06c, type: 3}
+  CardImage: {fileID: 21300000, guid: 6754c43f5a64cff418831441d6add069, type: 3}
   TypeOfCard: 3
   CardRarity: 4
   CardStats: {fileID: 11400000, guid: d4af764c8d83c84499fc946b43a42d97, type: 2}

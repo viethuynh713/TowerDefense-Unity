@@ -15,7 +15,7 @@ MonoBehaviour:
   CardId: 0478625a-93a9-4146-8d21-0fa5fcfe1f29
   CardName: Speed
   CardStar: 4
-  CardImage: {fileID: 21300000, guid: 2abe2c06793fdf941a25efb024b2b829, type: 3}
+  CardImage: {fileID: 21300000, guid: 73ab4e5647521e744bd0c5db0956bc7e, type: 3}
   TypeOfCard: 3
   CardRarity: 2
   CardStats: {fileID: 11400000, guid: a098813a2262ef64c9ea02c4bd8adc27, type: 2}

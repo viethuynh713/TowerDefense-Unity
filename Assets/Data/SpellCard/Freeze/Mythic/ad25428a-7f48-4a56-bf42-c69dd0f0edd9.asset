@@ -15,7 +15,7 @@ MonoBehaviour:
   CardId: ad25428a-7f48-4a56-bf42-c69dd0f0edd9
   CardName: Freeze
   CardStar: 4
-  CardImage: {fileID: 21300000, guid: 1d707e73c67098b41acbed671a4444e1, type: 3}
+  CardImage: {fileID: 21300000, guid: 5ef1d8a8ffcd9064abdb68893d175aae, type: 3}
   TypeOfCard: 3
   CardRarity: 3
   CardStats: {fileID: 11400000, guid: 82ef72aa57d4b854ab0b1b3aaf500cb0, type: 2}
