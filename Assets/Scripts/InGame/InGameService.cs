@@ -136,32 +136,26 @@ namespace MythicEmpire.InGame
         }
 
         // find path for monster
-        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile)
+        private static List<FPTile> GetWalkableTiles(List<string> map, FPTile currentTile, FPTile targetTile, bool isMyPlayer)
         {
             List<FPTile> possibleTiles;
 
             if (currentTile.x == columnIndexSplit)
             {
-                possibleTiles = new List<FPTile>()
+                if (isMyPlayer)
                 {
-                    new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 },
-                    new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-
-                };
-                // if (isMyPlayer)
-                // {
-                //     possibleTiles = new List<FPTile>()
-                //     {
-                //         new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-                //     };
-                // }
-                // else
-                // {
-                //     possibleTiles = new List<FPTile>()
-                //     {
-                //         new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
-                //     };
-                // }
+                    possibleTiles = new List<FPTile>()
+                     {
+                         new FPTile { x = currentTile.x + 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+                     };
+                }
+                else
+                {
+                    possibleTiles = new List<FPTile>()
+                     {
+                         new FPTile { x = currentTile.x - 1, y = currentTile.y, parent = currentTile, cost = currentTile.cost + 1 }
+                     };
+                }
             }
             else
             {
@@ -185,7 +179,7 @@ namespace MythicEmpire.InGame
                     .ToList();
         }
 
-        public static List<Vector2Int> FindPathForMonster(Tile[][] realMap, Vector2Int startPos, Vector2Int des)
+        public static List<Vector2Int> FindPathForMonster(Tile[][] realMap, Vector2Int startPos, Vector2Int des, bool isMyPlayer)
         {
             List<string> map = new List<string>();
             for (int i = 0; i < realMap.Length; i++)
@@ -259,7 +253,7 @@ namespace MythicEmpire.InGame
                 visitedTiles.Add(checkTile);
                 activeTiles.Remove(checkTile);
 
-                var walkableTiles = GetWalkableTiles(map, checkTile, finish);
+                var walkableTiles = GetWalkableTiles(map, checkTile, finish, isMyPlayer);
 
                 foreach (var walkableTile in walkableTiles)
                 {

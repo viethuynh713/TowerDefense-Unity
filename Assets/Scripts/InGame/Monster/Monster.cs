@@ -25,6 +25,7 @@ namespace MythicEmpire.InGame
         private bool _isOnPath;
         private List<Vector2Int> _path;
         private float _speedupRate;
+        private bool _isMyPlayer;
 
         private bool _canAction;
 
@@ -135,6 +136,7 @@ namespace MythicEmpire.InGame
             _isDie = false;
             _isOnPath = true;
             _speedupRate = 1f;
+            _isMyPlayer = isMyMonster;
 
             _maxHp = hp;
             _hp = _maxHp;
@@ -265,7 +267,8 @@ namespace MythicEmpire.InGame
                     _path = InGameService.FindPathForMonster(
                         GameController_v2.Instance.mapService.CurrentMap,
                         InGameService.Display2LogicPos(transform.position),
-                        GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId));
+                        GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId),
+                        _isMyPlayer);
                     
                 }
             }
