@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 5037209582369627714}
   animation: {fileID: 1082446700742295596}
-  rangeUI: {fileID: 6990889708104889776}
+  rangeUI: {fileID: 7781795436298407748}
   bullet: {fileID: 1350568909529245914, guid: 068e3082608bcfd488f7792e6c0c914f, type: 3}
   firePosition: {fileID: 584194324520198665}
 --- !u!114 &1082446700742295596

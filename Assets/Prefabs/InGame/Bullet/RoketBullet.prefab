@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5429578466455192735}
   - component: {fileID: 5179120131984966522}
   - component: {fileID: 4047746482065279623}
-  - component: {fileID: 1350568909529245914}
+  - component: {fileID: 611848194486464484}
   m_Layer: 0
-  m_Name: FireBallBullet
+  m_Name: RoketBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,7 +99,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1350568909529245914
+--- !u!114 &611848194486464484
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,11 +108,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 9170145259669970472}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16b83381b6864982b1f9d4e6680b8884, type: 3}
+  m_Script: {fileID: 11500000, guid: fa1a930f81964883b8bed582c1a806ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exploreVfx: {fileID: 19800002, guid: cfa5cd38b0eeb5d45aafdbe57871168c, type: 3}
-  height: 5
+  exploreVfx: {fileID: 19800002, guid: 6890a03af913b874092fbb1e8337747d, type: 3}
+  rotationSpeed: 5
 --- !u!1001 &7966939072840752013
 PrefabInstance:
   m_ObjectHideFlags: 0
