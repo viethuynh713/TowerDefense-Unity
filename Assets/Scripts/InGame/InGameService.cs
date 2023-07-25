@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using MythicEmpire.Enums;
 using MythicEmpire.Map;
 using System.Linq;
 using System;
@@ -19,81 +18,14 @@ namespace MythicEmpire.InGame
 {
     public static class InGameService
     {
-        public static readonly int nPlayer = 2;
-
         public static readonly int columnIndexSplit = 10;
-        public static readonly Vector2Int mapLogicPos = Vector2Int.zero;
-        public static readonly Vector2Int monsterGateLogicPos = new Vector2Int(10, 4);
-        public static readonly Dictionary<TypePlayer, Vector2Int> houseLogicPos = new Dictionary<TypePlayer, Vector2Int> {
-            { TypePlayer.Player, new Vector2Int(20, 4) },
-            { TypePlayer.Opponent, new Vector2Int(0, 4) }
-        };
-        public static readonly Vector3 rootVector = Vector3.forward;
         public static readonly float infinitesimal = 0.01f;
 
-        public static readonly int localMapWidth = 9;
         public static readonly int mapWidth = 21;
         public static readonly int mapHeight = 9;
 
-        public static readonly int playerHp = 2000;
-        public static readonly int maxEnergy = 100;
-        public static readonly int playerEnergy = 100;
-        public static readonly int waveTimeDelay = 20;
-
         public static readonly int monsterLayerMask = 1 << 3;
-
-        public static readonly int maxTowerLevel = 3;
-
-        public static readonly int nWave = 7;
-        public static readonly List<List<Tuple<string, int>>> monsterWave = new List<List<Tuple<string, int>>>
-        {
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("1", 5),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("2", 5),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("3", 5),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("4", 5),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("5", 5),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("6", 5),
-            },
-            new List<Tuple<string, int>>
-            {
-                new Tuple<string, int>("7", 5),
-            },
-        };
-
-        public static Vector2Int PrivateLogicPos2PublicLogicPos(Vector2Int logicPos, bool isMyPlayer)
-        {
-            if (isMyPlayer)
-            {
-                return new Vector2Int(logicPos.x + columnIndexSplit + 1, logicPos.y);
-            }
-            return new Vector2Int(columnIndexSplit - 1 - logicPos.x, mapHeight - logicPos.y - 1);
-        }
-
-        public static Vector2Int PublicLogicPos2PrivateLogicPos(Vector2Int logicPos, bool isMyPlayer)
-        {
-            if (isMyPlayer)
-            {
-                return new Vector2Int(logicPos.x - columnIndexSplit - 1, logicPos.y);
-            }
-            return new Vector2Int(columnIndexSplit - 1 - logicPos.x, mapHeight - 1 - logicPos.y);
-        }
+        
 
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {

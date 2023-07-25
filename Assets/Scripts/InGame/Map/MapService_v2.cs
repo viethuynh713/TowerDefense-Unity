@@ -14,7 +14,6 @@ using VContainer;
 public class MapService_v2 : MonoBehaviour
 {
     public Tile[][] CurrentMap;
-    private CreateLogicMapService _service;
     private int _height;
     private int _width;
     
