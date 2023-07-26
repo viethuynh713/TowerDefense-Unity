@@ -8,35 +8,35 @@ namespace MythicEmpire.InGame
 {
     public class AttackTower : Tower
     {
-        [SerializeField] private Bullet bullet;
-        [SerializeField] private Transform firePosition;
-        private Monster _target = null;
+        [SerializeField] protected Bullet bullet;
+        [SerializeField] protected Transform firePosition;
+        protected Monster Target = null;
         
         protected override void Fire()
         {
 
-            if (_target != null)
+            if (Target != null)
             {
-                transform.LookAt(new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z));
+                transform.LookAt(new Vector3(Target.transform.position.x, transform.position.y,Target.transform.position.z));
                 CheckTargetRange();
             }
 
             if (canFire)
             {
 
-                    if (_target == null || _target.IsDie)
+                    if (Target == null || Target.IsDie)
                     {
-                        _target = null;
+                        Target = null;
                         FindMonsterTarget();
                     }
-                    if (_target != null)
+                    if (Target != null)
                     {
-                        transform.LookAt(new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z));
+                        transform.LookAt(new Vector3(Target.transform.position.x, transform.position.y,Target.transform.position.z));
 
                         animation.PlayAnimation("fire");
                         // create bullet
                         Bullet b = Instantiate(bullet, firePosition.position, firePosition.rotation);
-                        b.Init(_target, damage, exploreRange, bulletSpeed);
+                        b.Init(Target, damage, exploreRange, bulletSpeed);
                         
                         StartCoroutine(LoadBullet());
                         CheckTargetRange();
@@ -47,7 +47,7 @@ namespace MythicEmpire.InGame
         }
         
 
-        private void FindMonsterTarget()
+        protected void FindMonsterTarget()
         {
             // get all monsters in range
             Collider[] colliders = Physics.OverlapSphere(transform.position, fireRange, InGameService.monsterLayerMask);
@@ -62,7 +62,7 @@ namespace MythicEmpire.InGame
                     if (monsterComponent.OwnerId == _ownerId) return;
                     if (!monsterComponent.IsDie)
                     {
-                        _target = monsterComponent;
+                        Target = monsterComponent;
                         
                     }
                 }
@@ -70,11 +70,12 @@ namespace MythicEmpire.InGame
             }
         }
 
-        private void CheckTargetRange()
+        protected void CheckTargetRange()
         {
-            if (Vector3.Distance(transform.position, new Vector3(_target.transform.position.x, transform.position.y,_target.transform.position.z)) > fireRange)
+            if (Vector3.Distance(transform.position, new Vector3(Target.transform.position.x, transform.position.y,Target.transform.position.z)) > fireRange)
             {
-                _target = null;
+                animation.PlayAnimation("stop-fire");
+                Target = null;
             }
         }
     }

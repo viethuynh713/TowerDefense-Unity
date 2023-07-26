@@ -18,6 +18,9 @@ namespace MythicEmpire.InGame
                     if(fireVfx != null)fireVfx.Play();
                     if(animator!= null)animator.SetTrigger("Fire");
                     break;
+                case "stop-fire":
+                    if(fireVfx != null)fireVfx.Stop();
+                    break;
             }
         }
     }

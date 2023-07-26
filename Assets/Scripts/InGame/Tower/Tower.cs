@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using MythicEmpire.Card;
@@ -21,7 +22,12 @@ namespace MythicEmpire.InGame
         [SerializeField] protected TowerUI canvas;
         [SerializeField] protected TowerAnimation animation;
         [SerializeField]private Transform rangeUI;
-        
+
+        private void Start()
+        {
+            animation.PlayAnimation("stop-fire");
+        }
+
         public void Init(string towerId, string ownerId, TowerStats stats)
         {
             _towerID = towerId;
