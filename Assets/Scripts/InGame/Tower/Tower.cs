@@ -26,6 +26,7 @@ namespace MythicEmpire.InGame
         private void Start()
         {
             animation.PlayAnimation("stop-fire");
+            rangeUI.gameObject.SetActive(false);
         }
 
         public void Init(string towerId, string ownerId, TowerStats stats)
@@ -46,7 +47,6 @@ namespace MythicEmpire.InGame
             canvas.gameObject.SetActive(false);
             var scale = ((fireRange + 1) * 3.5f) / transform.localScale.x;
             rangeUI.localScale = new Vector3(scale, rangeUI.localScale.y, scale);
-            rangeUI.gameObject.SetActive(false);
 
         }
 
@@ -129,6 +129,13 @@ namespace MythicEmpire.InGame
         {
             yield return new WaitForSeconds(0.99f);
             _speedRate = 1;
+        }
+
+        public void View()
+        {
+            animation.PlayAnimation("fire");
+            canvas.gameObject.SetActive(false);
+
         }
     }
 }

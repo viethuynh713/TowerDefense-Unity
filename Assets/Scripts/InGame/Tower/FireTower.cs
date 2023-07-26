@@ -27,6 +27,8 @@ namespace MythicEmpire.InGame
                 if (Target == null || Target.IsDie)
                 {
                     Target = null;
+                    animation.PlayAnimation("stop-fire");
+
                     FindMonsterTarget();
                 }
                 if (Target != null)

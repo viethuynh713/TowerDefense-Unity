@@ -11,6 +11,7 @@ namespace MythicEmpire.InGame
         protected string ownerId;
         protected SpellStats stats;
         private float time;
+        public GameObject model;
         public void Init(string spellId, string playerID, SpellStats spellStats)
         {
             id = spellId;
@@ -18,6 +19,7 @@ namespace MythicEmpire.InGame
             transform.localScale = Vector3.one*stats.Range;
             time = stats.Time;
             ownerId = playerID;
+            model.SetActive(false);
             StartCoroutine(AffectDuration());
         }
 
@@ -52,6 +54,12 @@ namespace MythicEmpire.InGame
             {
                 Gizmos.DrawWireSphere(transform.position,stats.Range);
             }
+
+        }
+
+        public void View()
+        {
+            model.SetActive(true);
 
         }
     }

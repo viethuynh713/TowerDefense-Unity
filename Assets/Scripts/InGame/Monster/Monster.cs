@@ -47,6 +47,8 @@ namespace MythicEmpire.InGame
             _canAction = false;
             _canAttack = false;
             _isOnPath = false;
+            _monsterUI.gameObject.SetActive(false);
+
 
         }
 
@@ -57,7 +59,6 @@ namespace MythicEmpire.InGame
             EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
             EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPath);
             EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPath);
-            StartCoroutine(UpdatePosition());
 
         }
 
@@ -151,6 +152,8 @@ namespace MythicEmpire.InGame
             _monsterUI.Init(_maxHp,isMyMonster);
             indexPackageUpdateHp = 0;
             indexPackageUpdateCastle = 0;
+            _monsterUI.gameObject.SetActive(true);
+            StartCoroutine(UpdatePosition());
             FindPath();
         }
 
@@ -288,5 +291,10 @@ namespace MythicEmpire.InGame
         public bool IsDie { get { return _isDie; } }
         public int Cost { get { return _monsterStats.Energy; } }
         public bool CanAction { get { return _canAction; } set { _canAction = value; } }
+
+        public void View()
+        {
+            _monsterUI.gameObject.SetActive(false);
+        }
     }
 }

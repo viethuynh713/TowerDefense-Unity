@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MythicEmpire.Card;
 using MythicEmpire.Enums;
+using MythicEmpire.InGame;
 using MythicEmpire.Manager;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Networking;
@@ -17,7 +18,7 @@ namespace MythicEmpire.UI.Lobby
         [SerializeField] private MonsterStatsRender _monsterStatsRender;
         [SerializeField] private TowerStatsRender _towerStatsRender;
         [SerializeField] private SpellStatsRender _spellStatsRender;
-        [SerializeField] private Image _mainImage;
+        [SerializeField] private Transform object3DParent;
 
         [SerializeField] private List<GameObject> _stars;
 
@@ -33,7 +34,7 @@ namespace MythicEmpire.UI.Lobby
             _monsterStatsRender.gameObject.SetActive(activity);
             _towerStatsRender.gameObject.SetActive(activity);
             _spellStatsRender.gameObject.SetActive(activity);
-            _mainImage.gameObject.SetActive(activity);
+            object3DParent.gameObject.SetActive(activity);
             for (int i = 0; i < _stars.Count; i++)
             {
                 _stars[i].SetActive(activity);
@@ -73,11 +74,24 @@ namespace MythicEmpire.UI.Lobby
         private void InstanceObject(GameObject gameObject)
         {
 
-            Destroy(_mainImage.transform.GetChild(0).gameObject);
+            Destroy(object3DParent.transform.GetChild(0).gameObject);
 
 
             if (gameObject == null) return;
-            var obj = Instantiate(gameObject, _mainImage.transform);
+            var obj = Instantiate(gameObject, object3DParent.transform);
+            if (TryGetComponent<Tower>(out var tower))
+            {
+                tower.View();
+                Debug.Log("ViewMonster");
+            }
+            if (TryGetComponent<Monster>(out var monster))
+            {
+                monster.View();
+            }
+            if (TryGetComponent<Spell>(out var spell))
+            {
+                spell.View();
+            }
             obj.transform.localPosition = Vector3.zero;
         }
 

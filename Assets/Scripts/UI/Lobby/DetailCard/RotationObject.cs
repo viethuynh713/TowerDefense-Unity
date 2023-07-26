@@ -11,7 +11,7 @@ public class RotationObject : MonoBehaviour
 
     private void OnEnable()
     {
-        transform.rotation = Quaternion.Euler(0,180,0);
+        // transform.rotation = Quaternion.Euler(0,180,0);
     }
 
     void OnMouseDrag()
