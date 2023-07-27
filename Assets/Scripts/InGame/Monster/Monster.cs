@@ -67,7 +67,7 @@ namespace MythicEmpire.InGame
         {
             while (true)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1f);
                 _positionData.monsterId = _id;
                 _positionData.ownerId = _ownerId;
                 _positionData.Xposition = transform.position.x;

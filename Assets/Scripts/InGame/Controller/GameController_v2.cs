@@ -86,7 +86,7 @@ namespace MythicEmpire.InGame
         public void CreateMonster(MonsterModel data)
         {
             var cardInfo = _cardManager.GetCardById(data.cardId);
-            var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0, data.YLogicPosition),
+            var monster = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0f, data.YLogicPosition),
                 quaternion.identity);
             // TODO: create new stats. -> Done
 

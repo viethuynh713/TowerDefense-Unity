@@ -268,9 +268,7 @@ namespace MythicEmpire.Networking
 
                 var newCardInfo = _cardManager.GetCardById(_userModel.cardListID[^1]);
                 
-                Notification.Instance.PopupNotifyWaring(
-                    $"Give new card : {newCardInfo.CardName} - {newCardInfo.CardRarity}");
-                EventManager.Instance.PostEvent(EventID.OnBuyGachaSuccess);
+                EventManager.Instance.PostEvent(EventID.OnBuyGachaSuccess, newCardInfo);
             }
             else
             {
