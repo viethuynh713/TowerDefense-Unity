@@ -47,8 +47,6 @@ namespace MythicEmpire.InGame
             _canAction = false;
             _canAttack = false;
             _isOnPath = false;
-            _monsterUI.gameObject.SetActive(false);
-
 
         }
 
@@ -57,8 +55,9 @@ namespace MythicEmpire.InGame
             _monsterAnimation = GetComponent<MonsterAnimation>();
             EventManager.Instance.RegisterListener(EventID.UpdateMonsterHp, HandleUpdateHp);
             EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
-            EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPath);
-            EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPath);
+            EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPathAfterBuildTower);
+            EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPathAfterSellTower);
+            StartCoroutine(UpdatePosition());
 
         }
 
@@ -67,7 +66,7 @@ namespace MythicEmpire.InGame
         {
             while (true)
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.5f);
                 _positionData.monsterId = _id;
                 _positionData.ownerId = _ownerId;
                 _positionData.Xposition = transform.position.x;
@@ -76,7 +75,7 @@ namespace MythicEmpire.InGame
             }
 
         }
-        private void FindNewPath(object obj)
+        private void FindNewPathAfterBuildTower(object obj)
         {
             var data = (TowerModel)obj;
             GameController_v2.Instance.mainThreadAction.Add(() =>
@@ -84,6 +83,16 @@ namespace MythicEmpire.InGame
                 FindPath(new Vector2Int(data.XLogicPosition,data.YLogicPosition));
                 // Debug.Log("Find new path");
                 
+            });
+        }
+
+        private void FindNewPathAfterSellTower(object obj)
+        {
+            GameController_v2.Instance.mainThreadAction.Add(() =>
+            {
+                FindPath();
+                // Debug.Log("Find new path");
+
             });
         }
         
@@ -119,8 +128,8 @@ namespace MythicEmpire.InGame
             {
                 EventManager.Instance.RemoveListener(EventID.UpdateMonsterHp,HandleUpdateHp);
                 EventManager.Instance.RemoveListener(EventID.KillMonster, HandleKilledMonster);
-                EventManager.Instance.RemoveListener(EventID.BuildTower,FindNewPath);
-                EventManager.Instance.RemoveListener(EventID.SellTower,FindNewPath);
+                EventManager.Instance.RemoveListener(EventID.BuildTower,FindNewPathAfterBuildTower);
+                EventManager.Instance.RemoveListener(EventID.SellTower,FindNewPathAfterSellTower);
 
             }
             catch (Exception e)
@@ -152,8 +161,6 @@ namespace MythicEmpire.InGame
             _monsterUI.Init(_maxHp,isMyMonster);
             indexPackageUpdateHp = 0;
             indexPackageUpdateCastle = 0;
-            _monsterUI.gameObject.SetActive(true);
-            StartCoroutine(UpdatePosition());
             FindPath();
         }
 
@@ -291,10 +298,5 @@ namespace MythicEmpire.InGame
         public bool IsDie { get { return _isDie; } }
         public int Cost { get { return _monsterStats.Energy; } }
         public bool CanAction { get { return _canAction; } set { _canAction = value; } }
-
-        public void View()
-        {
-            _monsterUI.gameObject.SetActive(false);
-        }
     }
 }
