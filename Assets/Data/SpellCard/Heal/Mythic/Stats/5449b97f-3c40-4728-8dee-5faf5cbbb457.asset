@@ -15,6 +15,6 @@ MonoBehaviour:
   Energy: 21
   Time: 3
   Duration: 1
-  DamegePerDuration: 11
+  DamegePerDuration: 340
   Range: 3
   Detail: 
