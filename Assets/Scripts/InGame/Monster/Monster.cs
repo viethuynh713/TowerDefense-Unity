@@ -55,8 +55,8 @@ namespace MythicEmpire.InGame
             _monsterAnimation = GetComponent<MonsterAnimation>();
             EventManager.Instance.RegisterListener(EventID.UpdateMonsterHp, HandleUpdateHp);
             EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
-            EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPath);
-            EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPath);
+            EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPathAfterBuildTower);
+            EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPathAfterSellTower);
             StartCoroutine(UpdatePosition());
 
         }
@@ -75,7 +75,7 @@ namespace MythicEmpire.InGame
             }
 
         }
-        private void FindNewPath(object obj)
+        private void FindNewPathAfterBuildTower(object obj)
         {
             var data = (TowerModel)obj;
             GameController_v2.Instance.mainThreadAction.Add(() =>
@@ -83,6 +83,16 @@ namespace MythicEmpire.InGame
                 FindPath(new Vector2Int(data.XLogicPosition,data.YLogicPosition));
                 // Debug.Log("Find new path");
                 
+            });
+        }
+
+        private void FindNewPathAfterSellTower(object obj)
+        {
+            GameController_v2.Instance.mainThreadAction.Add(() =>
+            {
+                FindPath();
+                // Debug.Log("Find new path");
+
             });
         }
         
@@ -118,8 +128,8 @@ namespace MythicEmpire.InGame
             {
                 EventManager.Instance.RemoveListener(EventID.UpdateMonsterHp,HandleUpdateHp);
                 EventManager.Instance.RemoveListener(EventID.KillMonster, HandleKilledMonster);
-                EventManager.Instance.RemoveListener(EventID.BuildTower,FindNewPath);
-                EventManager.Instance.RemoveListener(EventID.SellTower,FindNewPath);
+                EventManager.Instance.RemoveListener(EventID.BuildTower,FindNewPathAfterBuildTower);
+                EventManager.Instance.RemoveListener(EventID.SellTower,FindNewPathAfterSellTower);
 
             }
             catch (Exception e)
