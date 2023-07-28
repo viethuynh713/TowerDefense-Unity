@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Energy: 28
   Hp: 1400
-  AttackSpeed: 0.61
-  MoveSpeed: 0.63
-  AttackRange: 1.45
+  AttackSpeed: 0.7
+  MoveSpeed: 0.6
+  AttackRange: 1.5
   Damage: 40
   EnergyGainWhenDie: 9
