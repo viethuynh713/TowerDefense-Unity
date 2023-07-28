@@ -28,6 +28,8 @@ namespace MythicEmpire.InGame
         public void Start()
         {
             EventManager.Instance.RegisterListener(EventID.UpdateEnergy, UpdateEnergy);
+            EventManager.Instance.RegisterListener(EventID.UpgradeTower, (o)=>isUpdate = false);
+            EventManager.Instance.RegisterListener(EventID.SellTower, (o)=>isUpdate = false);
         }
 
 
@@ -36,9 +38,10 @@ namespace MythicEmpire.InGame
             Instance = this;
         }
 
+        private bool isUpdate = false;
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !isUpdate)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit raycast))
@@ -47,9 +50,18 @@ namespace MythicEmpire.InGame
                     if (raycast.collider.TryGetComponent<Tower>(out tower))
                     {
                         if (tower.OwnerId == _userModel.userId)
+                        {
+                            isUpdate = true;
+
                             tower.ActiveUI();
+                        }
                     }
                 }
+            }
+
+            if (Input.GetMouseButtonDown(1) && isUpdate)
+            {
+                isUpdate = false;
             }
         }
 

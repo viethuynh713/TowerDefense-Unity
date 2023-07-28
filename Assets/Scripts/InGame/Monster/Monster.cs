@@ -251,12 +251,10 @@ namespace MythicEmpire.InGame
         public void TakeDamage(int dmg)
         {
             _hpLose += dmg;
-            if ((_hp < 1500 && _hpLose > 1500)
-                || (_hp < 1000 && _hpLose > 1000)
-                || (_hp < 700 && _hpLose > 700)
-                || (_hp < 400 && _hpLose > 400)
-                || (_hp < 200 && _hpLose > 200)
-                || (_hp < 100))
+            _hp -= dmg;
+            if(_isDie)return;
+
+            if ( _hp < 50)
             {
                 MonsterTakeDamageData data = new MonsterTakeDamageData()
                 {
@@ -270,14 +268,14 @@ namespace MythicEmpire.InGame
             }
             else
             {
-                _monsterUI.UpdateMonsterHp(_maxHp,_hp -= dmg);
+                _monsterUI.UpdateMonsterHp(_maxHp,_hp);
 
             }
-
+            
         }
 
-        
-        
+
+
         public void Speedup(float rateup)
         {
             if (!_isDie)
