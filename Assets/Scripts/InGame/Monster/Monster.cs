@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -47,7 +48,7 @@ namespace MythicEmpire.InGame
             _canAction = false;
             _canAttack = false;
             _isOnPath = false;
-
+            _monsterUI.gameObject.SetActive(false);
         }
 
         private void Start()
@@ -57,21 +58,30 @@ namespace MythicEmpire.InGame
             EventManager.Instance.RegisterListener(EventID.KillMonster, HandleKilledMonster);
             EventManager.Instance.RegisterListener(EventID.BuildTower, FindNewPathAfterBuildTower);
             EventManager.Instance.RegisterListener(EventID.SellTower, FindNewPathAfterSellTower);
-            StartCoroutine(UpdatePosition());
+            // StartCoroutine(UpdatePosition());
+            previousPosition = new Vector2(transform.position.x, transform.position.z);
 
         }
 
         private UpdateMonsterPositionData _positionData = new UpdateMonsterPositionData();
+        public Vector2 previousPosition;
         IEnumerator UpdatePosition()
         {
             while (true)
             {
-                yield return new WaitForSeconds(0.5f);
-                _positionData.monsterId = _id;
-                _positionData.ownerId = _ownerId;
-                _positionData.Xposition = transform.position.x;
-                _positionData.YPosition = transform.position.z;
-                PlayerController_v2.Instance.UpdateMonsterPosition(_positionData);
+                
+                yield return new WaitForSeconds(1f);
+                var currentPosition = new Vector2(transform.position.x, transform.position.z);
+                if (Vector2.Distance(currentPosition, previousPosition) > 1f)
+                {
+                    _positionData.monsterId = _id;
+                    _positionData.ownerId = _ownerId;
+                    _positionData.Xposition = transform.position.x;
+                    _positionData.YPosition = transform.position.z;
+
+                    PlayerController_v2.Instance.UpdateMonsterPosition(_positionData);
+                    previousPosition = currentPosition;
+                }
             }
 
         }
@@ -150,6 +160,9 @@ namespace MythicEmpire.InGame
             _speedupRate = 1f;
             _isMyPlayer = isMyMonster;
 
+            _monsterUI.gameObject.SetActive(true);
+            StartCoroutine(UpdatePosition());
+            // StartCoroutine(SendUpdateMonsterHp());
             _maxHp = hp;
             _hp = _maxHp;
             _attackSpeed = stats.AttackSpeed;
@@ -234,18 +247,36 @@ namespace MythicEmpire.InGame
 
         }
 
+        private int _hpLose = 0;
         public void TakeDamage(int dmg)
         {
-            MonsterTakeDamageData data = new MonsterTakeDamageData()
+            _hpLose += dmg;
+            if ((_hp < 1500 && _hpLose > 1500)
+                || (_hp < 1000 && _hpLose > 1000)
+                || (_hp < 700 && _hpLose > 700)
+                || (_hp < 400 && _hpLose > 400)
+                || (_hp < 200 && _hpLose > 200)
+                || (_hp < 100))
             {
-                damage = -dmg,
-                indexPackage = indexPackageUpdateHp,
-                monsterId = _id,
-                ownerId = _ownerId,
-            };
-            PlayerController_v2.Instance.UpdateMonsterHp(data);
+                MonsterTakeDamageData data = new MonsterTakeDamageData()
+                {
+                    damage = -_hpLose,
+                    indexPackage = indexPackageUpdateHp,
+                    monsterId = _id,
+                    ownerId = _ownerId,
+                };
+                _hpLose = 0;
+                PlayerController_v2.Instance.UpdateMonsterHp(data);
+            }
+            else
+            {
+                _monsterUI.UpdateMonsterHp(_maxHp,_hp -= dmg);
+
+            }
 
         }
+
+        
         
         public void Speedup(float rateup)
         {
@@ -300,5 +331,10 @@ namespace MythicEmpire.InGame
         public bool IsDie { get { return _isDie; } }
         public int Cost { get { return _monsterStats.Energy; } }
         public bool CanAction { get { return _canAction; } set { _canAction = value; } }
+
+        public void View()
+        {
+            _monsterUI.gameObject.SetActive(false);
+        }
     }
 }
