@@ -10540,6 +10540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireVfx: {fileID: 7997159205449598209}
+  animator: {fileID: 0}
 --- !u!1001 &2730523738758942297
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,6 +44,7 @@ namespace MythicEmpire.Networking
         [Inject] private UserModel _userModel;
         private HubConnection _hubConnection;
         private string _gameId = "admin-test";
+        private ModeGame mode;
 
         public void Start()
         {
@@ -87,6 +88,8 @@ namespace MythicEmpire.Networking
                 var gameInfoSenderData = JsonConvert.DeserializeObject<GameInfoSenderData>(Encoding.UTF8.GetString(data));
                 Debug.Log($"Get game data Success : {Encoding.UTF8.GetString(data)} ");
                 // _gameId = gameInfoSenderData.gameId;
+                mode = gameInfoSenderData.mode;
+                Debug.Log(mode.ToString());
                 EventManager.Instance.PostEvent(EventID.OnGetMap, gameInfoSenderData.map);
                 EventManager.Instance.PostEvent(EventID.RenderListCard,gameInfoSenderData.myListCard);
                 EventManager.Instance.PostEvent(EventID.SetMode,gameInfoSenderData.mode);
@@ -302,6 +305,7 @@ namespace MythicEmpire.Networking
 
         public async Task UpdatePosition(UpdateMonsterPositionData data)
         {
+            if(mode == ModeGame.Arena)return;
             JObject jsonString = new JObject(
                 new JProperty("senderId", _userModel.userId),
                 new JProperty("actionId",ActionId.UpdateMonsterPosition),

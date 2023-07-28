@@ -117,6 +117,8 @@ namespace MythicEmpire.InGame
             {
                 if (_id == (string)o)
                 {
+                    _monsterUI.UpdateMonsterHp(_maxHp, 0);
+
                     Die();
                 }
             });
