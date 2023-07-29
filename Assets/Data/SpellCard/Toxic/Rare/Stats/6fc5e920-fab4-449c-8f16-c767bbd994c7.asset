@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fae902b5d6649249dc7ce98a1ad0b94, type: 3}
   m_Name: 6fc5e920-fab4-449c-8f16-c767bbd994c7
   m_EditorClassIdentifier: 
-  Energy: 20
-  Time: 6
+  Energy: 27
+  Time: 11
   Duration: 1
-  DamegePerDuration: 15
+  DamegePerDuration: 13
   Range: 2
   Detail: 

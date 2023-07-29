@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0041588508, g: 0.011729093, b: 0.344589, a: 1}
+  m_IndirectSpecularColor: {r: 0.046672765, g: 0.0028857614, b: 0.1634141, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -766,7 +766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: MythicEmpire.Manager.RootGameLifetime
+    TypeName: 
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 1716862922}

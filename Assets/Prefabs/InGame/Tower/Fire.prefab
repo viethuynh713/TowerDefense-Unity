@@ -315,6 +315,7 @@ MonoBehaviour:
   rangeUI: {fileID: 8559670608124540069}
   bullet: {fileID: 406181132756394905}
   firePosition: {fileID: 7217347829402580043}
+  attackAngle: 15
 --- !u!1 &2270772729664029646
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,15 +416,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
       propertyPath: m_LocalPosition.x
@@ -435,7 +436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.524
+      value: 0.238
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
       propertyPath: m_LocalRotation.w
@@ -732,13 +733,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2333438058814810981, guid: 5980555ef5ded89478bd38f90aa82782,
         type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333438058814810981, guid: 5980555ef5ded89478bd38f90aa82782,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2333438058814810981, guid: 5980555ef5ded89478bd38f90aa82782,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.056
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2333438058814810981, guid: 5980555ef5ded89478bd38f90aa82782,
         type: 3}

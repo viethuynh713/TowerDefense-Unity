@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Energy: 30
   Damage: 15
-  AttackSpeed: 15
-  FireRange: 1.5
+  AttackSpeed: 2
+  FireRange: 2
   ExploreRange: 0
   BulletSpeed: 0

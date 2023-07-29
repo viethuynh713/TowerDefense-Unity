@@ -65,6 +65,7 @@ namespace MythicEmpire.UI.Lobby
                 mainAction.RemoveAt(0);
             }
         }
+        
         private void Start()
         {
             EventManager.Instance.RegisterListener(EventID.PrepareListCard, HandleListCardSelected);
@@ -119,6 +120,14 @@ namespace MythicEmpire.UI.Lobby
             _framePanel.SetActive(true);
             _waitingPanel.SetActive(false);
             _listRender = _userModel.cardListID;
+            foreach (var slot in _listCardSlot)
+            {
+                if (slot.transform.childCount == 1)
+                {
+                    Destroy(slot.transform.GetChild(0).gameObject);
+                    
+                }
+            }
             if (_listItems != null)
             {
                 foreach (var item in _listItems)

@@ -11,6 +11,7 @@ using MythicEmpire.Card;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Networking.Model;
 using Networking_System.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MythicEmpire.InGame
@@ -70,9 +71,9 @@ namespace MythicEmpire.InGame
             while (true)
             {
                 
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(4f);
                 var currentPosition = new Vector2(transform.position.x, transform.position.z);
-                if (Vector2.Distance(currentPosition, previousPosition) > 1f)
+                if (Vector2.Distance(currentPosition, previousPosition) > 2f)
                 {
                     _positionData.monsterId = _id;
                     _positionData.ownerId = _ownerId;
@@ -111,6 +112,7 @@ namespace MythicEmpire.InGame
             GameController_v2.Instance.mainThreadAction.Add(() =>
             {
                 var data = (UpdateMonsterHpDataSender)o;
+                isSend = true;
                 if (data.monsterId == _id)
                 {
                     if(data.indexPackage <= indexPackageUpdateHp)return;
@@ -248,15 +250,14 @@ namespace MythicEmpire.InGame
         }
 
         private int _hpLose = 0;
+        private bool isSend = true;
         public void TakeDamage(int dmg)
         {
             _hpLose += dmg;
-            if ((_hp < 1500 && _hpLose > 1500)
-                || (_hp < 1000 && _hpLose > 1000)
-                || (_hp < 700 && _hpLose > 700)
-                || (_hp < 400 && _hpLose > 400)
-                || (_hp < 200 && _hpLose > 200)
-                || (_hp < 100))
+            _hp -= dmg;
+            if(_isDie)return;
+            if(!isSend)return;
+            if ( _hp < 50)
             {
                 MonsterTakeDamageData data = new MonsterTakeDamageData()
                 {
@@ -266,18 +267,19 @@ namespace MythicEmpire.InGame
                     ownerId = _ownerId,
                 };
                 _hpLose = 0;
+                isSend = false;
                 PlayerController_v2.Instance.UpdateMonsterHp(data);
             }
             else
             {
-                _monsterUI.UpdateMonsterHp(_maxHp,_hp -= dmg);
+                _monsterUI.UpdateMonsterHp(_maxHp,_hp);
 
             }
-
+            
         }
 
-        
-        
+
+
         public void Speedup(float rateup)
         {
             if (!_isDie)
@@ -308,11 +310,14 @@ namespace MythicEmpire.InGame
             {
                 if (barrierPos == null || _path.Contains(barrierPos.Value))
                 {
+                    Vector2Int rivalCastle = GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId);
+                    // Debug.Log(rivalCastle);
                     _path = InGameService.FindPathForMonster(
                         GameController_v2.Instance.mapService.CurrentMap,
                         InGameService.Display2LogicPos(transform.position),
-                        GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId),
-                        _isMyPlayer);
+                        rivalCastle,
+                        rivalCastle.x != 0 ? true : false);
+                    // Debug.Log("=="+JsonConvert.SerializeObject(_path));
                     
                 }
             }

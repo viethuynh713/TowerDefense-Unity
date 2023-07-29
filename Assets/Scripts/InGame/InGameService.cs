@@ -29,7 +29,7 @@ namespace MythicEmpire.InGame
 
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos)
         {
-            return new Vector3(logicPos.x, 0, logicPos.y);
+            return new Vector3(logicPos.x, 0.25f, logicPos.y);
         }
 
         public static Vector3 Logic2DisplayPos(Vector2Int logicPos, bool isMyPlayer)

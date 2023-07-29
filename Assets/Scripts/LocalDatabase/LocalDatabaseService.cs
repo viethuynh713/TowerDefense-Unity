@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using MythicEmpire.Enums;
+using MythicEmpire.Manager.MythicEmpire.Manager;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace MythicEmpire.LocalDatabase
@@ -49,6 +51,7 @@ namespace MythicEmpire.LocalDatabase
         {
             var data = JsonConvert.SerializeObject(newModel);
             PlayerPrefs.SetString("Setting-Config",data);
+            EventManager.Instance.PostEvent(EventID.ChangeSoundSetting);
         }
     }
 

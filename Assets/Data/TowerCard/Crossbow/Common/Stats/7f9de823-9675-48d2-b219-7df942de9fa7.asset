@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b12d977f80448c6861aba1bdb62c652, type: 3}
   m_Name: 7f9de823-9675-48d2-b219-7df942de9fa7
   m_EditorClassIdentifier: 
-  Energy: 21
-  Damage: 16
-  AttackSpeed: 1.71
-  FireRange: 2.75
+  Energy: 28
+  Damage: 12
+  AttackSpeed: 2
+  FireRange: 3
   ExploreRange: 0
-  BulletSpeed: 14
+  BulletSpeed: 13
