@@ -70,9 +70,9 @@ namespace MythicEmpire.InGame
             while (true)
             {
                 
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(4f);
                 var currentPosition = new Vector2(transform.position.x, transform.position.z);
-                if (Vector2.Distance(currentPosition, previousPosition) > 1f)
+                if (Vector2.Distance(currentPosition, previousPosition) > 2f)
                 {
                     _positionData.monsterId = _id;
                     _positionData.ownerId = _ownerId;

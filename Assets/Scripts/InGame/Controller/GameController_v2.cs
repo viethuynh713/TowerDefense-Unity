@@ -73,7 +73,7 @@ namespace MythicEmpire.InGame
         public void BuildTower(TowerModel data)
         {
             var cardInfo = _cardManager.GetCardById(data.cardId);
-            var tower = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0.1f, data.YLogicPosition),
+            var tower = Instantiate(cardInfo.GameObjectPrefab, new Vector3(data.XLogicPosition, 0.3f, data.YLogicPosition),
                 quaternion.identity);
             tower.GetComponent<Tower>().Init(data.towerId,data.ownerId,(TowerStats)cardInfo.CardStats);
             

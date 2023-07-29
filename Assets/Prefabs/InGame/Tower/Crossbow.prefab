@@ -282,6 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireVfx: {fileID: 5464377424800420584}
+  animator: {fileID: 0}
 --- !u!1 &8617857396923553216
 GameObject:
   m_ObjectHideFlags: 0

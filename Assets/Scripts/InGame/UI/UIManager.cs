@@ -41,11 +41,11 @@ namespace MythicEmpire.InGame.UI
             var data = (EndGameDataSender)result;
             if (data.playerWin == _userModel.userId)
             {
-                _endGameUI.ShowResult(GameResult.Win, data.totalTime);
+                _endGameUI.ShowResult(GameResult.Win, data.totalTime,data.mode);
             }
             else
             {
-                _endGameUI.ShowResult(GameResult.Loss, data.totalTime);
+                _endGameUI.ShowResult(GameResult.Loss, data.totalTime,data.mode);
 
             }
         }
