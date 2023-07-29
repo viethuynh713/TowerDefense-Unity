@@ -111,6 +111,7 @@ namespace MythicEmpire.InGame
             GameController_v2.Instance.mainThreadAction.Add(() =>
             {
                 var data = (UpdateMonsterHpDataSender)o;
+                isSend = true;
                 if (data.monsterId == _id)
                 {
                     if(data.indexPackage <= indexPackageUpdateHp)return;
@@ -248,12 +249,13 @@ namespace MythicEmpire.InGame
         }
 
         private int _hpLose = 0;
+        private bool isSend = true;
         public void TakeDamage(int dmg)
         {
             _hpLose += dmg;
             _hp -= dmg;
             if(_isDie)return;
-
+            if(!isSend)return;
             if ( _hp < 50)
             {
                 MonsterTakeDamageData data = new MonsterTakeDamageData()
@@ -264,6 +266,7 @@ namespace MythicEmpire.InGame
                     ownerId = _ownerId,
                 };
                 _hpLose = 0;
+                isSend = false;
                 PlayerController_v2.Instance.UpdateMonsterHp(data);
             }
             else

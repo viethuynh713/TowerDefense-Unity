@@ -80,7 +80,7 @@ namespace MythicEmpire.Networking
             });
             _hubConnection.On("QuitGame", () =>
             {
-                GameController_v2.Instance.mainThreadAction.Add(()=>SceneManager.LoadSceneAsync("Lobby"));
+                GameController_v2.Instance.mainThreadAction.Add(()=>SceneManager.LoadSceneAsync("LoadlingScene"));
             });
             // Process in game
             _hubConnection.On<byte[]>("OnGameInfo" ,(data)=>
@@ -185,8 +185,8 @@ namespace MythicEmpire.Networking
             });
             _hubConnection.On<byte[]>("OnEndGame", (data) =>
             {
-                Debug.Log("================ EndGame =================");
                 var endgameData = JsonConvert.DeserializeObject<EndGameDataSender>(Encoding.UTF8.GetString(data));
+                Debug.Log("================ EndGame =================");
                 EventManager.Instance.PostEvent(EventID.OnEndGame, endgameData);
             });
             _hubConnection.StartAsync().ContinueWith(task =>

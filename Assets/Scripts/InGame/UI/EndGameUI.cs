@@ -37,6 +37,6 @@ public class EndGameUI : MonoBehaviour
 
     public void GoToLobby()
     {
-        SceneManager.LoadSceneAsync("Lobby");
+        SceneManager.LoadSceneAsync("LoadlingScene");
     }
 }
