@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b576fef79ce0d241b694143d6f6510e, type: 3}
   m_Name: f66c1613-2852-4c37-8180-15a4a89cb9bc
   m_EditorClassIdentifier: 
-  Energy: 14
-  Hp: 107
+  Energy: 19
+  Hp: 1320
   AttackSpeed: 1.04
-  MoveSpeed: 1.05
-  AttackRange: 0.8
-  Damage: 15
+  MoveSpeed: 1.26
+  AttackRange: 1.6
+  Damage: 48
   EnergyGainWhenDie: 6
