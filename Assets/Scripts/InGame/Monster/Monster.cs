@@ -11,6 +11,7 @@ using MythicEmpire.Card;
 using MythicEmpire.Manager.MythicEmpire.Manager;
 using MythicEmpire.Networking.Model;
 using Networking_System.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MythicEmpire.InGame
@@ -309,11 +310,14 @@ namespace MythicEmpire.InGame
             {
                 if (barrierPos == null || _path.Contains(barrierPos.Value))
                 {
+                    Vector2Int rivalCastle = GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId);
+                    // Debug.Log(rivalCastle);
                     _path = InGameService.FindPathForMonster(
                         GameController_v2.Instance.mapService.CurrentMap,
                         InGameService.Display2LogicPos(transform.position),
-                        GameController_v2.Instance.mapService.GetRivalCastlePosition(_ownerId),
-                        _isMyPlayer);
+                        rivalCastle,
+                        rivalCastle.x != 0 ? true : false);
+                    // Debug.Log("=="+JsonConvert.SerializeObject(_path));
                     
                 }
             }
