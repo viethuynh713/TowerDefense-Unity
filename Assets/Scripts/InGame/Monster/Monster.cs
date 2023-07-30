@@ -238,14 +238,19 @@ namespace MythicEmpire.InGame
 
         public void Heal(int hp)
         {
-            MonsterTakeDamageData data = new MonsterTakeDamageData()
-            {
-                damage = hp,
-                indexPackage = indexPackageUpdateHp,
-                monsterId = _id,
-                ownerId = _ownerId,
-            };
-            PlayerController_v2.Instance.UpdateMonsterHp(data);
+            // MonsterTakeDamageData data = new MonsterTakeDamageData()
+            // {
+            //     damage = hp,
+            //     indexPackage = indexPackageUpdateHp,
+            //     monsterId = _id,
+            //     ownerId = _ownerId,
+            // };
+            // PlayerController_v2.Instance.UpdateMonsterHp(data);
+            _hpLose -= hp;
+            _hp += hp;
+            if (_hp > _maxHp) _hp = _maxHp;
+            _monsterUI.UpdateMonsterHp(_maxHp,_hp);
+
 
         }
 

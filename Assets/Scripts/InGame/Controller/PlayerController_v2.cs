@@ -144,6 +144,7 @@ namespace MythicEmpire.InGame
 
         public void GainEnergy(AddEnergyData data)
         {
+            if (data.ownerId != _userModel.userId) return;
             _realtimeCommunication.AddEnergy(data);
         }
 
