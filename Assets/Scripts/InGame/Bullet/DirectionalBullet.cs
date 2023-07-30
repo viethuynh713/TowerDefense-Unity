@@ -34,7 +34,7 @@ namespace MythicEmpire.InGame
 
         public override void Explore()
         {
-            if (target != null && !target.IsDie)
+            if (target != null && !target.IsDie && ownerId != target.OwnerId)
             {
                 target.TakeDamage(damage);
             }

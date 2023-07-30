@@ -15,7 +15,7 @@ namespace MythicEmpire.InGame
             {
                 if (ownerId != monster.OwnerId)
                 {
-                    if ((monster.transform.position - transform.position).magnitude < stats.Range)
+                    if ((monster.transform.position - transform.position).magnitude < stats.Range && monster.OwnerId != ownerId)
                     {
                         monster.TakeDamage(Mathf.RoundToInt(stats.DamegePerDuration));
                     }

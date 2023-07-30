@@ -36,7 +36,7 @@ namespace MythicEmpire.InGame
                         animation.PlayAnimation("fire");
                         // create bullet
                         Bullet b = Instantiate(bullet, firePosition.position, firePosition.rotation);
-                        b.Init(Target, damage, exploreRange, bulletSpeed);
+                        b.Init(Target, _ownerId,damage, exploreRange, bulletSpeed);
                         
                         StartCoroutine(LoadBullet());
                         CheckTargetRange();

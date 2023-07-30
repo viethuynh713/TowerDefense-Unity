@@ -8,7 +8,7 @@ namespace MythicEmpire.InGame
 
         public void Start()
         {
-            bullet.Init(Target, damage, exploreRange, bulletSpeed);
+            bullet.Init(Target,_ownerId, damage, exploreRange, bulletSpeed);
             animation.PlayAnimation("stop-fire");
 
         }
@@ -56,6 +56,7 @@ namespace MythicEmpire.InGame
                 
                 if (results[i].TryGetComponent <Monster>(out var monster))
                 {
+                    if (monster.OwnerId == _ownerId) continue;
                     Vector3 direction = Target.transform.position - transform.position;
                     direction.y = 0;
 
