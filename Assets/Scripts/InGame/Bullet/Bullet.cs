@@ -8,19 +8,20 @@ namespace MythicEmpire.InGame
     public class Bullet : MonoBehaviour
     {
         protected int id;
-        protected int ownerId;
+        protected string ownerId;
         protected Monster target;
 
         protected int damage;
         protected float exploreRange;
         protected float bulletSpeed;
 
-        public void Init(Monster target, int damage, float exploreRange, float bulletSpeed)
+        public void Init(Monster target,string owner, int damage, float exploreRange, float bulletSpeed)
         {
             this.target = target;
             this.damage = damage;
             this.exploreRange = exploreRange;
             this.bulletSpeed = bulletSpeed;
+            this.ownerId = owner;
         }
 
         // Update is called once per frame

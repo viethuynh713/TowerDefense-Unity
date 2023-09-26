@@ -40,9 +40,10 @@ namespace MythicEmpire.InGame
 
             for (int i = 0; i < numColliders; i++)
             {
-                
+    
                 if (results[i].TryGetComponent <Monster>(out var monster))
                 {
+                    if (monster.OwnerId == ownerId) continue;
                     monster.TakeDamage(damage);
                 }
             }
