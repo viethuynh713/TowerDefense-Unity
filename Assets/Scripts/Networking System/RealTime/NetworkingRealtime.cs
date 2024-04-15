@@ -175,6 +175,7 @@ namespace MythicEmpire.Networking
                 UpgradeTowerDataSender dataSender = JsonConvert.DeserializeObject<UpgradeTowerDataSender>(jsonData);
                 Debug.Log($"Upgrade Tower {jsonData}");
                 EventManager.Instance.PostEvent(EventID.UpgradeTower, dataSender);
+                Notification.Instance.NotifyStatus("Upgrade successfully");
             });
             _hubConnection.On<byte[]>("SellTower", (data) =>
             {

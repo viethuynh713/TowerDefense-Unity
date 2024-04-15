@@ -1,4 +1,4 @@
-﻿using MythicEmpire.Card;
+﻿/*using MythicEmpire.Card;
 using MythicEmpire.Enums;
 
 namespace MythicEmpire.Networking.Model
@@ -25,4 +25,4 @@ namespace MythicEmpire.Networking.Model
         public SpellStats stats;
     }
 
-}
+}*/

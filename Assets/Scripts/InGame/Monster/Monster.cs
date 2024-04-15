@@ -146,7 +146,7 @@ namespace MythicEmpire.InGame
                 EventManager.Instance.RemoveListener(EventID.SellTower,FindNewPathAfterSellTower);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
