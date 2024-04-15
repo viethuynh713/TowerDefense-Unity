@@ -2,7 +2,7 @@
 
 ## Video Demo
 [Watch Demo Video](https://www.youtube.com/watch?v=RXJoQbxcVh4)
-[![Gameplay Demo](https://i.ibb.co/Vt7j4KF/ingame.png)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
+![Gameplay](https://i.ibb.co/Vt7j4KF/ingame.png)
 
 
 
