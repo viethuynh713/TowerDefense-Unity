@@ -1,10 +1,10 @@
 # Mythic Empire - Thủ thành đối kháng tự do 3D
 
 ## Video Demo
-[Video Demo](https://www.youtube.com/watch?v=RXJoQbxcVh4)
 
-![GamePlay](https://ibb.co/476mrQb)
+[![Gameplay Demo](https://i.ibb.co/TB4JHjD/start-gameplay.png)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
 
+![Game play](https://i.ibb.co/476mrQb/ingame.png)
 
 
 ## Mô tả
@@ -35,7 +35,7 @@ Dự án này là một trò chơi được phát triển bằng Unity, sử d�
 Chúng tôi rất hoan nghênh mọi đóng góp từ cộng đồng. Hãy tạo một Pull Request để đóng góp vào dự án này.
 
 ## Tác Giả
-Tên: Huỳnh Trần Việt
+
 Liên Hệ: viethuynh713@gmail.com
 
 
