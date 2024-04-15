@@ -1,10 +1,9 @@
 # Mythic Empire - Thủ thành đối kháng tự do 3D
 
 ## Video Demo
+[Watch Demo Video](https://www.youtube.com/watch?v=RXJoQbxcVh4)
+[![Gameplay Demo](https://i.ibb.co/Vt7j4KF/ingame.png)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
 
-[![Gameplay Demo](https://i.ibb.co/TB4JHjD/start-gameplay.png)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
-
-![Game play](https://i.ibb.co/476mrQb/ingame.png)
 
 
 ## Mô tả
