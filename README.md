@@ -6,7 +6,7 @@ Dự án game thủ thành 3D của nhóm là một trò chơi chiến thuật t
 Dự án này là một trò chơi được phát triển bằng Unity, sử dụng công nghệ SignalR để tạo kết nối trực tiếp giữa các người chơi. Cơ sở dữ liệu được lưu trữ bằng MongoDB, và ASP.NET được sử dụng để xây dựng backend cho ứng dụng.
 ## Video Demo
 Demo Video:[https://www.youtube.com/watch?v=RXJoQbxcVh4]
-[![Video Thumbnail](https://img.youtube.com/vi/RXJoQbxcVh4/maxresdefault.jpg)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
+[![Video Thumbnail](https://www.youtube.com/embed/RXJoQbxcVh4)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
 
 
 
