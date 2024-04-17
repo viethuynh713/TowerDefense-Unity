@@ -22,51 +22,45 @@ Các chức năng chính:
 ### Hệ thống thẻ bài
 Để bắt đầu các trận chiến, người chơi phải có cho mình các thẻ bài riêng cho bản thân để xây dựng các chiến thuật phù hợp.
 #### Các loại thẻ bài
-<!-- Cột 1 -->
 
-<p align="center">
-    <img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Thẻ quái" width="300">
-    <br>
-    <strong>Thẻ quái</strong>
-</p>
-
-<!-- Cột 2 -->
-<p align="center">
-    <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="thẻ tháp" width="300">
-    <br>
-    <strong>Thẻ tháp</strong>
-</p>
-
-<!-- Cột 3 -->
-<p align="center">
-    <img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Thẻ hỗ trợ" width="300">
-    <br>
-    <strong>Thẻ hỗ trợ</strong>
-</p>
 <table>
     <tr>
-        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 1" width="300"><br><strong>Title 1</strong></td>
-        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 2" width="300"><br><strong>Title 2</strong></td>
-        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 3" width="300"><br><strong>Title 3</strong></td>
+        <td align="center"><img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Image 1" width="200"><br><strong>Thẻ quái</strong></td>
+        <td align="center"><img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="200"><br><strong>Thẻ tháp</strong></td>
+        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 3" width="200"><br><strong>Thẻ hỗ trợ</strong></td>
     </tr>
 </table>
-
-
 
 Có 3 loại thẻ bài chính đó là thẻ tháp, thẻ quái và thẻ hỗ trợ: 
 - Thẻ tháp: cho phép xây dựng 1 đơn vị tháp lên sân đấu để phòng thủ hoặc hỗ trợ.
 - Thẻ quái: triệu hồi 1 đơn vị lính tấn công thành của địch.
 - Thẻ hỗ trợ: Cung cấp các hiệu ứng hỗ trợ trong phạm vi nhất định như hồi máu, đóng băng, tăng tốc ...
 
+#### Độ hiếm của thẻ bài
+Mỗi thẻ bài sẽ có độ hiếm tương ứng với sức mạnh tăng dần như sau: Common, Rare, Mythic, Legend
+<table>
+    <tr>
+        <td align="center"><img src="https://i.ibb.co/VvdkwVF/dog-common-card.png" alt="Image 1" width="200"><br><strong>Thẻ Common</strong></td>
+        <td align="center"><img src="https://i.ibb.co/GvFpMB2/dog-rare-card.png" alt="Image 2" width="200"><br><strong>Thẻ Rare</strong></td>
+        <td align="center"><img src="https://i.ibb.co/NCM4DTx/dog-mythic-card.png" alt="Image 3" width="200"><br><strong>Thẻ Mythic</strong></td>
+        <td align="center"><img src="https://i.ibb.co/Pmw722x/dog-legend-card.png" alt="Image 4" width="200"><br><strong>Thẻ Legend</strong></td>
+    </tr>
+</table>
+#### Cấp độ của thẻ bài
+Ngoài việc tìm kiếm các thẻ bài có độ hiếm cao để gia tăng sức mạnh, người chơi cũng có thể nâng cấp các thẻ bài để chúng trở nên mạnh hơn, gia tăng sức mạnh đội hình của bạn.
+    <div>
+        <img src="https://i.ibb.co/J35J4D3/Group-61.png" alt="Image 1">
+        <h2>Cấm độ thẻ bài tăng dần</h2>
+    </div>
 ### Giao diện trò chơi
 ![Gameplay](https://i.ibb.co/Vt7j4KF/ingame.png)
 
 
 ## Yêu cầu
-- [Unity 2021.3.1f1]
-- [SignalR]
-- [MongoDB version 6]
-- [ASP.NET version 6]
+- Unity 2021.3.1f1
+- SignalR
+- MongoDB version 6
+- ASP.NET version 6
 
 ## Cài đặt 
 1. clone repo
