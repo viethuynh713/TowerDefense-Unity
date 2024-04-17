@@ -7,9 +7,8 @@ Dự án này là một trò chơi được phát triển bằng Unity, sử d�
 ## Video Demo
 Demo Video:[https://www.youtube.com/watch?v=RXJoQbxcVh4]
 <a href="https://www.youtube.com/watch?v=RXJoQbxcVh4">
-    <img src="https://img.youtube.com/vi/RXJoQbxcVh4/maxresdefault.jpg" alt="Video Thumbnail">
+    <iframe width="800" height="450" src="https://www.youtube.com/embed/RXJoQbxcVh4" frameborder="0" allowfullscreen></iframe>
 </a>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/RXJoQbxcVh4" frameborder="0" allowfullscreen></iframe>
 
 
 ## Gameplay
