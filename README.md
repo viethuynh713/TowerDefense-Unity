@@ -22,26 +22,46 @@ Các chức năng chính:
 ### Hệ thống thẻ bài
 Để bắt đầu các trận chiến, người chơi phải có cho mình các thẻ bài riêng cho bản thân để xây dựng các chiến thuật phù hợp.
 #### Các loại thẻ bài
+<!-- Cột 1 -->
 
+<p align="center">
+    <img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Thẻ quái" width="300">
+    <br>
+    <strong>Thẻ quái</strong>
+</p>
+
+<!-- Cột 2 -->
+<p align="center">
+    <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="thẻ tháp" width="300">
+    <br>
+    <strong>Thẻ tháp</strong>
+</p>
+
+<!-- Cột 3 -->
+<p align="center">
+    <img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Thẻ hỗ trợ" width="300">
+    <br>
+    <strong>Thẻ hỗ trợ</strong>
+</p>
 <div style="display: flex; justify-content: space-between;">
     <!-- Cột 1 -->
     <div style="flex-basis: 30%;">
         <p align="center">
-            <img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Image 1" width="100%">
+            <img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Image 1" width="20%">
             <br>
             <strong>Title 1</strong>
         </p>
     </div>
     <div style="flex-basis: 30%;">
         <p align="center">
-            <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="100%">
+            <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="20%">
             <br>
             <strong>Title 2</strong>
         </p>
     </div>
     <div style="flex-basis: 30%;">
         <p align="center">
-            <img src="[image3.jpg](https://i.ibb.co/5G6t0fY/toxic-common-card.png)" alt="Image 3" width="100%">
+            <img src="(https://i.ibb.co/5G6t0fY/toxic-common-card.png)" alt="Image 3" width="20%">
             <br>
             <strong>Title 3</strong>
         </p>
