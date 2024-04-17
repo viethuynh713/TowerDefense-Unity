@@ -32,8 +32,6 @@ Các chức năng chính:
             <strong>Title 1</strong>
         </p>
     </div>
-
-    <!-- Cột 2 -->
     <div style="flex-basis: 30%;">
         <p align="center">
             <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="100%">
@@ -41,8 +39,6 @@ Các chức năng chính:
             <strong>Title 2</strong>
         </p>
     </div>
-
-    <!-- Cột 3 -->
     <div style="flex-basis: 30%;">
         <p align="center">
             <img src="[image3.jpg](https://i.ibb.co/5G6t0fY/toxic-common-card.png)" alt="Image 3" width="100%">
