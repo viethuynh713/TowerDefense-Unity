@@ -43,10 +43,14 @@ Các chức năng chính:
     <br>
     <strong>Thẻ hỗ trợ</strong>
 </p>
-| Cột 1                                | Cột 2                                | Cột 3                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------ |
-| ![Hình ảnh 1](https://i.ibb.co/zXMH0rz/golem-common-card.png))  | ![Hình ảnh 2](https://i.ibb.co/zXMH0rz/golem-common-card.png))  | ![Hình ảnh 3](https://i.ibb.co/zXMH0rz/golem-common-card.png)   |
-| Tiêu đề 1                            | Tiêu đề 2                            | Tiêu đề 3                            |
+<table>
+    <tr>
+        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 1" width="300"><br><strong>Title 1</strong></td>
+        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 2" width="300"><br><strong>Title 2</strong></td>
+        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 3" width="300"><br><strong>Title 3</strong></td>
+    </tr>
+</table>
+
 
 
 Có 3 loại thẻ bài chính đó là thẻ tháp, thẻ quái và thẻ hỗ trợ: 
