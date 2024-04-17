@@ -6,11 +6,49 @@ Dự án game thủ thành 3D của nhóm là một trò chơi chiến thuật t
 Dự án này là một trò chơi được phát triển bằng Unity, sử dụng công nghệ SignalR để tạo kết nối trực tiếp giữa các người chơi. Cơ sở dữ liệu được lưu trữ bằng MongoDB, và ASP.NET được sử dụng để xây dựng backend cho ứng dụng.
 ## Video Demo
 Demo Video:[https://www.youtube.com/watch?v=RXJoQbxcVh4]
-[![Video Thumbnail](https://www.youtube.com/embed/RXJoQbxcVh4)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
+[![Video Thumbnail](https://img.youtube.com/vi/RXJoQbxcVh4/maxresdefault.jpg)](https://www.youtube.com/watch?v=RXJoQbxcVh4)
 
 
 
 ## Gameplay
+### Giao diện sảnh chính trò chơi 
+<a href="https://ibb.co/qrQbr5r"><img src="https://i.ibb.co/87ZF7c7/Lobby.png" alt="Lobby" border="0"></a>
+Các chức năng chính:
+- Shop: Người chơi mua, bán các thẻ bài mà mình yêu thích
+- Advanture: Chế độ chơi với máy, người chơi sẽ được luyện tập và chơi với máy được lập trình từ trước
+- Arena: Chế độ chơi với người chơi khác, người chơi sẽ được thi đấu với các người chơi khác để nâng cao thứ hạng của bản thân.
+- Gacha: Người chơi dùng tài nguyên của mình để có cơ hội nhận được các thẻ bài quý hiếm.
+
+### Hệ thống thẻ bài
+Để bắt đầu các trận chiến, người chơi phải có cho mình các thẻ bài riêng cho bản thân để xây dựng các chiến thuật phù hợp.
+#### Các loại thẻ bài
+<!-- Cột 1 -->
+<p align="center">
+    <img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Thẻ quái" width="300">
+    <br>
+    <strong>Thẻ quái</strong>
+</p>
+
+<!-- Cột 2 -->
+<p align="center">
+    <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="thẻ tháp" width="300">
+    <br>
+    <strong>Thẻ tháp</strong>
+</p>
+
+<!-- Cột 3 -->
+<p align="center">
+    <img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Thẻ hỗ trợ" width="300">
+    <br>
+    <strong>Thẻ hỗ trợ</strong>
+</p>
+
+Có 3 loại thẻ bài chính đó là thẻ tháp, thẻ quái và thẻ hỗ trợ: 
+- Thẻ tháp: cho phép xây dựng 1 đơn vị tháp lên sân đấu để phòng thủ hoặc hỗ trợ.
+- Thẻ quái: triệu hồi 1 đơn vị lính tấn công thành của địch.
+- Thẻ hỗ trợ: Cung cấp các hiệu ứng hỗ trợ trong phạm vi nhất định như hồi máu, đóng băng, tăng tốc ...
+
+### Giao diện trò chơi
 ![Gameplay](https://i.ibb.co/Vt7j4KF/ingame.png)
 
 
