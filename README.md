@@ -9,6 +9,8 @@ Demo Video:[https://www.youtube.com/watch?v=RXJoQbxcVh4]
 <a href="https://www.youtube.com/watch?v=RXJoQbxcVh4">
     <img src="https://img.youtube.com/vi/RXJoQbxcVh4/maxresdefault.jpg" alt="Video Thumbnail">
 </a>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RXJoQbxcVh4" frameborder="0" allowfullscreen></iframe>
+
 
 ## Gameplay
 ![Gameplay](https://i.ibb.co/Vt7j4KF/ingame.png)
