@@ -45,7 +45,7 @@ Các chức năng chính:
 </p>
 | Cột 1                                | Cột 2                                | Cột 3                                |
 | ------------------------------------ | ------------------------------------ | ------------------------------------ |
-| ![Hình ảnh 1]([link_to_image1.jpg](https://i.ibb.co/zXMH0rz/golem-common-card.png))   | ![Hình ảnh 2]([link_to_image2.jpg](https://i.ibb.co/zXMH0rz/golem-common-card.png))   | ![Hình ảnh 3]([link_to_image3.jpg](https://i.ibb.co/zXMH0rz/golem-common-card.png))   |
+| ![Hình ảnh 1](https://i.ibb.co/zXMH0rz/golem-common-card.png))  | ![Hình ảnh 2](https://i.ibb.co/zXMH0rz/golem-common-card.png))  | ![Hình ảnh 3](https://i.ibb.co/zXMH0rz/golem-common-card.png)   |
 | Tiêu đề 1                            | Tiêu đề 2                            | Tiêu đề 3                            |
 
 
