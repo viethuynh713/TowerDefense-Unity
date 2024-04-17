@@ -43,30 +43,11 @@ Các chức năng chính:
     <br>
     <strong>Thẻ hỗ trợ</strong>
 </p>
-<div style="display: flex; justify-content: space-between;">
-    <!-- Cột 1 -->
-    <div style="flex-basis: 30%;">
-        <p align="center">
-            <img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Image 1" width="20%">
-            <br>
-            <strong>Title 1</strong>
-        </p>
-    </div>
-    <div style="flex-basis: 30%;">
-        <p align="center">
-            <img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="20%">
-            <br>
-            <strong>Title 2</strong>
-        </p>
-    </div>
-    <div style="flex-basis: 30%;">
-        <p align="center">
-            <img src="(https://i.ibb.co/5G6t0fY/toxic-common-card.png)" alt="Image 3" width="20%">
-            <br>
-            <strong>Title 3</strong>
-        </p>
-    </div>
-</div>
+| Cột 1                                | Cột 2                                | Cột 3                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------ |
+| ![Hình ảnh 1]([link_to_image1.jpg](https://i.ibb.co/zXMH0rz/golem-common-card.png))   | ![Hình ảnh 2]([link_to_image2.jpg](https://i.ibb.co/zXMH0rz/golem-common-card.png))   | ![Hình ảnh 3]([link_to_image3.jpg](https://i.ibb.co/zXMH0rz/golem-common-card.png))   |
+| Tiêu đề 1                            | Tiêu đề 2                            | Tiêu đề 3                            |
+
 
 Có 3 loại thẻ bài chính đó là thẻ tháp, thẻ quái và thẻ hỗ trợ: 
 - Thẻ tháp: cho phép xây dựng 1 đơn vị tháp lên sân đấu để phòng thủ hoặc hỗ trợ.
