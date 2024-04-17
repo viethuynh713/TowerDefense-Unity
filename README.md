@@ -12,7 +12,9 @@ Demo Video:[https://www.youtube.com/watch?v=RXJoQbxcVh4]
 
 ## Gameplay
 ### Giao diện sảnh chính trò chơi 
-<a href="https://ibb.co/qrQbr5r"><img src="https://i.ibb.co/87ZF7c7/Lobby.png" alt="Lobby" border="0"></a>
+<p align="center">
+<a href="https://i.ibb.co/87ZF7c7/Lobby.png"><img src="https://i.ibb.co/87ZF7c7/Lobby.png" alt="Lobby" border="0" width="1000"></a>
+  </p>  
 Các chức năng chính:
 - Shop: Người chơi mua, bán các thẻ bài mà mình yêu thích
 - Advanture: Chế độ chơi với máy, người chơi sẽ được luyện tập và chơi với máy được lập trình từ trước
@@ -22,15 +24,15 @@ Các chức năng chính:
 ### Hệ thống thẻ bài
 Để bắt đầu các trận chiến, người chơi phải có cho mình các thẻ bài riêng cho bản thân để xây dựng các chiến thuật phù hợp.
 #### Các loại thẻ bài
-
+<p align="center">
 <table>
     <tr>
-        <td align="center"><img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Image 1" width="200"><br><strong>Thẻ quái</strong></td>
-        <td align="center"><img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="200"><br><strong>Thẻ tháp</strong></td>
-        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 3" width="200"><br><strong>Thẻ hỗ trợ</strong></td>
+        <td align="center"><img src="https://i.ibb.co/zXMH0rz/golem-common-card.png" alt="Image 1" width="300"><br><strong>Thẻ quái</strong></td>
+        <td align="center"><img src="https://i.ibb.co/GczYHdm/energy-common-card-1.png" alt="Image 2" width="300"><br><strong>Thẻ tháp</strong></td>
+        <td align="center"><img src="https://i.ibb.co/5G6t0fY/toxic-common-card.png" alt="Image 3" width="300"><br><strong>Thẻ hỗ trợ</strong></td>
     </tr>
 </table>
-
+</p>
 Có 3 loại thẻ bài chính đó là thẻ tháp, thẻ quái và thẻ hỗ trợ: 
 - Thẻ tháp: cho phép xây dựng 1 đơn vị tháp lên sân đấu để phòng thủ hoặc hỗ trợ.
 - Thẻ quái: triệu hồi 1 đơn vị lính tấn công thành của địch.
@@ -38,24 +40,35 @@ Có 3 loại thẻ bài chính đó là thẻ tháp, thẻ quái và thẻ hỗ 
 
 #### Độ hiếm của thẻ bài
 Mỗi thẻ bài sẽ có độ hiếm tương ứng với sức mạnh tăng dần như sau: Common, Rare, Mythic, Legend
+<p align="center">
 <table>
     <tr>
-        <td align="center"><img src="https://i.ibb.co/VvdkwVF/dog-common-card.png" alt="Image 1" width="200"><br><strong>Thẻ Common</strong></td>
-        <td align="center"><img src="https://i.ibb.co/GvFpMB2/dog-rare-card.png" alt="Image 2" width="200"><br><strong>Thẻ Rare</strong></td>
-        <td align="center"><img src="https://i.ibb.co/NCM4DTx/dog-mythic-card.png" alt="Image 3" width="200"><br><strong>Thẻ Mythic</strong></td>
-        <td align="center"><img src="https://i.ibb.co/Pmw722x/dog-legend-card.png" alt="Image 4" width="200"><br><strong>Thẻ Legend</strong></td>
+        <td align="center"><img src="https://i.ibb.co/VvdkwVF/dog-common-card.png" alt="Image 1" width="300"><br><strong>Thẻ Common</strong></td>
+        <td align="center"><img src="https://i.ibb.co/GvFpMB2/dog-rare-card.png" alt="Image 2" width="300"><br><strong>Thẻ Rare</strong></td>
+        <td align="center"><img src="https://i.ibb.co/NCM4DTx/dog-mythic-card.png" alt="Image 3" width="300"><br><strong>Thẻ Mythic</strong></td>
+        <td align="center"><img src="https://i.ibb.co/Pmw722x/dog-legend-card.png" alt="Image 4" width="300"><br><strong>Thẻ Legend</strong></td>
     </tr>
 </table>
+</p>
 #### Cấp độ của thẻ bài
 Ngoài việc tìm kiếm các thẻ bài có độ hiếm cao để gia tăng sức mạnh, người chơi cũng có thể nâng cấp các thẻ bài để chúng trở nên mạnh hơn, gia tăng sức mạnh đội hình của bạn.
+<p align="center">
     <div>
         <img src="https://i.ibb.co/J35J4D3/Group-61.png" alt="Image 1">
         <h2>Cấm độ thẻ bài tăng dần</h2>
     </div>
+</p>
 ### Giao diện trò chơi
-![Gameplay](https://i.ibb.co/Vt7j4KF/ingame.png)
+Khi bắt đầu trận đấu, bản đồ sẽ được khởi tạo với những vật cản như cây cối, người chơi không thể đặt các thẻ bài trên các vật cản đó.
 
+<p align="center">
+<a href="https://i.ibb.co/5WrC5pX/start-gameplay.png"><img src="https://i.ibb.co/5WrC5pX/start-gameplay.png" alt="Lobby" border="0" width="1000"></a>
+</p>  
+Người chơi kéo thả các thẻ bài từ thanh thẻ bài bên dưới để đặt các thẻ bài lên sân đấu. Người chơi phải xây dựng chiến thuật phòng thủ mạnh mẽ trước các đợt tấng công của kẻ thù đồng thời tổ chức các đợt tấn công đối thủ để dành được chiến thắng.
 
+<p align="center">
+<a href="https://i.ibb.co/Vt7j4KF/ingame.png"><img src="https://i.ibb.co/Vt7j4KF/ingame.png" alt="Lobby" border="0" width="1000"></a>
+</p> 
 ## Yêu cầu
 - Unity 2021.3.1f1
 - SignalR
